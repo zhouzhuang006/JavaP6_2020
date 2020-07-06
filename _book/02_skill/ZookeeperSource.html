@@ -1,0 +1,1022 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Zookeeper源码分析 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="ActiveMQSource.html" />
+    
+    
+    <link rel="prev" href="NettySource.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Java P6+ 学习指南
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../01_tools/">
+            
+                <a href="../01_tools/">
+            
+                    
+                    必备工具箱
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../01_tools/Maven.html">
+            
+                <a href="../01_tools/Maven.html">
+            
+                    
+                    Maven
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../01_tools/Git.html">
+            
+                <a href="../01_tools/Git.html">
+            
+                    
+                    Git
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../01_tools/Jenkins.html">
+            
+                <a href="../01_tools/Jenkins.html">
+            
+                    
+                    Jenkins
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="../01_tools/FindBugs.html">
+            
+                <a href="../01_tools/FindBugs.html">
+            
+                    
+                    FindBugs
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="../01_tools/Charles.html">
+            
+                <a href="../01_tools/Charles.html">
+            
+                    
+                    Charles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="../01_tools/Gradle.html">
+            
+                <a href="../01_tools/Gradle.html">
+            
+                    
+                    Gradle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="../01_tools/Typora.html">
+            
+                <a href="../01_tools/Typora.html">
+            
+                    
+                    Typora
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.8" data-path="../01_tools/Sonar.html">
+            
+                <a href="../01_tools/Sonar.html">
+            
+                    
+                    Sonar
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.9" data-path="../01_tools/UML.html">
+            
+                <a href="../01_tools/UML.html">
+            
+                    
+                    UML建模
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.10" data-path="../01_tools/Quick.html">
+            
+                <a href="../01_tools/Quick.html">
+            
+                    
+                    敏捷开发
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.11" data-path="../01_tools/Wiki.html">
+            
+                <a href="../01_tools/Wiki.html">
+            
+                    
+                    技术文档编写
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    内功心法
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="Java.html">
+            
+                <a href="Java.html">
+            
+                    
+                    JAVA 基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="DesignPattern.html">
+            
+                <a href="DesignPattern.html">
+            
+                    
+                    设计模式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="MyBatisSource.html">
+            
+                <a href="MyBatisSource.html">
+            
+                    
+                    MyBatis源码分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="DubboSource.html">
+            
+                <a href="DubboSource.html">
+            
+                    
+                    Dubbo源码分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="NettySource.html">
+            
+                <a href="NettySource.html">
+            
+                    
+                    Netty源码分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.6" data-path="ZookeeperSource.html">
+            
+                <a href="ZookeeperSource.html">
+            
+                    
+                    Zookeeper源码分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.7" data-path="ActiveMQSource.html">
+            
+                <a href="ActiveMQSource.html">
+            
+                    
+                    ActiveMQ源码分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../03_spring/">
+            
+                <a href="../03_spring/">
+            
+                    
+                    Spring全家桶
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../03_spring/SpringFramework.html">
+            
+                <a href="../03_spring/SpringFramework.html">
+            
+                    
+                    Spring Framework
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../03_spring/SpringBoot.html">
+            
+                <a href="../03_spring/SpringBoot.html">
+            
+                    
+                    Spring Boot
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../03_spring/SpringCloud.html">
+            
+                <a href="../03_spring/SpringCloud.html">
+            
+                    
+                    Spring Cloud
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../03_spring/SpringCloudNetflix.html">
+            
+                <a href="../03_spring/SpringCloudNetflix.html">
+            
+                    
+                    Spring Cloud Netflix
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../03_spring/SpringCloudAlibaba.html">
+            
+                <a href="../03_spring/SpringCloudAlibaba.html">
+            
+                    
+                    Spring Cloud Alibaba
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../04_concurrency/">
+            
+                <a href="../04_concurrency/">
+            
+                    
+                    分布式与高并发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../04_concurrency/Concurrent.html">
+            
+                <a href="../04_concurrency/Concurrent.html">
+            
+                    
+                    并发编程
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../04_concurrency/Base.html">
+            
+                <a href="../04_concurrency/Base.html">
+            
+                    
+                    分布式架构基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../04_concurrency/Communication.html">
+            
+                <a href="../04_concurrency/Communication.html">
+            
+                    
+                    分布式通信框架
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../04_concurrency/Middleware.html">
+            
+                <a href="../04_concurrency/Middleware.html">
+            
+                    
+                    分布式中间件
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../05_microService/">
+            
+                <a href="../05_microService/">
+            
+                    
+                    分布式与微服务
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../05_microService/ramble.html">
+            
+                <a href="../05_microService/ramble.html">
+            
+                    
+                    漫谈微服务架构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../05_microService/Dubbo.html">
+            
+                <a href="../05_microService/Dubbo.html">
+            
+                    
+                    服务框架 Apache Dubbo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../05_microService/Monitor.html">
+            
+                <a href="../05_microService/Monitor.html">
+            
+                    
+                    微服务监控
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../05_microService/SeaviceMesh.html">
+            
+                <a href="../05_microService/SeaviceMesh.html">
+            
+                    
+                    SeaviceMesh
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../06_database/">
+            
+                <a href="../06_database/">
+            
+                    
+                    数据库
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../06_database/MySQL.html">
+            
+                <a href="../06_database/MySQL.html">
+            
+                    
+                    MySQL
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../06_database/Mongo.html">
+            
+                <a href="../06_database/Mongo.html">
+            
+                    
+                    Mongo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../06_database/Redis.html">
+            
+                <a href="../06_database/Redis.html">
+            
+                    
+                    Redis
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../06_database/ElasticSearch.html">
+            
+                <a href="../06_database/ElasticSearch.html">
+            
+                    
+                    ElasticSearch
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../07_performance/">
+            
+                <a href="../07_performance/">
+            
+                    
+                    性能优化
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../07_performance/Understand.html">
+            
+                <a href="../07_performance/Understand.html">
+            
+                    
+                    理解性能优化
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../07_performance/JVM.html">
+            
+                <a href="../07_performance/JVM.html">
+            
+                    
+                    JVM调优篇
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../07_performance/MySQL.html">
+            
+                <a href="../07_performance/MySQL.html">
+            
+                    
+                    MySQL 调优篇
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.4" data-path="../07_performance/Tomcat.html">
+            
+                <a href="../07_performance/Tomcat.html">
+            
+                    
+                    Tomcat 调优篇
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../08_algorithm/">
+            
+                <a href="../08_algorithm/">
+            
+                    
+                    数据结构与算法
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../08_algorithm/DataStructures.html">
+            
+                <a href="../08_algorithm/DataStructures.html">
+            
+                    
+                    数据结构
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../08_algorithm/Algorithms.html">
+            
+                <a href="../08_algorithm/Algorithms.html">
+            
+                    
+                    经典算法篇
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../08_algorithm/Leetcode.html">
+            
+                <a href="../08_algorithm/Leetcode.html">
+            
+                    
+                    leetcode算法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../09_interview/">
+            
+                <a href="../09_interview/">
+            
+                    
+                    面试宝典
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../09_interview/HighFrequency.html">
+            
+                <a href="../09_interview/HighFrequency.html">
+            
+                    
+                    高频面试题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../10_other/">
+            
+                <a href="../10_other/">
+            
+                    
+                    附件其他
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../10_other/2019JavaP6.html">
+            
+                <a href="../10_other/2019JavaP6.html">
+            
+                    
+                    2019-JavaP6笔记
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="../10_other/2020JavaP6.html">
+            
+                <a href="../10_other/2020JavaP6.html">
+            
+                    
+                    2020-JavaP6笔记
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="../10_other/Alicode.html">
+            
+                <a href="../10_other/Alicode.html">
+            
+                    
+                    Java开发手册-v1.5.0 华山版
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Zookeeper源码分析</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="zookeeper&#x6E90;&#x7801;&#x5206;&#x6790;">Zookeeper&#x6E90;&#x7801;&#x5206;&#x6790;</h1>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="NettySource.html" class="navigation navigation-prev " aria-label="Previous page: Netty源码分析">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="ActiveMQSource.html" class="navigation navigation-next " aria-label="Next page: ActiveMQ源码分析">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Zookeeper源码分析","level":"1.3.6","depth":2,"next":{"title":"ActiveMQ源码分析","level":"1.3.7","depth":2,"path":"02_skill/ActiveMQSource.md","ref":"02_skill/ActiveMQSource.md","articles":[]},"previous":{"title":"Netty源码分析","level":"1.3.5","depth":2,"path":"02_skill/NettySource.md","ref":"02_skill/NettySource.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"02_skill/ZookeeperSource.md","mtime":"2020-07-03T05:43:31.092Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-07-03T07:06:02.403Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

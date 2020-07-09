@@ -1,27 +1,31 @@
-# JAVA 基础
+# 第一部分 JAVA 基础
 
 
 
 ## 1. Java 基本功
 
-### 1.1. Java 入门（基础概念与常识）
 
-#### 1.1.1. Java 语言有哪些特点?
+
+### 1.1. Java 入门
+
+
+
+#### 1.1.1. Java 语言有哪些特点
 
 1. 简单易学；
 2. 面向对象（封装，继承，多态）；
 3. 平台无关性（ Java 虚拟机实现平台无关性）；
 4. 可靠性；
 5. 安全性；
-6. 支持多线程（ C++ 语言没有内置的多线程机制，因此必须调用操作系统的多线程功能来进行多线程程序设计，而 Java 语言却提供了多线程支持）；
+6. 支持多线程
 7. 支持网络编程并且很方便（ Java 语言诞生本身就是为简化网络编程设计的，因此 Java 语言不仅支持网络编程而且很方便）；
 8. 编译与解释并存；
 
-> 修正（参见： [issue#544](https://github.com/Snailclimb/JavaGuide/issues/544)）：C++11 开始（2011 年的时候）,C++就引入了多线程库，在 windows、linux、macos 都可以使用`std::thread`和`std::async`来创建线程。参考链接：http://www.cplusplus.com/reference/thread/thread/?kw=thread
 
-#### 1.1.2. 关于 JVM JDK 和 JRE 最详细通俗的解答
 
-##### 1.1.2.1. JVM
+#### 1.1.2. JDK 和 JRE 理解
+
+**Java 虚拟机（JVM）**
 
 Java 虚拟机（JVM）是运行 Java 字节码的虚拟机。JVM 有针对不同系统的特定实现（Windows，Linux，macOS），目的是使用相同的字节码，它们都会给出相同的结果。
 
@@ -41,13 +45,15 @@ Java 虚拟机（JVM）是运行 Java 字节码的虚拟机。JVM 有针对不�
 
 Java 虚拟机（JVM）是运行 Java 字节码的虚拟机。JVM 有针对不同系统的特定实现（Windows，Linux，macOS），目的是使用相同的字节码，它们都会给出相同的结果。字节码和不同系统的 JVM 实现是 Java 语言“一次编译，随处可以运行”的关键所在。
 
-##### 1.1.2.2. JDK 和 JRE
+**JDK 和 JRE 概念**
 
 JDK 是 Java Development Kit，它是功能齐全的 Java SDK。它拥有 JRE 所拥有的一切，还有编译器（javac）和工具（如 javadoc 和 jdb）。它能够创建和编译程序。
 
 JRE 是 Java 运行时环境。它是运行已编译 Java 程序所需的所有内容的集合，包括 Java 虚拟机（JVM），Java 类库，java 命令和其他的一些基础构件。但是，它不能用于创建新程序。
 
 如果你只是为了运行一下 Java 程序的话，那么你只需要安装 JRE 就可以了。如果你需要进行一些 Java 编程方面的工作，那么你就需要安装 JDK 了。但是，这不是绝对的。有时，即使您不打算在计算机上进行任何 Java 开发，仍然需要安装 JDK。例如，如果要使用 JSP 部署 Web 应用程序，那么从技术上讲，您只是在应用程序服务器中运行 Java 程序。那你为什么需要 JDK 呢？因为应用程序服务器会将 JSP 转换为 Java servlet，并且需要使用 JDK 来编译 servlet。
+
+
 
 #### 1.1.3. Oracle JDK 和 OpenJDK 的对比
 
@@ -61,14 +67,16 @@ JRE 是 Java 运行时环境。它是运行已编译 Java 程序所需的所有�
 
 **总结：**
 
-1. Oracle JDK 大概每 6 个月发一次主要版本，而 OpenJDK 版本大概每三个月发布一次。但这不是固定的，我觉得了解这个没啥用处。详情参见：[https://blogs.oracle.com/java-platform-group/update-and-faq-on-the-java-se-release-cadence](https://blogs.oracle.com/java-platform-group/update-and-faq-on-the-java-se-release-cadence) 。
+1. Oracle JDK 大概每 6 个月发一次主要版本，而 OpenJDK 版本大概每三个月发布一次。但这不是固定的，我觉得了解这个没啥用处。详情参见：[Java SE Release Cadence的更新和常见问题解答](https://blogs.oracle.com/java-platform-group/update-and-faq-on-the-java-se-release-cadence) 。
 2. OpenJDK 是一个参考模型并且是完全开源的，而 Oracle JDK 是 OpenJDK 的一个实现，并不是完全开源的；
 3. Oracle JDK 比 OpenJDK 更稳定。OpenJDK 和 Oracle JDK 的代码几乎相同，但 Oracle JDK 有更多的类和一些错误修复。因此，如果您想开发企业/商业软件，我建议您选择 Oracle JDK，因为它经过了彻底的测试和稳定。某些情况下，有些人提到在使用 OpenJDK 可能会遇到了许多应用程序崩溃的问题，但是，只需切换到 Oracle JDK 就可以解决问题；
 4. 在响应性和 JVM 性能方面，Oracle JDK 与 OpenJDK 相比提供了更好的性能；
 5. Oracle JDK 不会为即将发布的版本提供长期支持，用户每次都必须通过更新到最新版本获得支持来获取最新版本；
 6. Oracle JDK 根据二进制代码许可协议获得许可，而 OpenJDK 根据 GPL v2 许可获得许可。
 
-#### 1.1.4. Java 和 C++的区别?
+
+
+#### 1.1.4. Java 和 C++的区别
 
 我知道很多人没学过 C++，但是面试官就是没事喜欢拿咱们 Java 和 C++ 比呀！没办法！！！就算没学过 C++，也要记下来！
 
@@ -76,41 +84,54 @@ JRE 是 Java 运行时环境。它是运行已编译 Java 程序所需的所有�
 - Java 不提供指针来直接访问内存，程序内存更加安全
 - Java 的类是单继承的，C++ 支持多重继承；虽然 Java 的类不可以多继承，但是接口可以多继承。
 - Java 有自动内存管理机制，不需要程序员手动释放无用内存
-- **在 C 语言中，字符串或字符数组最后都会有一个额外的字符‘\0’来表示结束。但是，Java 语言中没有结束符这一概念。** 这是一个值得深度思考的问题，具体原因推荐看这篇文章： [https://blog.csdn.net/sszgg2006/article/details/49148189](https://blog.csdn.net/sszgg2006/article/details/49148189)
+- **在 C 语言中，字符串或字符数组最后都会有一个额外的字符‘\0’来表示结束。但是，Java 语言中没有结束符这一概念。** 这是一个值得深度思考的问题，具体原因推荐看这篇文章： [Java与C语言在字符串结束符上的区别](https://blog.csdn.net/sszgg2006/article/details/49148189)
 
-#### 1.1.5. 什么是 Java 程序的主类 应用程序和小程序的主类有何不同?
 
-一个程序中可以有多个类，但只能有一个类是主类。在 Java 应用程序中，这个主类是指包含 main（）方法的类。而在 Java 小程序中，这个主类是一个继承自系统类 JApplet 或 Applet 的子类。应用程序的主类不一定要求是 public 类，但小程序的主类要求必须是 public 类。主类是 Java 程序执行的入口点。
 
-#### 1.1.6. Java 应用程序与小程序之间有哪些差别?
+#### 1.1.5. Java 应用程序和小程序的主类的不同
+
+一个程序中可以有多个类，但只能有一个类是主类。在 Java 应用程序中，这个主类是指包含 main（）方法的类。而在 Java 小程序中，这个主类是一个继承自系统类 JApplet 或 Applet 的子类。
+
+应用程序的主类不一定要求是 public 类，但小程序的主类要求必须是 public 类。主类是 Java 程序执行的入口点。
+
+
+
+#### 1.1.6. Java 应用程序与小程序的差别
 
 简单说应用程序是从主线程启动(也就是 `main()` 方法)。applet 小程序没有 `main()` 方法，主要是嵌在浏览器页面上运行(调用`init()`或者`run()`来启动)，嵌入浏览器这点跟 flash 的小游戏类似。
 
-#### 1.1.7. import java 和 javax 有什么区别？
+
+
+#### 1.1.7. import java 和 javax 有什么区别
 
 刚开始的时候 JavaAPI 所必需的包是 java 开头的包，javax 当时只是扩展 API 包来使用。然而随着时间的推移，javax 逐渐地扩展成为 Java API 的组成部分。但是，将扩展从 javax 包移动到 java 包确实太麻烦了，最终会破坏一堆现有的代码。因此，最终决定 javax 包将成为标准 API 的一部分。
 
 所以，实际上 java 和 javax 没有区别。这都是一个名字。
 
-#### 1.1.8. 为什么说 Java 语言“编译与解释并存”？
+
+
+#### 1.1.8. 为什么说 Java 语言“编译与解释并存”
 
 高级编程语言按照程序的执行方式分为编译型和解释型两种。简单来说，编译型语言是指编译器针对特定的操作系统将源代码一次性翻译成可被该平台执行的机器码；解释型语言是指解释器对源程序逐行解释成特定平台的机器码并立即执行。比如，你想阅读一本英文名著，你可以找一个英文翻译人员帮助你阅读，
 有两种选择方式，你可以先等翻译人员将全本的英文名著（也就是源码）都翻译成汉语，再去阅读，也可以让翻译人员翻译一段，你在旁边阅读一段，慢慢把书读完。
 
 Java 语言既具有编译型语言的特征，也具有解释型语言的特征，因为 Java 程序要经过先编译，后解释两个步骤，由 Java 编写的程序需要先经过编译步骤，生成字节码（\*.class 文件），这种字节码必须由 Java 解释器来解释执行。因此，我们可以认为 Java 语言编译与解释并存。
 
+
+
 ### 1.2. Java 语法
 
-#### 1.2.1. 字符型常量和字符串常量的区别?
+
+
+#### 1.2.1. 字符型常量和字符串常量的区别
 
 1. 形式上: 字符常量是单引号引起的一个字符; 字符串常量是双引号引起的若干个字符
 2. 含义上: 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算; 字符串常量代表一个地址值(该字符串在内存中存放位置)
 3. 占内存大小 字符常量只占 2 个字节; 字符串常量占若干个字节 (**注意： char 在 Java 中占两个字节**)
 
-> java 编程思想第四版：2.2.2 节
-> ![](Java.assets/86735519.jpg)
 
-#### 1.2.2. 关于注释？
+
+#### 1.2.2. 关于注释
 
 Java 中的注释有三种：
 
@@ -143,14 +164,19 @@ Java 中的注释有三种：
 > if (employee.isEligibleForFullBenefits())
 > ```
 
-#### 1.2.3. 标识符和关键字的区别是什么？
+
+
+#### 1.2.3. 标识符和关键字的区别
 
 在我们编写程序的时候，需要大量地为程序、类、变量、方法等取名字，于是就有了标识符，简单来说，标识符就是一个名字。但是有一些标识符，Java 语言已经赋予了其特殊的含义，只能用于特定的地方，这种特殊的标识符就是关键字。因此，关键字是被赋予特殊含义的标识符。比如，在我们的日常生活中 ，“警察局”这个名字已经被赋予了特殊的含义，所以如果你开一家店，店的名字不能叫“警察局”，“警察局”就是我们日常生活中的关键字。
 
-#### 1.2.4. Java中有哪些常见的关键字？
 
-| 访问控制             | private  | protected  | public   |              |            |           |        |
+
+#### 1.2.4. Java中有哪些常见的关键字
+
+|                      |          |            |          |              |            |           |        |
 | -------------------- | -------- | ---------- | -------- | ------------ | ---------- | --------- | ------ |
+| 访问控制             | private  | protected  | public   |              |            |           |        |
 | 类，方法和变量修饰符 | abstract | class      | extends  | final        | implements | interface | native |
 |                      | new      | static     | strictfp | synchronized | transient  | volatile  |        |
 | 程序控制             | break    | continue   | return   | do           | while      | if        | else   |
@@ -162,13 +188,17 @@ Java 中的注释有三种：
 | 变量引用             | super    | this       | void     |              |            |           |        |
 | 保留字               | goto     | const      |          |              |            |           |        |
 
+
+
 #### 1.2.5. 自增自减运算符
 
 在写代码的过程中，常见的一种情况是需要某个整数类型变量增加 1 或减少 1，Java 提供了一种特殊的运算符，用于这种表达式，叫做自增运算符（++)和自减运算符（--）。
 
 ++和--运算符可以放在操作数之前，也可以放在操作数之后，当运算符放在操作数之前时，先自增/减，再赋值；当运算符放在操作数之后时，先赋值，再自增/减。例如，当“b=++a”时，先自增（自己增加 1），再赋值（赋值给 b）；当“b=a++”时，先赋值(赋值给 b)，再自增（自己增加 1）。也就是，++a 输出的是 a+1 的值，a++输出的是 a 值。用一句口诀就是：“符号在前就先加/减，符号在后就后加/减”。
 
-#### 1.2.6. continue、break、和return的区别是什么？
+
+
+#### 1.2.6. continue、break、和return的区别
 
 在循环结构中，当循环条件不满足或者循环次数达到要求时，循环会正常结束。但是，有时候可能需要在循环的过程中，当发生了某种条件之后 ，提前终止循环，这就需要用到下面几个关键词：
 
@@ -180,7 +210,9 @@ return 用于跳出所在方法，结束该方法的运行。return 一般有两
 1. `return;` ：直接使用 return 结束方法执行，用于没有返回值函数的方法
 2. `return value;` ：return 一个特定值，用于有返回值函数的方法
 
-#### 1.2.7. Java泛型了解么？什么是类型擦除？介绍一下常用的通配符？
+
+
+#### 1.2.7. Java泛型、类型擦除、常用的通配符
 
 Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。
 
@@ -260,13 +292,13 @@ class GeneratorImpl<T> implements Generator<String>{
 **3.泛型方法** ：
 
 ```java
-   public static < E > void printArray( E[] inputArray )
-   {         
-         for ( E element : inputArray ){        
-            System.out.printf( "%s ", element );
-         }
-         System.out.println();
+public static < E > void printArray(E[] inputArray)
+{         
+    for (E element : inputArray){        
+        System.out.printf("%s ", element);
     }
+    System.out.println();
+}
 ```
 
 使用：
@@ -275,8 +307,8 @@ class GeneratorImpl<T> implements Generator<String>{
 // 创建不同类型数组： Integer, Double 和 Character
 Integer[] intArray = { 1, 2, 3 };
 String[] stringArray = { "Hello", "World" };
-printArray( intArray  ); 
-printArray( stringArray  ); 
+printArray(intArray); 
+printArray(stringArray); 
 ```
 
 **常用的通配符为： T，E，K，V，？**
@@ -288,13 +320,15 @@ printArray( stringArray  );
 
 更多关于Java 泛型中的通配符可以查看这篇文章：[《聊一聊-JAVA 泛型中的通配符 T，E，K，V，？》](https://juejin.im/post/5d5789d26fb9a06ad0056bd9)
 
+
+
 #### 1.2.8. ==和equals的区别
 
 **`==`** : 它的作用是判断两个对象的地址是不是相等。即判断两个对象是不是同一个对象。(**基本数据类型==比较的是值，引用数据类型==比较的是内存地址**)
 
 > 因为 Java 只有值传递，所以，对于 ==  来说，不管是比较基本数据类型，还是引用数据类型的变量，其本质比较的都是值，只是引用类型变量存的值是对象的地址。
 
-**`equals()`** : 它的作用也是判断两个对象是否相等，它不能用于比较基本数据类型的变量。`equals()`方法存在于`Object`类中，而`Object`类是所有类的直接或间接父类。
+`equals()` : 它的作用也是判断两个对象是否相等，它不能用于比较基本数据类型的变量。`equals()`方法存在于`Object`类中，而`Object`类是所有类的直接或间接父类。
 
 `Object`类`equals()`方法：
 
@@ -362,6 +396,8 @@ public boolean equals(Object anObject) {
 }
 ```
 
+
+
 #### 1.2.9. hashCode()与 equals()
 
 面试官可能会问你：“你重写过 `hashcode` 和 `equals `么，为什么重写 `equals` 时必须重写 `hashCode` 方法？”
@@ -401,9 +437,11 @@ public native int hashCode();
 
 更多关于 `hashcode()` 和 `equals()` 的内容可以查看：[Java hashCode() 和 equals()的若干问题解答](https://www.cnblogs.com/skywang12345/p/3324958.html)
 
+
+
 ### 1.3. 基本数据类型
 
-#### 1.3.1. Java中的几种基本数据类型是什么？对应的包装类型是什么？各自占用多少字节呢？
+#### 1.3.1. Java中的几种基本数据类型
 
 Java**中**有8种基本数据类型，分别为：
 
@@ -411,18 +449,21 @@ Java**中**有8种基本数据类型，分别为：
 2. 1种字符类型：char
 3. 1中布尔型：boolean。 
 
-这八种基本类型都有对应的包装类分别为：Byte、Short、Integer、Long、Float、Double、Character、Boolean
+**基本数据类型**
 
-| 基本类型 | 位数 | 字节 | 默认值  |
-| :------- | :--- | :--- | ------- |
-| int      | 32   | 4    | 0       |
-| short    | 16   | 2    | 0       |
-| long     | 64   | 8    | 0L      |
-| byte     | 8    | 1    | 0       |
-| char     | 16   | 2    | 'u0000' |
-| float    | 32   | 4    | 0f      |
-| double   | 64   | 8    | 0d      |
-| boolean  | 1    |      | false   |
+JAVA中一共有八种基本数据类型，他们分别是 
+byte、short、int、long、float、double、char、boolean
+
+| 类型    | 型别   | 字节  | 位数 | 默认值  | 取值范围                      | 包装器类型 |
+| ------- | ------ | ----- | ---- | ------- | ----------------------------- | ---------- |
+| byte    | 整型   | 1byte | 1    | 0       | -27 ~ 27-1                    | Byte       |
+| short   | 整型   | 2byte | 2    | 0       | -215 ~ 215-1                  | Short      |
+| int     | 整型   | 4byte | 4    | 0       | -231 ~ 231-1                  | Integer    |
+| long    | 整型   | 8byte | 8    | 0L      | -263 ~ 263-1                  | Long       |
+| float   | 浮点型 | 4byte | 4    | 0f      | 3.402823e+38 ~ 1.401298e-45   | Float      |
+| double  | 浮点型 | 8byte | 8    | 0d      | 1.797693e+308~ 4.9000000e-324 | Double     |
+| char    | 文本型 | 2byte | 2    | 'u0000' | 0~216-1                       | Character  |
+| boolean | 布尔型 | 1byte | 1    | false   | true/false                    | Boolean    |
 
 对于boolean，官方文档未明确定义，它依赖于 JVM 厂商的具体实现。逻辑上理解是占用 1位，但是实际中会考虑计算机高效存储因素。
 
@@ -431,12 +472,16 @@ Java**中**有8种基本数据类型，分别为：
 1. Java 里使用 long 类型的数据一定要在数值后面加上 **L**，否则将作为整型解析：
 2. `char a = 'h'`char :单引号，`String a = "hello"` :双引号
 
+
+
 #### 1.3.2. 自动装箱与拆箱
 
 - **装箱**：将基本类型用它们对应的引用类型包装起来；
 - **拆箱**：将包装类型转换为基本数据类型；
 
 更多内容见：[深入剖析 Java 中的装箱和拆箱](https://www.cnblogs.com/dolphin0520/p/3780005.html)
+
+
 
 #### 1.3.3. 8种基本类型的包装类和常量池
 
@@ -532,11 +577,17 @@ i4=i5+i6   true
 
 语句 i4 == i5 + i6，因为+这个操作符不适用于 Integer 对象，首先 i5 和 i6 进行自动拆箱操作，进行数值相加，即 i4 == 40。然后 Integer 对象无法与数值进行直接比较，所以 i4 自动拆箱转为 int 值 40，最终这条语句转为 40 == 40 进行数值比较。
 
+
+
 ### 1.4. 方法（函数）
 
-#### 1.4.1. 什么是方法的返回值?返回值在类的方法里的作用是什么?
+
+
+#### 1.4.1. 方法的返回值在类的方法里的作用
 
 方法的返回值是指我们获取到的某个方法体中的代码执行后产生的结果！（前提是该方法可能产生结果）。返回值的作用是接收出结果，使得它可以用于其他的操作！
+
+
 
 #### 1.4.2. 为什么 Java 中只有值传递？
 
@@ -679,23 +730,43 @@ Java 程序设计语言对对象采用的不是引用调用，实际上，对象
 
 《Java 核心技术卷 Ⅰ》基础知识第十版第四章 4.5 小节
 
+
+
 #### 1.4.3. 重载和重写的区别
 
 > 重载就是同样的一个方法能够根据输入数据的不同，做出不同的处理
 >
 > 重写就是当子类继承自父类的相同方法，输入数据一样，但要做出有别于父类的响应时，你就要覆盖父类方法
 
-###### 1.4.3.1. 重载
+**重载** overload
 
 发生在同一个类中，方法名必须相同，参数类型不同、个数不同、顺序不同，方法返回值和访问修饰符可以不同。
 
 下面是《Java 核心技术》对重载这个概念的介绍：
 
-![](Java.assets/desktopjava核心技术-重载.jpg)
+> **重载:如果有多个方法有相同的名字,不同的参数,变产生了重载.**
+>
+> **Java允许重载任何方法,而不只是构造方法.因此,要完整地描述一个方法,**
+>
+> **需要指出方法名以及参数类型.这叫做方法的签名(signature).**
+>
+> **返回类型不是方法签名的一部分.就是说,不能有两个名字相同、参数类型也相同**
+>
+> **却返回不同类型值的方法.**
+>
+> **例:**
+>
+> ```java
+> // String类有4个称为indexOf的共有方法.它们的签名是
+> indexOf(int)
+> indexOf(int,int)
+> indexOf(String)
+> indexOf(String,int)
+> ```
 
 **综上：重载就是同一个类中多个同名方法根据不同的传参来执行不同的逻辑处理。**
 
-###### 1.4.3.2. 重写
+**重写** override
 
 重写发生在运行期，是子类对父类的允许访问的方法的实现过程进行重新编写。
 
@@ -716,12 +787,16 @@ Java 程序设计语言对对象采用的不是引用调用，实际上，对象
 | 访问修饰符 | 可修改   | 一定不能做更严格的限制（可以降低限制）         |
 | 发生阶段   | 编译期   | 运行期                                         |
 
+
+
 #### 1.4.4. 深拷贝 vs 浅拷贝
 
 1. **浅拷贝**：对基本数据类型进行值传递，对引用数据类型进行引用传递般的拷贝，此为浅拷贝。
 2. **深拷贝**：对基本数据类型进行值传递，对引用数据类型，创建一个新的对象，并复制其内容，此为深拷贝。
 
 ![deep and shallow copy](Java.assets/java-deep-and-shallow-copy.jpg)
+
+
 
 #### 1.4.5. 方法的四种类型
 
@@ -777,6 +852,8 @@ public void f5(int a) {
 }
 ```
 
+
+
 ## 2. Java 面向对象
 
 ### 2.1. 类和对象
@@ -792,44 +869,64 @@ public void f5(int a) {
 >
 > 而面向过程语言大多都是直接编译成机械码在电脑上执行，并且其它一些面向过程的脚本语言性能也并不一定比 Java 好。
 
-#### 2.1.2. 构造器 Constructor 是否可被 override?
+
+
+#### 2.1.2. 构造器 Constructor 是否可被重写
 
 Constructor 不能被 override（重写）,但是可以 overload（重载）,所以你可以看到一个类中有多个构造函数的情况。
 
-#### 2.1.3. 在 Java 中定义一个不做事且没有参数的构造方法的作用
+
+
+#### 2.1.3. 无参构造方法的作用
 
 Java 程序在执行子类的构造方法之前，如果没有用 `super()`来调用父类特定的构造方法，则会调用父类中“没有参数的构造方法”。因此，如果父类中只定义了有参数的构造方法，而在子类的构造方法中又没有用 `super()`来调用父类中特定的构造方法，则编译时将发生错误，因为 Java 程序在父类中找不到没有参数的构造方法可供执行。解决办法是在父类里加上一个不做事且没有参数的构造方法。
 
-#### 2.1.4. 成员变量与局部变量的区别有哪些？
+
+
+#### 2.1.4. 成员变量与局部变量的区别
 
 1. 从语法形式上看:成员变量是属于类的，而局部变量是在方法中定义的变量或是方法的参数；成员变量可以被 public,private,static 等修饰符所修饰，而局部变量不能被访问控制修饰符及 static 所修饰；但是，成员变量和局部变量都能被 final 所修饰。
 2. 从变量在内存中的存储方式来看:如果成员变量是使用`static`修饰的，那么这个成员变量是属于类的，如果没有使用`static`修饰，这个成员变量是属于实例的。而对象存在于堆内存，局部变量则存在于栈内存。
 3. 从变量在内存中的生存时间上看:成员变量是对象的一部分，它随着对象的创建而存在，而局部变量随着方法的调用而自动消失。
 4. 成员变量如果没有被赋初值:则会自动以类型的默认值而赋值（一种情况例外:被 final 修饰的成员变量也必须显式地赋值），而局部变量则不会自动赋值。
 
-#### 2.1.5. 创建一个对象用什么运算符?对象实体与对象引用有何不同?
 
-new 运算符，new 创建对象实例（对象实例在堆内存中），对象引用指向对象实例（对象引用存放在栈内存中）。一个对象引用可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）;一个对象可以有 n 个引用指向它（可以用 n 条绳子系住一个气球）。
 
-#### 2.1.6. 一个类的构造方法的作用是什么? 若一个类没有声明构造方法，该程序能正确执行吗? 为什么?
+#### 2.1.5. 对象实体与对象引用有何不同
+
+创建一个对象用  new 运算符，new 创建对象实例（对象实例在堆内存中），对象引用指向对象实例（对象引用存放在栈内存中）。一个对象引用可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）;一个对象可以有 n 个引用指向它（可以用 n 条绳子系住一个气球）。
+
+
+
+#### 2.1.6. 构造方法的作用
 
 主要作用是完成对类对象的初始化工作。可以执行。因为一个类即使没有声明构造方法也会有默认的不带参数的构造方法。如果我们自己添加了类的构造方法（无论是否有参），Java 就不会再添加默认的无参数的构造方法了，这时候，就不能直接 new 一个对象而不传递参数了，所以我们一直在不知不觉地使用构造方法，这也是为什么我们在创建对象的时候后面要加一个括号（因为要调用无参的构造方法）。如果我们重载了有参的构造方法，记得都要把无参的构造方法也写出来（无论是否用到），因为这可以帮助我们在创建对象的时候少踩坑。
 
-#### 2.1.7. 构造方法有哪些特性？
+
+
+#### 2.1.7. 构造方法的特性
 
 1. 名字与类名相同。
 2. 没有返回值，但不能用 void 声明构造函数。
 3. 生成类的对象时自动执行，无需调用。
 
-#### 2.1.8. 在调用子类构造方法之前会先调用父类没有参数的构造方法,其目的是?
+
+
+#### 2.1.8. super() 的目的
 
 帮助子类做初始化工作。
 
-#### 2.1.9. 对象的相等与指向他们的引用相等,两者有什么不同?
+
+
+#### 2.1.9. 对象相等与引用相等有什么不同
 
 对象的相等，比的是内存中存放的内容是否相等。而引用相等，比较的是他们指向的内存地址是否相等。
 
+
+
 ### 2.2. 面向对象三大特征
+
+
 
 #### 2.2.1. 封装
 
@@ -862,6 +959,8 @@ public class Student {
 }
 ```
 
+
+
 #### 2.2.2. 继承
 
 不同类型的对象，相互之间经常有一定数量的共同点。例如，小明同学、小红同学、小李同学，都共享学生的特性（班级、学号等）。同时，每一个对象还定义了额外的特性使得他们与众不同。例如小明的数学比较好，小红的性格惹人喜爱；小李的力气比较大。继承是使用已存在的类的定义作为基础建立新类的技术，新类的定义可以增加新的数据或新的功能，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用，程序的可维护性，节省大量创建新类的时间 ，提高我们的开发效率。
@@ -871,6 +970,8 @@ public class Student {
 1. 子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，**只是拥有**。
 2. 子类可以拥有自己属性和方法，即子类可以对父类进行扩展。
 3. 子类可以用自己的方式实现父类的方法。（以后介绍）。
+
+
 
 #### 2.2.3. 多态
 
@@ -885,11 +986,17 @@ public class Student {
 - 多态不能调用“只在子类存在但在父类不存在”的方法；
 - 如果子类重写了父类的方法，真正执行的是子类覆盖的方法，如果子类没有覆盖父类的方法，执行的是父类的方法。
 
+
+
 ### 2.3. 修饰符
 
-#### 2.3.1. 在一个静态方法内调用一个非静态成员为什么是非法的?
+
+
+#### 2.3.1. 静态方法可以调用非静态成员吗？
 
 由于静态方法可以不通过对象进行调用，因此在静态方法里，不能调用其他非静态变量，也不可以访问非静态变量成员。
+
+
 
 #### 2.3.2. 静态方法和实例方法有何不同
 
@@ -897,13 +1004,19 @@ public class Student {
 
 2. 静态方法在访问本类的成员时，只允许访问静态成员（即静态成员变量和静态方法），而不允许访问实例成员变量和实例方法；实例方法则无此限制。
 
-#### 2.3.3. 常见关键字总结:static,final,this,super
 
-详见笔主的这篇文章: https://snailclimb.gitee.io/javaguide/#/docs/java/basic/final,static,this,super
+
+#### 2.3.3. 常见关键字总结
+
+详见笔主的这篇文章: [final，static，this，super关键字总结](https://snailclimb.gitee.io/javaguide/#/docs/java/basic/final,static,this,super?id=finalstaticthissuper-关键字总结)
+
+
 
 ### 2.4. 接口和抽象类
 
-#### 2.4.1. 接口和抽象类的区别是什么？
+
+
+#### 2.4.1. 接口和抽象类的区别
 
 1. 接口的方法默认是 public，所有方法在接口中不能有实现(Java 8 开始接口方法可以有默认实现），而抽象类可以有非抽象的方法。
 2. 接口中除了 static、final 变量，不能有其他变量，而抽象类中则不一定。
@@ -922,9 +1035,11 @@ public class Student {
 2. jdk8 的时候接口可以有默认方法和静态方法功能。
 3. Jdk 9 在接口中引入了私有方法和私有静态方法。
 
+
+
 ### 2.5. 其它重要知识点
 
-#### 2.5.1. String StringBuffer 和 StringBuilder 的区别是什么? String 为什么是不可变的?
+#### 2.5.1. StringBuffer 和 StringBuilder 的区别
 
 简单的来说：`String` 类中使用 final 关键字修饰字符数组来保存字符串，`private final char value[]`，所以` String` 对象是不可变的。
 
@@ -967,6 +1082,8 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 2. 单线程操作字符串缓冲区下操作大量数据: 适用 `StringBuilder`
 3. 多线程操作字符串缓冲区下操作大量数据: 适用 `StringBuffer`
 
+
+
 #### 2.5.2. Object 类的常见方法总结
 
 Object 类是一个特殊的类，是所有类的父类。它主要提供了以下 11 个方法：
@@ -994,6 +1111,8 @@ public final void wait() throws InterruptedException//跟之前的2个wait方法
 protected void finalize() throws Throwable { }//实例被垃圾回收器回收的时候触发的操作
 
 ```
+
+
 
 #### 2.5.3. == 与 equals(重要)
 
@@ -1032,23 +1151,24 @@ public class test1 {
 - 当创建 String 类型的对象时，虚拟机会在常量池中查找有没有已经存在的值和要创建的值相同的对象，如果有就把它赋给当前引用。如果没有就在常量池中重新创建一个 String 对象。
 
 
+
 #### 2.5.4. hashCode 与 equals (重要)
 
 面试官可能会问你：“你重写过 hashcode 和 equals 么，为什么重写 equals 时必须重写 hashCode 方法？”
 
-##### 2.5.4.1. hashCode（）介绍
+**hashCode（）介绍**
 
 hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个 int 整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。hashCode() 定义在 JDK 的 Object.java 中，这就意味着 Java 中的任何类都包含有 hashCode() 函数。
 
 散列表存储的是键值对(key-value)，它的特点是：能根据“键”快速的检索出对应的“值”。这其中就利用到了散列码！（可以快速找到所需要的对象）
 
-##### 2.5.4.2. 为什么要有 hashCode
+**为什么要有 hashCode**
 
 **我们先以“HashSet 如何检查重复”为例子来说明为什么要有 hashCode：** 当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，同时也会与该位置其他已经加入的对象的 hashcode 值作比较，如果没有相符的 hashcode，HashSet 会假设对象没有重复出现。但是如果发现有相同 hashcode 值的对象，这时会调用 `equals()`方法来检查 hashcode 相等的对象是否真的相同。如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。（摘自我的 Java 启蒙书《Head first java》第二版）。这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。
 
 通过我们可以看出：`hashCode()` 的作用就是**获取哈希码**，也称为散列码；它实际上是返回一个 int 整数。这个**哈希码的作用**是确定该对象在哈希表中的索引位置。**`hashCode()`在散列表中才有用，在其它情况下没用**。在散列表中 hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。
 
-##### 2.5.4.3. hashCode（）与 equals（）的相关规定
+**hashCode（）与 equals（）的相关规定**
 
 1. 如果两个对象相等，则 hashcode 一定也是相同的
 2. 两个对象相等,对两个对象分别调用 equals 方法都返回 true
@@ -1058,11 +1178,15 @@ hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返
 
 推荐阅读：[Java hashCode() 和 equals()的若干问题解答](https://www.cnblogs.com/skywang12345/p/3324958.html)
 
-#### 2.5.5. Java 序列化中如果有些字段不想进行序列化，怎么办？
+
+
+#### 2.5.5. Java 序列化 transient 关键字
 
 对于不想进行序列化的变量，使用 transient 关键字修饰。
 
 transient 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 transient 修饰的变量值不会被持久化和恢复。transient 只能修饰变量，不能修饰类和方法。
+
+
 
 #### 2.5.6. 获取用键盘输入常用的两种方法
 
@@ -1081,15 +1205,25 @@ BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 String s = input.readLine();
 ```
 
+
+
 ## 3. Java 核心技术
+
+
 
 ### 3.1. 集合
 
-#### 3.1.1. Collections 工具类和 Arrays 工具类常见方法总结
 
-详见笔主的这篇文章: https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/java/basic/Arrays,CollectionsCommonMethods.md
+
+#### 3.1.1. Collections 工具类和 Arrays 工具类
+
+详见笔主的这篇文章:  [Collections 工具类和 Arrays 工具类常见方法](https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/java/basic/Arrays,CollectionsCommonMethods.md#collections-工具类和-arrays-工具类常见方法)
+
+
 
 ### 3.2. 异常
+
+
 
 #### 3.2.1. Java 异常类层次结构图
 
@@ -1113,12 +1247,16 @@ String s = input.readLine();
 
 **注意：异常和错误的区别：异常能被程序本身处理，错误是无法处理。**
 
+
+
 #### 3.2.2. Throwable 类常用方法
 
 - **`public string getMessage()`**:返回异常发生时的简要描述
 - **`public string toString()`**:返回异常发生时的详细信息
 - **`public string getLocalizedMessage()`**:返回异常对象的本地化信息。使用 `Throwable` 的子类覆盖这个方法，可以生成本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与 `getMessage（）`返回的结果相同
 - **`public void printStackTrace()`**:在控制台上打印 `Throwable` 对象封装的异常信息
+
+
 
 #### 3.2.3. try-catch-finally
 
@@ -1153,6 +1291,8 @@ public class Test {
 
 如果调用 `f(2)`，返回值将是 0，因为 finally 语句的返回值覆盖了 try 语句块的返回值。
 
+
+
 #### 3.2.4. 使用 `try-with-resources` 来代替`try-catch-finally`
 
 《Effecitve Java》中明确指出：
@@ -1162,20 +1302,20 @@ public class Test {
 Java 中类似于`InputStream`、`OutputStream` 、`Scanner` 、`PrintWriter`等的资源都需要我们调用`close()`方法来手动关闭，一般情况下我们都是通过`try-catch-finally`语句来实现这个需求，如下：
 
 ```java
-        //读取文本文件的内容
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(new File("D://read.txt"));
-            while (scanner.hasNext()) {
-                System.out.println(scanner.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (scanner != null) {
-                scanner.close();
-            }
-        }
+//读取文本文件的内容
+Scanner scanner = null;
+try {
+    scanner = new Scanner(new File("D://read.txt"));
+    while (scanner.hasNext()) {
+        System.out.println(scanner.nextLine());
+    }
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+} finally {
+    if (scanner != null) {
+        scanner.close();
+    }
+}
 ```
 
 使用Java 7之后的 `try-with-resources` 语句改造上面的代码:
@@ -1194,9 +1334,13 @@ try (Scanner scanner = new Scanner(new File("test.txt"))) {
 
 通过使用分号分隔，可以在`try-with-resources`块中声明多个资源：
 
+
+
 ### 3.3. 多线程
 
-#### 3.3.1. 简述线程、程序、进程的基本概念。以及他们之间关系是什么?
+
+
+#### 3.3.1. 简述线程、程序、进程的基本概念
 
 **线程**与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享同一块内存空间和一组系统资源，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。
 
@@ -1205,7 +1349,7 @@ try (Scanner scanner = new Scanner(new File("test.txt"))) {
 **进程**是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。简单来说，一个进程就是一个执行中的程序，它在计算机中一个指令接着一个指令地执行着，同时，每个进程还占有某些系统资源如 CPU 时间，内存空间，文件，输入输出设备的使用权等等。换句话说，当程序在执行时，将会被操作系统载入内存中。
 线程是进程划分成的更小的运行单位。线程和进程最大的不同在于基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程极有可能会相互影响。从另一角度来说，进程属于操作系统的范畴，主要是同一段时间内，可以同时执行一个以上的程序，而线程则是在同一程序内几乎同时执行一个以上的程序段。
 
-#### 3.3.2. 线程有哪些基本状态?
+#### 3.3.2. 线程有哪些基本状态
 
 Java 线程在运行的生命周期中的指定时刻只可能处于下面 6 种不同状态的其中一个状态（图源《Java 并发编程艺术》4.1.4 节）。
 
@@ -1246,13 +1390,13 @@ Java Io 流共涉及 40 多个类，这些类看上去很杂乱，但实际上�
 
 ![IO-操作对象分类](Java.assets/IO-操作对象分类.png)
 
-##### 3.4.1.1. 既然有了字节流,为什么还要有字符流?
+**既然有了字节流,为什么还要有字符流?**
 
 问题本质想问：**不管是文件读写还是网络发送接收，信息的最小存储单元都是字节，那为什么 I/O 流操作要分为字节流操作和字符流操作呢？**
 
 回答：字符流是由 Java 虚拟机将字节转换得到的，问题就出在这个过程还算是非常耗时，并且，如果我们不知道编码类型就很容易出现乱码问题。所以， I/O 流就干脆提供了一个直接操作字符的接口，方便我们平时对字符进行流操作。如果音频文件、图片等媒体文件用字节流比较好，如果涉及到字符的话使用字符流比较好。
 
-##### 3.4.1.2. BIO,NIO,AIO 有什么区别?
+**BIO,NIO,AIO 有什么区别?**
 
 - **BIO (Blocking I/O):** 同步阻塞 I/O 模式，数据的读取写入必须阻塞在一个线程内等待其完成。在活动连接数不是特别高（小于单机 1000）的情况下，这种模型是比较不错的，可以让每一个连接专注于自己的 I/O 并且编程模型简单，也不用过多考虑系统的过载、限流等问题。线程池本身就是一个天然的漏斗，可以缓冲一些系统处理不了的连接或请求。但是，当面对十万甚至百万级连接的时候，传统的 BIO 模型是无能为力的。因此，我们需要一种更高效的 I/O 处理模型来应对更高的并发量。
 - **NIO (Non-blocking/New I/O):** NIO 是一种同步非阻塞的 I/O 模型，在 Java 1.4 中引入了 NIO 框架，对应 java.nio 包，提供了 Channel , Selector，Buffer 等抽象。NIO 中的 N 可以理解为 Non-blocking，不单纯是 New。它支持面向缓冲的，基于通道的 I/O 操作方法。 NIO 提供了与传统 BIO 模型中的 `Socket` 和 `ServerSocket` 相对应的 `SocketChannel` 和 `ServerSocketChannel` 两种不同的套接字通道实现,两种通道都支持阻塞和非阻塞两种模式。阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；非阻塞模式正好与之相反。对于低负载、低并发的应用程序，可以使用同步阻塞 I/O 来提升开发速率和更好的维护性；对于高负载、高并发的（网络）应用，应使用 NIO 的非阻塞模式来开发
@@ -1266,9 +1410,7 @@ Java Io 流共涉及 40 多个类，这些类看上去很杂乱，但实际上�
 
 
 
-
-
-# JAVA疑难点
+# 第二部分 JAVA疑难点
 
 ## 1. 基础
 
@@ -1629,13 +1771,13 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 
 
-# JAVA集合面试
+# 第三部分 JAVA集合面试
 
 剖析面试最常见问题之 Java 集合框架
 
-## 1.1. 集合概述
+## 1. 集合概述
 
-### 1.1.1. Java 集合概览
+### 1.1. Java 集合概览
 
 从下图可以看出，在 Java 中除了以 `Map` 结尾的类之外， 其他类都实现了 `Collection` 接口。
 
@@ -1643,23 +1785,23 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 ![](Java.assets/Java-Collections.jpeg)
 
-### 1.1.2. 说说 List,Set,Map 三者的区别？
+### 1.2. 说说 List,Set,Map 三者的区别？
 
 - `List`(对付顺序的好帮手)： 存储的元素是有序的、可重复的。
 - `Set`(注重独一无二的性质): 存储的元素是无序的、不可重复的。
 - `Map`(用 Key 来搜索的专家): 使用键值对（kye-value）存储，类似于数学上的函数 y=f(x)，“x”代表 key，"y"代表 value，Key 是无序的、不可重复的，value 是无序的、可重复的，每个键最多映射到一个值。
 
-### 1.1.3. 集合框架底层数据结构总结
+### 1.3. 集合框架底层数据结构总结
 
 先来看一下 `Collection` 接口下面的集合。
 
-#### 1.1.3.1. List
+#### 1.3.1. List
 
 - `Arraylist`： `Object[]`数组
 - `Vector`：`Object[]`数组
 - `LinkedList`： 双向链表(JDK1.6 之前为循环链表，JDK1.7 取消了循环)
 
-#### 1.1.3.2. Set
+#### 1.3.2. Set
 
 - `HashSet`（无序，唯一）: 基于 `HashMap` 实现的，底层采用 `HashMap` 来保存元素
 - `LinkedHashSet`：`LinkedHashSet` 是 `HashSet` 的子类，并且其内部是通过 `LinkedHashMap` 来实现的。有点类似于我们之前说的 `LinkedHashMap` 其内部是基于 `HashMap` 实现一样，不过还是有一点点区别的
@@ -1667,20 +1809,20 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 再来看看 `Map` 接口下面的集合。
 
-#### 1.1.3.3. Map
+#### 1.3.3. Map
 
 - `HashMap`： JDK1.8 之前 HashMap 由数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）。JDK1.8 以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间
 - `LinkedHashMap`： `LinkedHashMap` 继承自 `HashMap`，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，`LinkedHashMap` 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑。详细可以查看：[《LinkedHashMap 源码详细分析（JDK1.8）》](https://www.imooc.com/article/22931)
 - `Hashtable`： 数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的
 - `TreeMap`： 红黑树（自平衡的排序二叉树）
 
-### 1.1.4. 如何选用集合?
+### 1.4. 如何选用集合?
 
 主要根据集合的特点来选用，比如我们需要根据键值获取到元素值时就选用 `Map` 接口下的集合，需要排序时选择 `TreeMap`,不需要排序时就选择 `HashMap`,需要保证线程安全就选用 `ConcurrentHashMap`。
 
 当我们只需要存放元素值时，就选择实现`Collection` 接口的集合，需要保证元素唯一时选择实现 `Set` 接口的集合比如 `TreeSet` 或 `HashSet`，不需要就选择实现 `List` 接口的比如 `ArrayList` 或 `LinkedList`，然后再根据实现这些接口的集合的特点来选用。
 
-### 1.1.5. 为什么要使用集合？
+### 1.5. 为什么要使用集合？
 
 当我们需要保存一组类型相同的数据的时候，我们应该是用一个容器来保存，这个容器就是数组，但是，使用数组存储对象具有一定的弊端，
 因为我们在实际开发中，存储的数据的类型是多种多样的，于是，就出现了“集合”，集合同样也是用来存储多个数据的。
@@ -1688,9 +1830,9 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 数组的缺点是一旦声明之后，长度就不可变了；同时，声明数组时的数据类型也决定了该数组存储的数据的类型；而且，数组存储的数据是有序的、可重复的，特点单一。
 但是集合提高了数据存储的灵活性，Java 集合不仅可以用来存储不同类型不同数量的对象，还可以保存具有映射关系的数据
 
-### 1.1.6. Iterator 迭代器
+### 1.6. Iterator 迭代器
 
-#### 1.1.6.1. 迭代器 Iterator 是什么？
+#### 1.6.1. 迭代器 Iterator 是什么？
 
 ```java
 public interface Iterator<E> {
@@ -1706,11 +1848,11 @@ public interface Iterator<E> {
 
 迭代器是将这样的方法抽取出接口，然后在每个类的内部，定义自己迭代方式，这样做就规定了整个集合体系的遍历方式都是 `hasNext()`和`next()`方法，使用者不用管怎么实现的，会用即可。迭代器的定义为：提供一种方法访问一个容器对象中各个元素，而又不需要暴露该对象的内部细节。
 
-#### 1.1.6.2. 迭代器 Iterator 有啥用？
+#### 1.6.2. 迭代器 Iterator 有啥用？
 
 `Iterator` 主要是用来遍历集合用的，它的特点是更加安全，因为它可以确保，在当前遍历的集合元素被更改的时候，就会抛出 `ConcurrentModificationException` 异常。
 
-#### 1.1.6.3. 如何使用？
+#### 1.6.3. 如何使用？
 
 我们通过使用迭代器来遍历 `HashMap`，演示一下 迭代器 Iterator 的使用。
 
@@ -1726,7 +1868,7 @@ while (iterator.hasNext()) {
 }
 ```
 
-### 1.1.7. 有哪些集合是线程不安全的？怎么解决呢？
+### 1.7. 有哪些集合是线程不安全的？怎么解决呢？
 
 我们常用的 `Arraylist` ,`LinkedList`,`Hashmap`,`HashSet`,`TreeSet`,`TreeMap`，`PriorityQueue` 都不是线程安全的。解决办法很简单，可以使用线程安全的集合来代替。
 
@@ -1738,14 +1880,14 @@ while (iterator.hasNext()) {
 4. `BlockingQueue`: 这是一个接口，JDK 内部通过链表、数组等方式实现了这个接口。表示阻塞队列，非常适合用于作为数据共享的通道。
 5. `ConcurrentSkipListMap` :跳表的实现。这是一个`Map`，使用跳表的数据结构进行快速查找。
 
-## 1.2. Collection 子接口之 List
+## 2. Collection 子接口之 List
 
-### 1.2.1. Arraylist 和 Vector 的区别?
+### 2.1. Arraylist 和 Vector 的区别?
 
 1. ArrayList 是 List 的主要实现类，底层使用 Object[ ]存储，适用于频繁的查找工作，线程不安全 ；
 2. Vector 是 List 的古老实现类，底层使用 Object[ ]存储，线程安全的。
 
-### 1.2.2. Arraylist 与 LinkedList 区别?
+### 2.2. Arraylist 与 LinkedList 区别?
 
 1. **是否保证线程安全：** `ArrayList` 和 `LinkedList` 都是不同步的，也就是不保证线程安全；
 2. **底层数据结构：** `Arraylist` 底层使用的是 **`Object` 数组**；`LinkedList` 底层使用的是 **双向链表** 数据结构（JDK1.6 之前为循环链表，JDK1.7 取消了循环。注意双向链表和双向循环链表的区别，下面有介绍到！）
@@ -1753,7 +1895,7 @@ while (iterator.hasNext()) {
 4. **是否支持快速随机访问：** `LinkedList` 不支持高效的随机元素访问，而 `ArrayList` 支持。快速随机访问就是通过元素的序号快速获取元素对象(对应于`get(int index)`方法)。
 5. **内存空间占用：** ArrayList 的空 间浪费主要体现在在 list 列表的结尾会预留一定的容量空间，而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间（因为要存放直接后继和直接前驱以及数据）。
 
-#### 1.2.2.1. 补充内容:双向链表和双向循环链表
+#### 2.2.1. 补充内容:双向链表和双向循环链表
 
 **双向链表：** 包含两个指针，一个 prev 指向前一个节点，一个 next 指向后一个节点。
 
@@ -1765,7 +1907,7 @@ while (iterator.hasNext()) {
 
 ![双向循环链表](Java.assets/双向循环链表.png)
 
-#### 1.2.2.2. 补充内容:RandomAccess 接口
+#### 2.2.2. 补充内容:RandomAccess 接口
 
 ```java
 public interface RandomAccess {
@@ -1788,20 +1930,20 @@ public interface RandomAccess {
 
 `ArrayList` 实现了 `RandomAccess` 接口， 而 `LinkedList` 没有实现。为什么呢？我觉得还是和底层数据结构有关！`ArrayList` 底层是数组，而 `LinkedList` 底层是链表。数组天然支持随机访问，时间复杂度为 O(1)，所以称为快速随机访问。链表需要遍历到特定位置才能访问特定位置的元素，时间复杂度为 O(n)，所以不支持快速随机访问。，`ArrayList` 实现了 `RandomAccess` 接口，就表明了他具有快速随机访问功能。 `RandomAccess` 接口只是标识，并不是说 `ArrayList` 实现 `RandomAccess` 接口才具有快速随机访问功能的！
 
-### 1.2.3. 说一说 ArrayList 的扩容机制吧
+### 2.3. 说一说 ArrayList 的扩容机制吧
 
 详见笔主的这篇文章:[通过源码一步一步分析 ArrayList 扩容机制](https://github.com/Snailclimb/JavaGuide/blob/master/docs/java/collection/ArrayList-Grow.md)
 
-## 1.3. Collection 子接口之 Set
+## 3. Collection 子接口之 Set
 
-### 1.3.1. comparable 和 Comparator 的区别
+### 3.1. comparable 和 Comparator 的区别
 
 - `comparable` 接口实际上是出自`java.lang`包 它有一个 `compareTo(Object obj)`方法用来排序
 - `comparator`接口实际上是出自 java.util 包它有一个`compare(Object obj1, Object obj2)`方法用来排序
 
 一般我们需要对一个集合使用自定义排序时，我们就要重写`compareTo()`方法或`compare()`方法，当我们需要对某一个集合实现两种排序方式，比如一个 song 对象中的歌名和歌手名分别采用一种排序方法的话，我们可以重写`compareTo()`方法和使用自制的`Comparator`方法或者以两个 Comparator 来实现歌名排序和歌星名排序，第二种代表我们只能使用两个参数版的 `Collections.sort()`.
 
-#### 1.3.1.1. Comparator 定制排序
+#### 3.1.1. Comparator 定制排序
 
 ```java
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
@@ -1849,7 +1991,7 @@ Collections.sort(arrayList):
 [7, 4, 3, 3, -1, -5, -7, -9]
 ```
 
-#### 1.3.1.2. 重写 compareTo 方法实现按年龄来排序
+#### 3.1.2. 重写 compareTo 方法实现按年龄来排序
 
 ```java
 // person对象没有实现Comparable接口，所以必须实现，这样才不会出错，才可以使treemap中的数据按顺序排列
@@ -1923,13 +2065,13 @@ Output：
 30-张三
 ```
 
-### 1.3.2. 无序性和不可重复性的含义是什么
+### 3.2. 无序性和不可重复性的含义是什么
 
 1、什么是无序性？无序性不等于随机性 ，无序性是指存储的数据在底层数组中并非按照数组索引的顺序添加 ，而是根据数据的哈希值决定的。
 
 2、什么是不可重复性？不可重复性是指添加的元素按照 equals()判断时 ，返回 false，需要同时重写 equals()方法和 HashCode()方法。
 
-### 1.3.3. 比较 HashSet、LinkedHashSet 和 TreeSet 三者的异同
+### 3.3. 比较 HashSet、LinkedHashSet 和 TreeSet 三者的异同
 
 HashSet 是 Set 接口的主要实现类 ，HashSet 的底层是 HashMap，线程不安全的，可以存储 null 值；
 
@@ -1937,9 +2079,9 @@ LinkedHashSet 是 HashSet 的子类，能够按照添加的顺序遍历；
 
 TreeSet 底层使用红黑树，能够按照添加元素的顺序进行遍历，排序的方式有自然排序和定制排序。
 
-## 1.4. Map 接口
+## 4. Map 接口
 
-### 1.4.1. HashMap 和 Hashtable 的区别
+### 4.1. HashMap 和 Hashtable 的区别
 
 1. **线程是否安全：** HashMap 是非线程安全的，HashTable 是线程安全的,因为 HashTable 内部的方法基本都经过`synchronized` 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；
 2. **效率：** 因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它；
@@ -1984,7 +2126,7 @@ TreeSet 底层使用红黑树，能够按照添加元素的顺序进行遍历，
     }
 ```
 
-### 1.4.2. HashMap 和 HashSet 区别
+### 4.2. HashMap 和 HashSet 区别
 
 如果你看过 `HashSet` 源码的话就应该知道：HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 `clone()`、`writeObject()`、`readObject()`是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。
 
@@ -1995,7 +2137,7 @@ TreeSet 底层使用红黑树，能够按照添加元素的顺序进行遍历，
 |   调用 `put()`向 map 中添加元素    |              调用 `add()`方法向 Set 中添加元素               |
 | HashMap 使用键（Key）计算 Hashcode | HashSet 使用成员对象来计算 hashcode 值，对于两个对象来说 hashcode 可能相同，所以 equals()方法用来判断对象的相等性， |
 
-### 1.4.3. HashMap 和 TreeMap 区别
+### 4.3. HashMap 和 TreeMap 区别
 
 `TreeMap` 和`HashMap` 都继承自`AbstractMap` ，但是需要注意的是`TreeMap`它还实现了`NavigableMap`接口和`SortedMap` 接口。
 
@@ -2063,7 +2205,7 @@ TreeMap<Person, String> treeMap = new TreeMap<>((person1, person2) -> {
 
 **综上，相比于`HashMap`来说 `TreeMap` 主要多了对集合中的元素根据键排序的能力以及对集合内元素的搜索的能力。**
 
-### 1.4.4. HashSet 如何检查重复
+### 4.4. HashSet 如何检查重复
 
 当你把对象加入`HashSet`时，HashSet 会先计算对象的`hashcode`值来判断对象加入的位置，同时也会与其他加入的对象的 hashcode 值作比较，如果没有相符的 hashcode，HashSet 会假设对象没有重复出现。但是如果发现有相同 hashcode 值的对象，这时会调用`equals()`方法来检查 hashcode 相等的对象是否真的相同。如果两者相同，HashSet 就不会让加入操作成功。（摘自我的 Java 启蒙书《Head fist java》第二版）
 
@@ -2083,9 +2225,9 @@ TreeMap<Person, String> treeMap = new TreeMap<>((person1, person2) -> {
 
 对于引用类型（包括包装类型）来说，equals 如果没有被重写，对比它们的地址是否相等；如果 equals()方法被重写（例如 String），则比较的是地址里的内容。
 
-### 1.4.5. HashMap 的底层实现
+### 4.5. HashMap 的底层实现
 
-#### 1.4.5.1. JDK1.8 之前
+#### 4.5.1. JDK1.8 之前
 
 JDK1.8 之前 `HashMap` 底层是 **数组和链表** 结合在一起使用也就是 **链表散列**。**HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，然后通过 (n - 1) & hash 判断当前元素存放的位置（这里的 n 指的是数组的长度），如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，不相同就通过拉链法解决冲突。**
 
@@ -2124,7 +2266,7 @@ static int hash(int h) {
 
 ![jdk1.8之前的内部结构-HashMap](Java.assets/77c95eb733284dbd8ce4e85c9cb6b042.png)
 
-#### 1.4.5.2. JDK1.8 之后
+#### 4.5.2. JDK1.8 之后
 
 相比于之前的版本， JDK1.8 之后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间。
 
@@ -2132,7 +2274,7 @@ static int hash(int h) {
 
 > TreeMap、TreeSet 以及 JDK1.8 之后的 HashMap 底层都用到了红黑树。红黑树就是为了解决二叉查找树的缺陷，因为二叉查找树在某些情况下会退化成一个线性结构。
 
-### 1.4.6. HashMap 的长度为什么是 2 的幂次方
+### 4.6. HashMap 的长度为什么是 2 的幂次方
 
 为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，Hash 值的范围值-2147483648 到 2147483647，前后加起来大概 40 亿的映射空间，只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。但问题是一个 40 亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。这个数组下标的计算方法是“ `(n - 1) & hash`”。（n 代表数组长度）。这也就解释了 HashMap 的长度为什么是 2 的幂次方。
 
@@ -2140,17 +2282,17 @@ static int hash(int h) {
 
 我们首先可能会想到采用%取余的操作来实现。但是，重点来了：**“取余(%)操作中如果除数是 2 的幂次则等价于与其除数减一的与(&)操作（也就是说 hash%length==hash&(length-1)的前提是 length 是 2 的 n 次方；）。”** 并且 **采用二进制位操作 &，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是 2 的幂次方。**
 
-### 1.4.7. HashMap 多线程操作导致死循环问题
+### 4.7. HashMap 多线程操作导致死循环问题
 
 主要原因在于并发下的 Rehash 会造成元素之间会形成一个循环链表。不过，jdk 1.8 后解决了这个问题，但是还是不建议在多线程下使用 HashMap,因为多线程下使用 HashMap 还是会存在其他问题比如数据丢失。并发环境下推荐使用 ConcurrentHashMap 。
 
 详情请查看：<https://coolshell.cn/articles/9606.html>
 
-### 1.4.8. HashMap 有哪几种常见的遍历方式?
+### 4.8. HashMap 有哪几种常见的遍历方式?
 
 [HashMap 的 7 种遍历方式与性能分析！](https://mp.weixin.qq.com/s/Zz6mofCtmYpABDL1ap04ow)
 
-### 1.4.9. ConcurrentHashMap 和 Hashtable 的区别
+### 4.9. ConcurrentHashMap 和 Hashtable 的区别
 
 ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方式上不同。
 
@@ -2177,9 +2319,9 @@ ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方
 
 JDK1.8 的 `ConcurrentHashMap` 不在是 **Segment 数组 + HashEntry 数组 + 链表**，而是 **Node 数组 + 链表 / 红黑树**。不过，Node 只能用于链表的情况，红黑树的情况需要使用 **`TreeNode`**。当冲突链表达到一定长度时，链表会转换成红黑树。
 
-### 1.4.10. ConcurrentHashMap 线程安全的具体实现方式/底层具体实现
+### 4.10. ConcurrentHashMap 线程安全的具体实现方式/底层具体实现
 
-#### 1.4.10.1. JDK1.7（上面有示意图）
+#### 4.10.1. JDK1.7（上面有示意图）
 
 首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。
 
@@ -2194,13 +2336,13 @@ static class Segment<K,V> extends ReentrantLock implements Serializable {
 
 一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和 HashMap 类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个 HashEntry 数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment 的锁。
 
-#### 1.4.10.2. JDK1.8 （上面有示意图）
+#### 4.10.2. JDK1.8 （上面有示意图）
 
 ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS 和 synchronized 来保证并发安全。数据结构跟 HashMap1.8 的结构类似，数组+链表/红黑二叉树。Java 8 在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为 O(N)）转换为红黑树（寻址时间复杂度为 O(log(N))）
 
 synchronized 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，效率又提升 N 倍。
 
-## 1.5. Collections 工具类
+## 5. Collections 工具类
 
 Collections 工具类常用方法:
 
@@ -2208,7 +2350,7 @@ Collections 工具类常用方法:
 2. 查找,替换操作
 3. 同步控制(不推荐，需要线程安全的集合类型时请考虑使用 JUC 包下的并发集合)
 
-### 1.5.1. 排序操作
+### 5.1. 排序操作
 
 ```java
 void reverse(List list)//反转
@@ -2219,7 +2361,7 @@ void swap(List list, int i , int j)//交换两个索引位置的元素
 void rotate(List list, int distance)//旋转。当distance为正数时，将list后distance个元素整体移到前面。当distance为负数时，将 list的前distance个元素整体移到后面
 ```
 
-### 1.5.2. 查找,替换操作
+### 5.2. 查找,替换操作
 
 ```java
 int binarySearch(List list, Object key)//对List进行二分查找，返回索引，注意List必须是有序的
@@ -2231,7 +2373,7 @@ int indexOfSubList(List list, List target)//统计target在list中第一次出�
 boolean replaceAll(List list, Object oldVal, Object newVal), 用新元素替换旧元素
 ```
 
-### 1.5.3. 同步控制
+### 5.3. 同步控制
 
 `Collections` 提供了多个`synchronizedXxx()`方法·，该方法可以将指定集合包装成线程同步的集合，从而解决多线程并发访问集合时的线程安全问题。
 
@@ -2248,9 +2390,9 @@ synchronizedMap(Map<K,V> m) //返回由指定映射支持的同步（线程安�
 synchronizedSet(Set<T> s) //返回指定 set 支持的同步（线程安全的）set。
 ```
 
-## 1.6. 其他重要问题
+## 6. 其他重要问题
 
-### 1.6.1. 什么是快速失败(fail-fast)？
+### 6.1. 什么是快速失败(fail-fast)？
 
 **快速失败(fail-fast)** 是 Java 集合的一种错误检测机制。**在使用迭代器对集合进行遍历的时候，我们在多线程下操作非安全失败(fail-safe)的集合类可能就会触发 fail-fast 机制，导致抛出 `ConcurrentModificationException` 异常。 另外，在单线程下，如果在遍历过程中对集合对象的内容进行了修改的话也会触发 fail-fast 机制。**
 
@@ -2281,17 +2423,17 @@ final void checkForComodification() {
 
 有了前面讲的基础，我们应该知道：使用 `Iterator` 提供的 `remove` 方法，可以修改到 `expectedModCount` 的值。所以，才不会再抛出`ConcurrentModificationException` 异常。
 
-### 1.6.2. 什么是安全失败(fail-safe)呢？
+### 6.2. 什么是安全失败(fail-safe)呢？
 
 明白了快速失败(fail-fast)之后，安全失败(fail-safe)我们就很好理解了。
 
 采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。所以，在遍历过程中对原集合所作的修改并不能被迭代器检测到，故不会抛 `ConcurrentModificationException` 异常。
 
-### 1.6.3. Arrays.asList()避坑指南
+### 6.3. Arrays.asList()避坑指南
 
 最近使用`Arrays.asList()`遇到了一些坑，然后在网上看到这篇文章：[Java Array to List Examples](http://javadevnotes.com/java-array-to-list-examples) 感觉挺不错的，但是还不是特别全面。所以，自己对于这块小知识点进行了简单的总结。
 
-#### 1.6.3.1. 简介
+#### 6.3.1. 简介
 
 `Arrays.asList()`在平时开发中还是比较常见的，我们可以使用它将一个数组转换为一个 List 集合。
 
@@ -2313,13 +2455,13 @@ public static <T> List<T> asList(T... a) {
 }
 ```
 
-#### 1.6.3.2. 《阿里巴巴 Java 开发手册》对其的描述
+#### 6.3.2. 《阿里巴巴 Java 开发手册》对其的描述
 
 `Arrays.asList()`将数组转换为集合后,底层其实还是数组，《阿里巴巴 Java 开发手册》对于这个方法有如下描述：
 
 ![阿里巴巴Java开发手-Arrays.asList()方法](<Java.assets/阿里巴巴Java开发手-Arrays.asList()方法.png>)
 
-#### 1.6.3.3. 使用时的注意事项总结
+#### 6.3.3. 使用时的注意事项总结
 
 **传递的数组必须是对象数组，而不是基本类型。**
 
@@ -2416,7 +2558,7 @@ public E remove(int index) {
 
 
 
-# 集合源码深度剖析
+# 第四部分 集合源码深度剖析
 
 ## HashMap 深度剖析
 
@@ -2962,6 +3104,10 @@ public class HashMapDemo {
 
 }
 ```
+
+
+
+## ConcurrentHashMap 深度剖析
 
 
 
@@ -4657,7 +4803,7 @@ public class EnsureCapacityTest {
 
 
 
-# J2EE基础知识
+# 第五部分 J2EE基础知识
 
 
 
@@ -4955,7 +5101,7 @@ Cookie 存储在客户端中，而Session存储在服务器上，相对来说 Se
 
 
 
-# JAVA新特性
+# 第六部分 JAVA新特性
 
 大家好，我是Guide哥！这篇文章来自读者的投稿，经过了两次较大的改动，两周的完善终于完成。Java 8新特性见这里：[Java8新特性最佳指南](https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247484744&idx=1&sn=9db31dca13d327678845054af75efb74&chksm=cea24a83f9d5c3956f4feb9956b068624ab2fdd6c4a75fe52d5df5dca356a016577301399548&token=1082669959&lang=zh_CN&scene=21#wechat_redirect) 。
 
@@ -5383,6 +5529,8 @@ if(obj instanceof String str){
 - 每次 Java 版本的发布都伴随着对 JVM 虚拟机的优化，包括对现有垃圾回收算法的改进，引入新的垃圾回收算法，移除老旧的不再适用于今天的垃圾回收算法等
 - 整体优化的方向是**高效，低时延的垃圾回收表现**
 - 对于日常的应用开发者可能比较关注新的语法特性，但是从一个公司角度来说，在考虑是否升级 Java 平台时更加考虑的是**JVM 运行时的提升**
+
+
 
 ## 参考信息
 

@@ -1,0 +1,8 @@
+## File-based project format:
+_book/
+node_modules/
+logo.jpg
+*.idea/
+.idea/
+log.log
+

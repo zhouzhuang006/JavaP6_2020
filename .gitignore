@@ -2,6 +2,8 @@
 _book/
 node_modules/
 logo.jpg
+start.bat
+start.sh
 *.idea/
 .idea/
 log.log

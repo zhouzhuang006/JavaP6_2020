@@ -1,4 +1,4 @@
-第一部分 JAVA 基础
+# 第一部分 JAVA 基础
 
 
 
@@ -992,7 +992,7 @@ public class Student {
 
 
 
-#### 2.3.1. 静态方法可以调用非静态成员吗？
+#### 2.3.1. 静态方法可以调用非静态成员吗
 
 由于静态方法可以不通过对象进行调用，因此在静态方法里，不能调用其他非静态变量，也不可以访问非静态变量成员。
 
@@ -1551,7 +1551,7 @@ BigDecimal 主要用来操作（大）浮点数，BigInteger 主要用来操作�
 
 BigDecimal 的实现利用到了 BigInteger, 所不同的是 BigDecimal 加入了小数位的概念
 
-### 1.4. 基本数据类型与包装数据类型的使用标准
+### 1.4. 基本数据类型与包装数据类型
 
 Reference:《阿里巴巴Java开发手册》
 
@@ -1917,7 +1917,7 @@ while (iterator.hasNext()) {
 }
 ```
 
-### 1.7. 有哪些集合是线程不安全的？怎么解决呢？
+### 1.7. 有哪些集合是线程不安全的
 
 我们常用的 `Arraylist` ,`LinkedList`,`Hashmap`,`HashSet`,`TreeSet`,`TreeMap`，`PriorityQueue` 都不是线程安全的。解决办法很简单，可以使用线程安全的集合来代替。
 
@@ -2120,7 +2120,7 @@ Output：
 
 2、什么是不可重复性？不可重复性是指添加的元素按照 equals()判断时 ，返回 false，需要同时重写 equals()方法和 HashCode()方法。
 
-### 3.3. HashSet LinkedHashSet TreeSet 异同
+### 3.3. HashSet LinkedHashSet TreeSet
 
 HashSet 是 Set 接口的主要实现类 ，HashSet 的底层是 HashMap，线程不安全的，可以存储 null 值；
 
@@ -2341,7 +2341,7 @@ static int hash(int h) {
 
 [HashMap 的 7 种遍历方式与性能分析！](https://mp.weixin.qq.com/s/Zz6mofCtmYpABDL1ap04ow)
 
-### 4.9. ConcurrentHashMap 和 Hashtable 区别
+### 4.9. ConcurrentHashMap和Hashtable
 
 ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方式上不同。
 

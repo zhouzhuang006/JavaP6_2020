@@ -12,5 +12,28 @@
 
 废话不多，上代码：
 
+新建一个 start.sh 文件
 
+vim start.sh
+
+```shell
+killall node
+git pull
+# gitbook build
+gitbook serve --port 9188 > log.log 2>&1 &
+```
+
+设置linux 的 **crontab**
+
+**vim /etc/crontab**
+
+最后一行添加
+
+```sh
+0 */1 * * * sh /root/app/JavaP6_2020/start.sh
+```
+
+重启crontab：systemctl restart crond.service
+
+> 如果没有按照 crontab 请仔细百度安装： **yum -y install cron**
 

@@ -1,4 +1,4 @@
-# 第一部分 JAVA 基础
+第一部分 JAVA 基础
 
 
 
@@ -1424,9 +1424,9 @@ Object的equals方法容易抛空指针异常，应使用常量或确定有值�
 // 不能使用一个值为null的引用类型变量来调用非静态方法，否则会抛出异常
 String str = null;
 if (str.equals("SnailClimb")) {
-  ...
+  System.out.println("Yes");
 } else {
-  ..
+  System.out.println("No");
 }
 ```
 
@@ -1446,9 +1446,9 @@ Objects.equals(null,"SnailClimb");// false
 
 ```java
 public static boolean equals(Object a, Object b) {
-        // 可以避免空指针异常。如果a==null的话此时a.equals(b)就不会得到执行，避免出现空指针异常。
-        return (a == b) || (a != null && a.equals(b));
-    }
+    // 可以避免空指针异常。如果a==null的话此时a.equals(b)就不会得到执行，避免出现空指针异常。
+    return (a == b) || (a != null && a.equals(b));
+}
 ```
 
 **注意：**
@@ -1461,7 +1461,7 @@ Reference:[Java中equals方法造成空指针异常的原因及解决方案](htt
 
 ### 1.2. 整型包装类值的比较
 
-所有整型包装类对象值的比较必须使用equals方法。
+所有整型包装类对象值的比较必须使用equals方法，推荐使用 `java.util.Objects#equals`。
 
 先看下面这个例子：
 
@@ -1526,9 +1526,24 @@ System.out.println(n);// 1.255
 
 1.3.4. BigDecimal 的使用注意事项
 
-注意：我们在使用BigDecimal时，为了防止精度丢失，推荐使用它的 **BigDecimal(String)** 构造方法来创建对象。《阿里巴巴Java开发手册》对这部分内容也有提到如下图所示。
+注意：我们在使用BigDecimal时，为了防止精度丢失，推荐使用它的 **BigDecimal(String)** 构造方法来创建对象。
 
-![《阿里巴巴Java开发手册》对这部分BigDecimal的描述](Java.assets/BigDecimal.png)
+《阿里巴巴Java开发手册》对这部分内容也有提到如下图所示。
+
+```
+10.【强制】为了防止精度损失，禁止使用构造方法 BigDecimal(double)的方式把 double 值转化为 BigDecimal 对象。
+
+说明：BigDecimal(double)存在精度损失风险，在精确计算或值比较的场景中可能会导致业务逻辑异常。
+
+如：BigDecimal g = new BigDecimal(0.1f); 实际的存储值为：0.10000000149
+
+正例：优先推荐入参为 String 的构造方法，或使用 BigDecimal 的 valueOf 方法，此方法内部其实执行了Double 的 toString，而 Double 的 toString 按 double 的实际能表达的精度对尾数进行了截断。
+
+BigDecimal recommend1 = new BigDecimal("0.1");
+BigDecimal recommend2 = BigDecimal.valueOf(0.1)
+```
+
+
 
 1.3.5. 总结
 
@@ -1580,11 +1595,20 @@ public static <T> List<T> asList(T... a) {
 }
 ```
 
-#### 2.1.2. 《阿里巴巴Java 开发手册》对其的描述
+#### 2.1.2. 工具类 Arrays.asList
 
 `Arrays.asList()`将数组转换为集合后,底层其实还是数组，《阿里巴巴Java 开发手册》对于这个方法有如下描述：
 
-![阿里巴巴Java开发手-Arrays.asList()方法](Java.assets/阿里巴巴Java开发手-Arrays.asList()方法.png)
+```
+8.【强制】使用工具类 Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的 add/remove/clear 方法会抛出 UnsupportedOperationException 异常。
+
+说明：asList 的返回对象是一个 Arrays 内部类，并没有实现集合的修改方法。Arrays.asList 体现的是适配器模式，只是转换接口，后台的数据仍是数组。
+
+String[] str = new String[] { "yang", "hao" };
+List list = Arrays.asList(str);
+```
+
+
 
 #### 2.1.3. 使用时的注意事项总结
 
@@ -1595,9 +1619,9 @@ public static <T> List<T> asList(T... a) {
 ```java
 int[] myArray = { 1, 2, 3 };
 List myList = Arrays.asList(myArray);
-System.out.println(myList.size());//1
-System.out.println(myList.get(0));//数组地址值
-System.out.println(myList.get(1));//报错：ArrayIndexOutOfBoundsException
+System.out.println(myList.size());// 1
+System.out.println(myList.get(0));// 数组地址值
+System.out.println(myList.get(1));// 报错：ArrayIndexOutOfBoundsException
 int [] array=(int[]) myList.get(0);
 System.out.println(array[0]);//1
 ```
@@ -1614,16 +1638,16 @@ Integer[] myArray = { 1, 2, 3 };
 
 ```java
 List myList = Arrays.asList(1, 2, 3);
-myList.add(4);//运行时报错：UnsupportedOperationException
-myList.remove(1);//运行时报错：UnsupportedOperationException
-myList.clear();//运行时报错：UnsupportedOperationException
+myList.add(4);// 运行时报错：UnsupportedOperationException
+myList.remove(1);// 运行时报错：UnsupportedOperationException
+myList.clear();// 运行时报错：UnsupportedOperationException
 ```
 
 `Arrays.asList()` 方法返回的并不是 `java.util.ArrayList` ，而是 `java.util.Arrays` 的一个内部类,这个内部类并没有实现集合的修改方法或者说并没有重写这些方法。
 
 ```java
 List myList = Arrays.asList(1, 2, 3);
-System.out.println(myList.getClass());//class java.util.Arrays$ArrayList
+System.out.println(myList.getClass());// class java.util.Arrays$ArrayList
 ```
 
 下图是`java.util.Arrays$ArrayList`的简易源码，我们可以看到这个类重写的方法有哪些。
@@ -1679,7 +1703,7 @@ public E remove(int index) {
 }
 ```
 
-#### 2.1.4. 如何正确的将数组转换为ArrayList?
+#### 2.1.4. 如何正确的将数组转换为ArrayList
 
 stackoverflow：https://dwz.cn/vcBkTiTW
 
@@ -1742,7 +1766,7 @@ List<String> list = new ArrayList<String>();
 CollectionUtils.addAll(list, str);
 ```
 
-### 2.2. Collection.toArray()方法使用的坑&如何反转数组
+### 2.2. Collection.toArray()方法使用的坑
 
 该方法是一个泛型方法：`<T> T[] toArray(T[] a);` 如果`toArray`方法中没有传递任何参数的话返回的是`Object`类型数组。
 
@@ -1757,7 +1781,7 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 由于JVM优化，`new String[0]`作为`Collection.toArray()`方法的参数现在使用更好，`new String[0]`就是起一个模板的作用，指定了返回数组的类型，0是为了节省空间，因为它只是为了说明返回的类型。详见：<https://shipilev.net/blog/2016/arrays-wisdom-ancients/>
 
-### 2.3. 不要在 foreach 循环里进行元素的 remove/add 操作
+### 2.3. 不要在 foreach 循环 remove 操作
 
 如果要进行`remove`操作，可以调用迭代器的 `remove `方法而不是集合类的 remove 方法。因为如果列表在任何时间从结构上修改创建迭代器之后，以任何方式除非通过迭代器自身`remove/add`方法，迭代器都将抛出一个`ConcurrentModificationException`,这就是单线程状态下产生的 **fail-fast 机制**。
 
@@ -1765,9 +1789,34 @@ s=list.toArray(new String[0]);//没有指定类型的话会报错
 
 `java.util`包下面的所有的集合类都是fail-fast的，而`java.util.concurrent`包下面的所有的类都是fail-safe的。
 
-![不要在 foreach 循环里进行元素的 remove/add 操作](https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019/7/foreach-remove:add.png)
+以下引用阿里巴巴Java开发手册
 
+```
+11.【强制】不要在 foreach 循环里进行元素的 remove/add 操作。remove 元素请使用Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。
 
+正例：
+
+List<String> list = new ArrayList<>(); 
+list.add("1"); 
+list.add("2"); 
+Iterator<String> iterator = list.iterator(); 
+while (iterator.hasNext()) { 
+    String item = iterator.next(); 
+    if (删除元素的条件) {
+        iterator.remove(); 
+    } 
+}
+
+反例：
+
+for (String item : list) { 
+    if ("1".equals(item)) { 
+        list.remove(item); 
+    } 
+}
+
+说明：以上代码的执行结果肯定会出乎大家的意料，那么试一下把“1”换成“2”，会是同样的结果吗？
+```
 
 
 
@@ -2071,7 +2120,7 @@ Output：
 
 2、什么是不可重复性？不可重复性是指添加的元素按照 equals()判断时 ，返回 false，需要同时重写 equals()方法和 HashCode()方法。
 
-### 3.3. 比较 HashSet、LinkedHashSet 和 TreeSet 三者的异同
+### 3.3. HashSet LinkedHashSet TreeSet 异同
 
 HashSet 是 Set 接口的主要实现类 ，HashSet 的底层是 HashMap，线程不安全的，可以存储 null 值；
 
@@ -2288,11 +2337,11 @@ static int hash(int h) {
 
 详情请查看：<https://coolshell.cn/articles/9606.html>
 
-### 4.8. HashMap 有哪几种常见的遍历方式?
+### 4.8. HashMap 有哪几种常见的遍历方式
 
 [HashMap 的 7 种遍历方式与性能分析！](https://mp.weixin.qq.com/s/Zz6mofCtmYpABDL1ap04ow)
 
-### 4.9. ConcurrentHashMap 和 Hashtable 的区别
+### 4.9. ConcurrentHashMap 和 Hashtable 区别
 
 ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方式上不同。
 
@@ -2319,7 +2368,7 @@ ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方
 
 JDK1.8 的 `ConcurrentHashMap` 不在是 **Segment 数组 + HashEntry 数组 + 链表**，而是 **Node 数组 + 链表 / 红黑树**。不过，Node 只能用于链表的情况，红黑树的情况需要使用 **`TreeNode`**。当冲突链表达到一定长度时，链表会转换成红黑树。
 
-### 4.10. ConcurrentHashMap 线程安全的具体实现方式/底层具体实现
+### 4.10. ConcurrentHashMap 底层实现
 
 #### 4.10.1. JDK1.7（上面有示意图）
 
@@ -2392,7 +2441,7 @@ synchronizedSet(Set<T> s) //返回指定 set 支持的同步（线程安全的�
 
 ## 6. 其他重要问题
 
-### 6.1. 什么是快速失败(fail-fast)？
+### 6.1. 什么是快速失败(fail-fast)
 
 **快速失败(fail-fast)** 是 Java 集合的一种错误检测机制。**在使用迭代器对集合进行遍历的时候，我们在多线程下操作非安全失败(fail-safe)的集合类可能就会触发 fail-fast 机制，导致抛出 `ConcurrentModificationException` 异常。 另外，在单线程下，如果在遍历过程中对集合对象的内容进行了修改的话也会触发 fail-fast 机制。**
 
@@ -2419,11 +2468,31 @@ final void checkForComodification() {
 
 我们再来趁热打铁，看一个阿里巴巴手册相关的规定：
 
-![](Java.assets/ad28e3ba-e419-4724-869c-73879e604da1.png)
+```
+11.【强制】不要在 foreach 循环里进行元素的 remove/add 操作。remove 元素请使用Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。
+正例：
+List<String> list = new ArrayList<>(); 
+list.add("1"); 
+list.add("2"); 
+Iterator<String> iterator = list.iterator(); 
+while (iterator.hasNext()) { 
+    String item = iterator.next(); 
+    if (删除元素的条件) {
+        iterator.remove(); 
+    } 
+}
+反例：
+for (String item : list) { 
+    if ("1".equals(item)) { 
+        list.remove(item); 
+    } 
+}
+说明：以上代码的执行结果肯定会出乎大家的意料，那么试一下把“1”换成“2”，会是同样的结果吗？
+```
 
 有了前面讲的基础，我们应该知道：使用 `Iterator` 提供的 `remove` 方法，可以修改到 `expectedModCount` 的值。所以，才不会再抛出`ConcurrentModificationException` 异常。
 
-### 6.2. 什么是安全失败(fail-safe)呢？
+### 6.2. 什么是安全失败(fail-safe)呢
 
 明白了快速失败(fail-fast)之后，安全失败(fail-safe)我们就很好理解了。
 
@@ -2455,11 +2524,24 @@ public static <T> List<T> asList(T... a) {
 }
 ```
 
-#### 6.3.2. 《阿里巴巴 Java 开发手册》对其的描述
+#### 6.3.2. 工具类 Arrays.asList()使用
 
-`Arrays.asList()`将数组转换为集合后,底层其实还是数组，《阿里巴巴 Java 开发手册》对于这个方法有如下描述：
+`Arrays.asList()`将数组转换为集合后, 底层其实还是数组，《阿里巴巴 Java 开发手册》对于这个方法有如下描述：
 
-![阿里巴巴Java开发手-Arrays.asList()方法](<Java.assets/阿里巴巴Java开发手-Arrays.asList()方法.png>)
+```
+8.【强制】使用工具类 Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的 add/remove/clear 方法会抛出 UnsupportedOperationException 异常。
+
+说明：asList 的返回对象是一个 Arrays 内部类，并没有实现集合的修改方法。Arrays.asList 体现的是适配器模式，只是转换接口，后台的数据仍是数组。
+
+String[] str = new String[] { "yang", "hao" };
+List list = Arrays.asList(str);
+
+第一种情况：list.add("yangguanbao"); 运行时异常。
+
+第二种情况：str[0] = "changed"; 也会随之修改，反之亦然。
+```
+
+
 
 #### 6.3.3. 使用时的注意事项总结
 
@@ -4222,7 +4304,7 @@ public class ArrayList<E> extends AbstractList<E>
 
 ### <font face="楷体" id="1" id="5">ArrayList源码分析</font>
 
-####  System.arraycopy()和Arrays.copyOf()方法
+####  System.arraycopy和Arrays.copyOf
 
 　　通过上面源码我们发现这两个实现数组复制的方法被广泛使用而且很多地方都特别巧妙。比如下面<font color="red">add(int index, E element)</font>方法就很巧妙的用到了<font color="red">arraycopy()方法</font>让数组自己复制自己实现让index开始之后的所有成员后移一个位置:
 
@@ -4258,7 +4340,7 @@ public class ArrayList<E> extends AbstractList<E>
     }
 ```
 
-##### 两者联系与区别
+**两者联系与区别**:
 
 **联系：**
 看两者源代码可以发现`copyOf()`内部调用了`System.arraycopy()`方法
@@ -4626,7 +4708,7 @@ public class ArrayListDemo {
 
 
 
-### 三、`System.arraycopy()` 和 `Arrays.copyOf()`方法
+### 三、`System.arraycopy` 和 `Arrays.copyOf`
 
 
 阅读源码的话，我们就会发现 ArrayList 中大量调用了这两个方法。比如：我们上面讲的扩容操作以及`add(int index, E element)`、`toArray()` 等方法中都用到了该方法！
@@ -4835,7 +4917,7 @@ Servlet的优点:
 
 参考：《javaweb整合开发王者归来》P7
 
-## Servlet接口中有哪些方法及Servlet生命周期探秘
+## Servlet生命周期
 
 Servlet接口定义了5个方法，其中**前三个方法与Servlet生命周期相关**：
 
@@ -4976,7 +5058,7 @@ JSP有9个内置对象：
 - getServerPort()：获取服务器的端口号 
 - removeAttribute(String name)：删除请求中的一个属性 
 
-## request.getAttribute()和 request.getParameter()有何区别
+## getAttribute和getParameter区别
 
 **从获取方向来看：**
 

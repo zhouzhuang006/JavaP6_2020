@@ -491,7 +491,7 @@ BigDecimal recommend1 = new BigDecimal("0.1");
 BigDecimal recommend2 = BigDecimal.valueOf(0.1)
 ```
 
-11. 关于基本数据类型与包装数据类型的使用标准如下：
+11.关于基本数据类型与包装数据类型的使用标准如下：
 
 1） 【强制】所有的 POJO 类属性必须使用包装数据类型。
 

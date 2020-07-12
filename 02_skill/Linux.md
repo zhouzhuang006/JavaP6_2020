@@ -25,7 +25,12 @@ gitbook serve --port 9188 > log.log 2>&1 &
 
 设置linux 的 **crontab**
 
-**vim /etc/crontab**
+```
+crontab [-u username]　　　　//省略用户表表示操作当前用户的crontab
+    -e      (编辑工作表)
+    -l      (列出工作表里的命令)
+    -r      (删除工作作)
+```
 
 最后一行添加
 

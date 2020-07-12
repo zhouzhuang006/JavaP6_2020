@@ -4302,7 +4302,7 @@ public class ArrayList<E> extends AbstractList<E>
   
 ```
 
-### <font face="楷体" id="1" id="5">ArrayList源码分析</font>
+### ArrayList源码分析
 
 ####  System.arraycopy和Arrays.copyOf
 
@@ -4445,7 +4445,7 @@ public class ArrayList<E> extends AbstractList<E>
 
 　　ArrayList有四个内部类，其中的**Itr是实现了Iterator接口**，同时重写了里面的**hasNext()**， **next()**， **remove()** 等方法；其中的**ListItr** 继承 **Itr**，实现了**ListIterator接口**，同时重写了**hasPrevious()**， **nextIndex()**， **previousIndex()**， **previous()**， **set(E e)**， **add(E e)** 等方法，所以这也可以看出了 **Iterator和ListIterator的区别:** ListIterator在Iterator的基础上增加了添加对象，修改对象，逆向遍历等方法，这些是Iterator不能实现的。
 
-### <font face="楷体" id="6"> ArrayList经典Demo</font>
+### ArrayList经典Demo
 
 ```java
 package list;
@@ -4523,7 +4523,7 @@ public class ArrayListDemo {
 
 ## ArrayList扩容
 
-### 一、 先从 ArrayList 的构造函数说起
+### 1. 先从 ArrayList 的构造函数说起
 
 **ArrayList有三种方式来初始化，构造方法源码如下：**
 
@@ -4580,7 +4580,7 @@ public class ArrayListDemo {
 
 细心的同学一定会发现 ：**以无参数构造方法创建 ArrayList 时，实际上初始化赋值的是一个空数组。当真正对数组进行添加元素操作时，才真正分配容量。即向数组中添加第一个元素时，数组容量扩为10。** 下面在我们分析 ArrayList 扩容时会讲到这一点内容！
 
-### 二、一步一步分析 ArrayList 扩容机制
+### 2. 一步一步分析 ArrayList 扩容机制
 
 这里以无参构造函数创建的 ArrayList 为例分析
 
@@ -4708,7 +4708,7 @@ public class ArrayListDemo {
 
 
 
-### 三、`System.arraycopy` 和 `Arrays.copyOf`
+### 3. `System.arraycopy` 和 `Arrays.copyOf`
 
 
 阅读源码的话，我们就会发现 ArrayList 中大量调用了这两个方法。比如：我们上面讲的扩容操作以及`add(int index, E element)`、`toArray()` 等方法中都用到了该方法！
@@ -4805,7 +4805,7 @@ public class ArrayscopyOfTest {
 
 `arraycopy()` 需要目标数组，将原数组拷贝到你自己定义的数组里或者原数组，而且可以选择拷贝的起点和长度以及放入新数组中的位置 `copyOf()` 是系统自动在内部新建一个数组，并返回该数组。
 
-### 四、`ensureCapacity`方法
+### 4. `ensureCapacity`方法
 
 ArrayList 源码中有一个 `ensureCapacity` 方法不知道大家注意到没有，这个方法 ArrayList 内部没有被调用过，所以很显然是提供给用户调用的，那么这个方法有什么作用呢？
 
@@ -4893,7 +4893,7 @@ public class EnsureCapacityTest {
 
 在Java Web程序中，**Servlet**主要负责接收用户请求 `HttpServletRequest`,在`doGet()`,`doPost()`中做相应的处理，并将回应`HttpServletResponse`反馈给用户。**Servlet** 可以设置初始化参数，供Servlet内部使用。一个Servlet类只会有一个实例，在它初始化时调用`init()`方法，销毁时调用`destroy()`方法**。**Servlet需要在web.xml中配置（MyEclipse中创建Servlet会自动配置），**一个Servlet可以设置多个URL访问**。**Servlet不是线程安全**，因此要谨慎使用类变量。
 
-## 阐述Servlet和CGI的区别?
+## 阐述Servlet和CGI的区别
 
 CGI的不足之处:
 
@@ -5185,9 +5185,9 @@ Cookie 存储在客户端中，而Session存储在服务器上，相对来说 Se
 
 # 第六部分 JAVA新特性
 
-大家好，我是Guide哥！这篇文章来自读者的投稿，经过了两次较大的改动，两周的完善终于完成。Java 8新特性见这里：[Java8新特性最佳指南](https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247484744&idx=1&sn=9db31dca13d327678845054af75efb74&chksm=cea24a83f9d5c3956f4feb9956b068624ab2fdd6c4a75fe52d5df5dca356a016577301399548&token=1082669959&lang=zh_CN&scene=21#wechat_redirect) 。
+大家好，Java 8新特性见这里：[Java8新特性最佳指南](https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247484744&idx=1&sn=9db31dca13d327678845054af75efb74&chksm=cea24a83f9d5c3956f4feb9956b068624ab2fdd6c4a75fe52d5df5dca356a016577301399548&token=1082669959&lang=zh_CN&scene=21#wechat_redirect) 。
 
-*Guide 哥：别人家的特性都用了几年了，我 Java 才出来，哈哈！真实！*
+*PS：别人家的特性都用了几年了，我 Java 才出来，哈哈！真实！*
 
 ## Java9
 

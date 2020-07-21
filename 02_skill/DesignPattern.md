@@ -172,41 +172,51 @@ public class BJCarFactory extends CarFactory {
 
  定义：定义了一个接口用于创建相关或有依赖关系的对象族，而无需明确指定具体类。
 
-举例：（我们依然举pizza工厂的例子，pizza工厂有两个：纽约工厂和伦敦工厂）。类图如下：
+举例：（我们举Car工厂的例子，Car工厂有两个：日本工厂和中国工厂）。类图如下：
 
-
+![image-20200715132606509](DesignPattern.assets/image-20200715132606509.png)
 
 工厂的接口：
 
-    public interface AbsFactory {
-           Pizza CreatePizza(String ordertype) ;
-    }
+```java
+public interface CarFactory {
+
+    Car createCar(String carType);
+}
+```
 
 工厂的实现：
 
-    public class LDFactory implements AbsFactory {
-           @Override
-           public Pizza CreatePizza(String ordertype) {
-                  Pizza pizza = null;
-                  if ("cheese".equals(ordertype)) {
-                         pizza = new LDCheesePizza();
-                  } else if ("pepper".equals(ordertype)) {
-                         pizza = new LDPepperPizza();
-                  }
-                  return pizza;
-           }
+```java
+public class JapaneseCarFactory implements CarFactory {
+    
+    @Override
+    public Car createCar(String carType) {
+        Car car = null;
+        if ("mini".equals(carType)) {
+            car = new JapaneseMiniCar();
+        } else if ("SUV".equals(carType)) {
+            car = new JapaneseSuvCar();
+        }
+        return car;
     }
+}
 
-PizzaStroe的代码如下：
 
-    public class PizzaStroe {
-           public static void main(String[] args) {
-                  OrderPizza mOrderPizza;
-                  mOrderPizza = new OrderPizza("London");
-           }
+```
+
+测试的代码如下：
+
+```java
+public class Test {
+    public static void main(String[] args) {
+        Car car = new JapaneseCarFactory().createCar("SUV");
+        car.run();
     }
+}
+```
 
-解决了工厂方法模式的问题：在抽象工厂中PizzaStroe中只需要传入参数就可以实例化对象。
+解决了工厂方法模式的问题：在抽象工厂中Test中只需要传入参数就可以实例化对象。
 
 ### 2.1 工厂模式适用的场合
 
@@ -244,18 +254,19 @@ PizzaStroe的代码如下：
 
 顾名思义，就是预先加载。再进一步解释就是还没有使用该单例对象，但是，该单例对象就已经被加载到内存了。
 
-    public class PreloadSingleton {
-           
-           public static PreloadSingleton instance = new PreloadSingleton();
-       
-           //其他的类无法实例化单例类的对象
-           private PreloadSingleton() {
-           };
-           
-           public static PreloadSingleton getInstance() {
-                  return instance;
-           }
+```java
+public class PreloadSingleton {
+
+    public static PreloadSingleton instance = new PreloadSingleton();
+
+    //其他的类无法实例化单例类的对象
+    private PreloadSingleton() {};
+
+    public static PreloadSingleton getInstance() {
+        return instance;
     }
+}
+```
 
 很明显，没有使用该单例对象，该对象就被加载到了内存，会造成内存的浪费。
 
@@ -263,23 +274,21 @@ PizzaStroe的代码如下：
 
 为了避免内存的浪费，我们可以采用懒加载，即用到该单例对象的时候再创建。
 
-    public class Singleton {
-           
-           private static Singleton instance=null;
-           
-           private Singleton(){
-           };
-           
-           public static Singleton getInstance()
-           {
-                  if(instance==null)
-                  {
-                         instance=new Singleton();
-                  }
-                  return instance;
-                  
-           }
+```java
+public class Singleton {
+
+    private static Singleton instance=null;
+
+    private Singleton(){};
+
+    public static Singleton getInstance() {
+        if(instance==null) {
+            instance=new Singleton();
+        }
+        return instance;
     }
+}
+```
 
 ### 3.3 单例模式和线程安全
 
@@ -289,11 +298,13 @@ PizzaStroe的代码如下：
 
 不满足原子性或者顺序性，线程肯定是不安全的，这是基本的常识，不再赘述。我主要讲一下为什么new Singleton()无法保证顺序性。我们知道创建一个对象分三步:
 
-    memory=allocate();//1:初始化内存空间
-     
-    ctorInstance(memory);//2:初始化对象
-     
-    instance=memory();//3:设置instance指向刚分配的内存地址
+```java
+memory=allocate();// 1:初始化内存空间
+
+ctorInstance(memory);// 2:初始化对象
+
+instance=memory();// 3:设置instance指向刚分配的内存地址
+```
 
 jvm为了提高程序执行性能，会对没有依赖关系的代码进行重排序，上面2和3行代码可能被重新排序。我们用两个线程来说明线程是不安全的。线程A和线程B都创建对象。其中，A2和A3的重排序，将导致线程B在B1处判断出instance不为空，线程B接下来将访问instance引用的对象。此时，线程B将会访问到一个还未初始化的对象（线程不安全）。
 
@@ -301,53 +312,57 @@ jvm为了提高程序执行性能，会对没有依赖关系的代码进行重�
 
 我们首先想到的就是使用synchronized关键字。synchronized加载getInstace()函数上确实保证了线程的安全。但是，如果要经常的调用getInstance()方法，不管有没有初始化实例，都会唤醒和阻塞线程。为了避免线程的上下文切换消耗大量时间，如果对象已经实例化了，我们没有必要再使用synchronized加锁，直接返回对象。
 
-    public class Singleton {
-           private static Singleton instance = null;
-           private Singleton() {
-           };
-           public static synchronized Singleton getInstance() {
-                  if (instance == null) {
-                         instance = new Singleton();
-                  }
-                  return instance;
-           }
+```java
+public class Singleton {
+    private static Singleton instance = null;
+    private Singleton() {
+    };
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
     }
+}
+```
 
 我们把sychronized加在if(instance==null)判断语句里面，保证instance未实例化的时候才加锁
 
-    public class Singleton {
-           private static Singleton instance = null;
-           private Singleton() {
-           };
-           public static synchronized Singleton getInstance() {
-                  if (instance == null) {
-                         synchronized (Singleton.class) {
-                               if (instance == null) {
-                                      instance = new Singleton();
-                               }
-                         }
-                  }
-                  return instance;
-           }
+```java
+public class Singleton {
+    private static Singleton instance = null;
+    private Singleton() {};
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
     }
+}
+```
 
 我们经过2.3的讨论知道new一个对象的代码是无法保证顺序性的，因此，我们需要使用另一个关键字volatile保证对象实例化过程的顺序性。
 
-    public class Singleton {
-           private static volatile Singleton instance = null;
-           private Singleton() {
-           };
-           public static synchronized Singleton getInstance() {
-                  if (instance == null) {
-                         synchronized (instance) {
-                               if (instance == null) {
-                                      instance = new Singleton();
-                               }
-                         }
-                  }
-                  return instance;
-           }
+```java
+public class Singleton {
+    private static volatile Singleton instance = null;
+    private Singleton() {};
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            synchronized (instance) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
     }
+}
+```
 
 到此，我们就保证了懒加载的线程安全。
 
@@ -379,96 +394,102 @@ jvm为了提高程序执行性能，会对没有依赖关系的代码进行重�
 
 ComputerBuilder类定义构造步骤：
 
-    public abstract class ComputerBuilder {
-       
-        protected Computer computer;
-       
-        public Computer getComputer() {
-            return computer;
-        }
-       
-        public void buildComputer() {
-            computer = new Computer();
-            System.out.println("生成了一台电脑！！！");
-        }
-        public abstract void buildMaster();
-        public abstract void buildScreen();
-        public abstract void buildKeyboard();
-        public abstract void buildMouse();
-        public abstract void buildAudio();
+```java
+public abstract class ComputerBuilder {
+
+    protected Computer computer;
+
+    public Computer getComputer() {
+        return computer;
     }
+
+    public void buildComputer() {
+        computer = new Computer();
+        System.out.println("生成了一台电脑！！！");
+    }
+    public abstract void buildMaster();
+    public abstract void buildScreen();
+    public abstract void buildKeyboard();
+    public abstract void buildMouse();
+    public abstract void buildAudio();
+}
+```
 
 HPComputerBuilder定义各个组件：
 
-    public class HPComputerBuilder extends ComputerBuilder {
-        @Override
-        public void buildMaster() {
-            // TODO Auto-generated method stub
-            computer.setMaster("i7,16g,512SSD,1060");
-            System.out.println("(i7,16g,512SSD,1060)的惠普主机");
-        }
-        @Override
-        public void buildScreen() {
-            // TODO Auto-generated method stub
-            computer.setScreen("1080p");
-            System.out.println("(1080p)的惠普显示屏");
-        }
-        @Override
-        public void buildKeyboard() {
-            // TODO Auto-generated method stub
-            computer.setKeyboard("cherry 青轴机械键盘");
-            System.out.println("(cherry 青轴机械键盘)的键盘");
-        }
-        @Override
-        public void buildMouse() {
-            // TODO Auto-generated method stub
-            computer.setMouse("MI 鼠标");
-            System.out.println("(MI 鼠标)的鼠标");
-        }
-        @Override
-        public void buildAudio() {
-            // TODO Auto-generated method stub
-            computer.setAudio("飞利浦 音响");
-            System.out.println("(飞利浦 音响)的音响");
-        }
+```java
+public class HPComputerBuilder extends ComputerBuilder {
+    @Override
+    public void buildMaster() {
+        // TODO Auto-generated method stub
+        computer.setMaster("i7,16g,512SSD,1060");
+        System.out.println("(i7,16g,512SSD,1060)的惠普主机");
     }
+    @Override
+    public void buildScreen() {
+        // TODO Auto-generated method stub
+        computer.setScreen("1080p");
+        System.out.println("(1080p)的惠普显示屏");
+    }
+    @Override
+    public void buildKeyboard() {
+        // TODO Auto-generated method stub
+        computer.setKeyboard("cherry 青轴机械键盘");
+        System.out.println("(cherry 青轴机械键盘)的键盘");
+    }
+    @Override
+    public void buildMouse() {
+        // TODO Auto-generated method stub
+        computer.setMouse("MI 鼠标");
+        System.out.println("(MI 鼠标)的鼠标");
+    }
+    @Override
+    public void buildAudio() {
+        // TODO Auto-generated method stub
+        computer.setAudio("飞利浦 音响");
+        System.out.println("(飞利浦 音响)的音响");
+    }
+}
+```
 
 Director类对组件进行组装并生成产品
 
-    public class Director {
-       
-        private ComputerBuilder computerBuilder;
-        public void setComputerBuilder(ComputerBuilder computerBuilder) {
-            this.computerBuilder = computerBuilder;
-        }
-       
-        public Computer getComputer() {
-            return computerBuilder.getComputer();
-        }
-       
-        public void constructComputer() {
-            computerBuilder.buildComputer();
-            computerBuilder.buildMaster();
-            computerBuilder.buildScreen();
-            computerBuilder.buildKeyboard();
-            computerBuilder.buildMouse();
-            computerBuilder.buildAudio();
-        }
+```java
+public class Director {
+
+    private ComputerBuilder computerBuilder;
+    public void setComputerBuilder(ComputerBuilder computerBuilder) {
+        this.computerBuilder = computerBuilder;
     }
+
+    public Computer getComputer() {
+        return computerBuilder.getComputer();
+    }
+
+    public void constructComputer() {
+        computerBuilder.buildComputer();
+        computerBuilder.buildMaster();
+        computerBuilder.buildScreen();
+        computerBuilder.buildKeyboard();
+        computerBuilder.buildMouse();
+        computerBuilder.buildAudio();
+    }
+}
+```
 
 ### 4.2 生成器模式的优缺点
 
 优点
 
-    将一个对象分解为各个组件
-    
-    将对象组件的构造封装起来
-    
-    可以控制整个对象的生成过程
+> 将一个对象分解为各个组件
+> 将对象组件的构造封装起来
+> 可以控制整个对象的生成过程
 
 缺点
 
-    对不同类型的对象需要实现不同的具体构造器的类，这可能回答大大增加类的数量
+> 对不同类型的对象需要实现不同的具体构造器的类，这可能回答大大增加类的数量
+
+
 
 ### 4.3 生成器模式与工厂模式的不同
 
@@ -498,72 +519,77 @@ ConcretePrototype：具体的原型类
 
 可以看出设计模式还是比较简单的，重点在于Prototype接口和Prototype接口的实现类ConcretePrototype。原型模式的具体实现：一个原型类，只需要实现Cloneable接口，覆写clone方法，此处clone方法可以改成任意的名称，因为Cloneable接口是个空接口，你可以任意定义实现类的方法名，如cloneA或者cloneB，因为此处的重点是super.clone()这句话，super.clone()调用的是Object的clone()方法。
 
-    public class Prototype implements Cloneable {  
-         public Object clone() throws CloneNotSupportedException {  
-             Prototype proto = (Prototype) super.clone();  
-             return proto;  
-         }  
+```java
+public class Prototype implements Cloneable {  
+    public Object clone() throws CloneNotSupportedException {  
+        Prototype proto = (Prototype) super.clone();  
+        return proto;  
     }  
+}  
+```
 
 举例（银行发送大量邮件，使用clone和不使用clone的时间对比）：我们模拟创建一个对象需要耗费比较长的时间，因此，在构造函数中我们让当前线程sleep一会
 
-    public Mail(EventTemplate et) {
-                  this.tail = et.geteventContent();
-                  this.subject = et.geteventSubject();
-                  try {
-                         Thread.sleep(1000);
-                  } catch (InterruptedException e) {
-                         // TODO Auto-generated catch block
-                         e.printStackTrace();
-                  }
-           }
+```java
+public Mail(EventTemplate et) {
+    this.tail = et.geteventContent();
+    this.subject = et.geteventSubject();
+    try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+}
+```
 
 不使用clone,发送十个邮件
 
-    public static void main(String[] args) {
-                  int i = 0;
-                  int MAX_COUNT = 10;
-                  EventTemplate et = new EventTemplate("9月份信用卡账单", "国庆抽奖活动...");
-                  long start = System.currentTimeMillis();
-                  while (i < MAX_COUNT) {
-                         // 以下是每封邮件不同的地方
-                         Mail mail = new Mail(et);
-                         mail.setContent(getRandString(5) + ",先生（女士）:你的信用卡账单..." + mail.getTail());
-                         mail.setReceiver(getRandString(5) + "@" + getRandString(8) + ".com");
-                         // 然后发送邮件
-                         sendMail(mail);
-                         i++;
-                  }
-                  long end = System.currentTimeMillis();
-                  System.out.println("用时:" + (end - start));
-           }
+```java
+public static void main(String[] args) {
+    int i = 0;
+    int MAX_COUNT = 10;
+    EventTemplate et = new EventTemplate("9月份信用卡账单", "国庆抽奖活动...");
+    long start = System.currentTimeMillis();
+    while (i < MAX_COUNT) {
+        // 以下是每封邮件不同的地方
+        Mail mail = new Mail(et);
+        mail.setContent(getRandString(5) + ",先生（女士）:你的信用卡账单..." + mail.getTail());
+        mail.setReceiver(getRandString(5) + "@" + getRandString(8) + ".com");
+        // 然后发送邮件
+        sendMail(mail);
+        i++;
+    }
+    long end = System.currentTimeMillis();
+    System.out.println("用时:" + (end - start));
+}
+```
 
  
-
-
-
 
 用时：10001
 
 使用clone,发送十个邮件
 
-        public static void main(String[] args) {
-                  int i = 0;
-                  int MAX_COUNT = 10;
-                  EventTemplate et = new EventTemplate("9月份信用卡账单", "国庆抽奖活动...");
-                  long start=System.currentTimeMillis();
-                  Mail mail = new Mail(et);         
-                  while (i < MAX_COUNT) {
-                         Mail cloneMail = mail.clone();
-                         mail.setContent(getRandString(5) + ",先生（女士）:你的信用卡账单..."
-                                      + mail.getTail());
-                         mail.setReceiver(getRandString(5) + "@" + getRandString(8) + ".com");
-                         sendMail(cloneMail);
-                         i++;
-                  }
-                  long end=System.currentTimeMillis();
-                  System.out.println("用时:"+(end-start));
-           }
+```java
+public static void main(String[] args) {
+    int i = 0;
+    int MAX_COUNT = 10;
+    EventTemplate et = new EventTemplate("9月份信用卡账单", "国庆抽奖活动...");
+    long start=System.currentTimeMillis();
+    Mail mail = new Mail(et);         
+    while (i < MAX_COUNT) {
+        Mail cloneMail = mail.clone();
+        mail.setContent(getRandString(5) + ",先生（女士）:你的信用卡账单..."
+                        + mail.getTail());
+        mail.setReceiver(getRandString(5) + "@" + getRandString(8) + ".com");
+        sendMail(cloneMail);
+        i++;
+    }
+    long end=System.currentTimeMillis();
+    System.out.println("用时:"+(end-start));
+}
+```
 
 用时：1001
 
@@ -595,48 +621,56 @@ ConcretePrototype：具体的原型类
 
 USBImpl的代码：
 
-    public class USBImpl implements USB{
-           @Override
-           public void showPPT() {
-                  // TODO Auto-generated method stub
-                  System.out.println("PPT内容演示");
-           }
+```java
+public class USBImpl implements USB{
+    @Override
+    public void showPPT() {
+        // TODO Auto-generated method stub
+        System.out.println("PPT内容演示");
     }
+}
+```
 
 AdatperUSB2VGA 首先继承USBImpl获取USB的功能，其次，实现VGA接口，表示该类的类型为VGA。
 
-    public class AdapterUSB2VGA extends USBImpl implements VGA {
-           @Override
-           public void projection() {
-                  super.showPPT();
-           }
-    }
+```java
+public class AdapterUSB2VGA extends USBImpl implements VGA {
+       @Override
+       public void projection() {
+              super.showPPT();
+       }
+}
+```
 
 Projector将USB映射为VGA，只有VGA接口才可以连接上投影仪进行投影
 
-    public class Projector<T> {
-           public void projection(T t) {
-                  if (t instanceof VGA) {
-                         System.out.println("开始投影");
-                         VGA v = new VGAImpl();
-                         v = (VGA) t;
-                         v.projection();
-                  } else {
-                         System.out.println("接口不匹配，无法投影");
-                  }
-           }
-    }
+```java
+public class Projector<T> {
+       public void projection(T t) {
+              if (t instanceof VGA) {
+                     System.out.println("开始投影");
+                     VGA v = new VGAImpl();
+                     v = (VGA) t;
+                     v.projection();
+              } else {
+                     System.out.println("接口不匹配，无法投影");
+              }
+       }
+}
+```
 
 test代码
 
-           @Test
-           public void test2(){
-                  //通过适配器创建一个VGA对象，这个适配器实际是使用的是USB的showPPT（）方法
-                  VGA a=new AdapterUSB2VGA();
-                  //进行投影
-                  Projector p1=new Projector();
-                  p1.projection(a);
-           } 
+```java
+       @Test
+       public void test2(){
+              //通过适配器创建一个VGA对象，这个适配器实际是使用的是USB的showPPT（）方法
+              VGA a=new AdapterUSB2VGA();
+              //进行投影
+              Projector p1=new Projector();
+              p1.projection(a);
+       } 
+```
 
 ### 6.2 对象适配器模式
 
@@ -646,13 +680,15 @@ test代码
 
  
 
-    public class AdapterUSB2VGA implements VGA {
-           USB u = new USBImpl();
-           @Override
-           public void projection() {
-                  u.showPPT();
-           }
-    }
+```java
+public class AdapterUSB2VGA implements VGA {
+       USB u = new USBImpl();
+       @Override
+       public void projection() {
+              u.showPPT();
+       }
+}
+```
 
 实现VGA接口，表示适配器类是VGA类型的，适配器方法中直接使用USB对象。
 
@@ -664,27 +700,31 @@ test代码
 
 AdapterUSB2VGA抽象类
 
-    public abstract class AdapterUSB2VGA implements VGA {
-           USB u = new USBImpl();
-           @Override
-           public void projection() {
-                  u.showPPT();
-           }
-           @Override
-           public void b() {
-           };
-           @Override
-           public void c() {
-           };
-    }
+```java
+public abstract class AdapterUSB2VGA implements VGA {
+       USB u = new USBImpl();
+       @Override
+       public void projection() {
+              u.showPPT();
+       }
+       @Override
+       public void b() {
+       };
+       @Override
+       public void c() {
+       };
+}
+```
 
 AdapterUSB2VGA实现，不用去实现b()和c()方法。
 
-    public class AdapterUSB2VGAImpl extends AdapterUSB2VGA {
-           public void projection() {
-                  super.projection();
-           }
-    }
+```java
+public class AdapterUSB2VGAImpl extends AdapterUSB2VGA {
+       public void projection() {
+              super.projection();
+       }
+}
+```
 
 ### 6.4 总结
 
@@ -742,102 +782,111 @@ AdapterUSB2VGA实现，不用去实现b()和c()方法。
 
 被装饰的对象和装饰者都继承自同一个超类
 
-    public abstract class Drink {
-           public String description="";
-           private float price=0f;;
-
-
-​           
-​           public void setDescription(String description)
-​           {
-​                  this.description=description;
-​           }
-​           
-​           public String getDescription()
-​           {
-​                  return description+"-"+this.getPrice();
-​           }
-​           public float getPrice()
-​           {
-​                  return price;
-​           }
-​           public void setPrice(float price)
-​           {
-​                  this.price=price;
-​           }
-​           public abstract float cost();
-​           
+```java
+public abstract class Drink {
+    public String description="";
+    private float price=0f;;
+    public void setDescription(String description)
+    {
+        this.description=description;
     }
+
+    public String getDescription()
+    {
+        return description+"-"+this.getPrice();
+    }
+    public float getPrice()
+    {
+        return price;
+    }
+    public void setPrice(float price)
+    {
+        this.price=price;
+    }
+    public abstract float cost();
+}
+```
+
+
+
 
 被装饰的对象，不用去改造。原来怎么样写，现在还是怎么写。
 
-    public  class Coffee extends Drink {
-           @Override
-           public float cost() {
-                  // TODO Auto-generated method stub
-                  return super.getPrice();
-           }
-           
+```java
+public  class Coffee extends Drink {
+    @Override
+    public float cost() {
+        // TODO Auto-generated method stub
+        return super.getPrice();
     }
+}
+```
 
 coffee类的实现
 
-    public class Decaf extends Coffee {
-           public Decaf()
-           {
-                  super.setDescription("Decaf");
-                  super.setPrice(3.0f);
-           }
+```java
+public class Decaf extends Coffee {
+    public Decaf() {
+        super.setDescription("Decaf");
+        super.setPrice(3.0f);
     }
+}
+```
 
 装饰者
 
 装饰者不仅要考虑自身，还要考虑被它修饰的对象，它是在被修饰的对象上继续添加修饰。例如，咖啡里面加牛奶，再加巧克力。加糖后价格为coffee+milk。再加牛奶价格为coffee+milk+chocolate。
 
-    public class Decorator extends Drink {
-           private Drink Obj;
-           public Decorator(Drink Obj) {
-                  this.Obj = Obj;
-           };
-           @Override
-           public float cost() {
-                  // TODO Auto-generated method stub
-                  return super.getPrice() + Obj.cost();
-           }
-           @Override
-           public String getDescription() {
-                  return super.description + "-" + super.getPrice() + "&&" + Obj.getDescription();
-           }
+```java
+public class Decorator extends Drink {
+    private Drink Obj;
+    public Decorator(Drink Obj) {
+        this.Obj = Obj;
+    };
+    @Override
+    public float cost() {
+        // TODO Auto-generated method stub
+        return super.getPrice() + Obj.cost();
     }
+    @Override
+    public String getDescription() {
+        return super.description + "-" + super.getPrice() + "&&" + Obj.getDescription();
+    }
+}
+```
 
 装饰者实例化（加牛奶）。这里面要对被修饰的对象进行实例化。
 
-    public class Milk extends Decorator {
-           public Milk(Drink Obj) {          
-                  super(Obj);
-                  // TODO Auto-generated constructor stub
-                  super.setDescription("Milk");
-                  super.setPrice(2.0f);
-           }
-    }
+```java
+public class Milk extends Decorator {
+       public Milk(Drink Obj) {          
+              super(Obj);
+              // TODO Auto-generated constructor stub
+              super.setDescription("Milk");
+              super.setPrice(2.0f);
+       }
+}
+```
 
 coffee店：初始化一个被修饰对象，修饰者实例需要对被修改者实例化，才能对具体的被修饰者进行修饰。
 
-    public class CoffeeBar {
-           public static void main(String[] args) {
-                  Drink order;
-                  order = new Decaf();
-                  System.out.println("order1 price:" + order.cost());
-                  System.out.println("order1 desc:" + order.getDescription());
-                  System.out.println("****************");
-                  order = new LongBlack();
-                  order = new Milk(order);
-                  order = new Chocolate(order);
-                  order = new Chocolate(order);
-                  System.out.println("order2 price:" + order.cost());
-                  System.out.println("order2 desc:" + order.getDescription());
-           }
+```java
+public class CoffeeBar {
+    public static void main(String[] args) {
+        Drink order;
+        order = new Decaf();
+        System.out.println("order1 price:" + order.cost());
+        System.out.println("order1 desc:" + order.getDescription());
+        System.out.println("****************");
+        order = new LongBlack();
+        order = new Milk(order);
+        order = new Chocolate(order);
+        order = new Chocolate(order);
+        System.out.println("order2 price:" + order.cost());
+        System.out.println("order2 desc:" + order.getDescription());
     }
+}
+```
 
 ### 7.2 总结
 
@@ -865,33 +914,39 @@ coffee店：初始化一个被修饰对象，修饰者实例需要对被修改�
 
 第一步：创建服务类接口
 
-    public interface BuyHouse {
-        void buyHosue();
-    }
+```java
+public interface BuyHouse {
+    void buyHosue();
+}
+```
 
 第二步：实现服务接口
 
-    public class BuyHouseImpl implements BuyHouse {
-           @Override
-           public void buyHosue() {
-                  System.out.println("我要买房");
-           }
+```java
+public class BuyHouseImpl implements BuyHouse {
+    @Override
+    public void buyHosue() {
+        System.out.println("我要买房");
     }
+}
+```
 
 第三步：创建代理类
 
-    public class BuyHouseProxy implements BuyHouse {
-           private BuyHouse buyHouse;
-           public BuyHouseProxy(final BuyHouse buyHouse) {
-                  this.buyHouse = buyHouse;
-           }
-           @Override
-           public void buyHosue() {
-                  System.out.println("买房前准备");
-                  buyHouse.buyHosue();
-                  System.out.println("买房后装修");
-           }
+```java
+public class BuyHouseProxy implements BuyHouse {
+    private BuyHouse buyHouse;
+    public BuyHouseProxy(final BuyHouse buyHouse) {
+        this.buyHouse = buyHouse;
     }
+    @Override
+    public void buyHosue() {
+        System.out.println("买房前准备");
+        buyHouse.buyHosue();
+        System.out.println("买房后装修");
+    }
+}
+```
 
 总结：
 
@@ -913,48 +968,54 @@ coffee店：初始化一个被修饰对象，修饰者实例需要对被修改�
 
 Java.lang.reflect.Proxy类可以直接生成一个代理对象
 
-    Proxy.newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)生成一个代理对象
-    
-        参数1:ClassLoader loader 代理对象的类加载器 一般使用被代理对象的类加载器
-    
-        参数2:Class<?>[] interfaces 代理对象的要实现的接口 一般使用的被代理对象实现的接口
-    
-        参数3:InvocationHandler h (接口)执行处理类
-    
-    InvocationHandler中的invoke(Object proxy, Method method, Object[] args)方法：调用代理类的任何方法，此方法都会执行
-    
-        参数3.1:代理对象(慎用)
-    
-        参数3.2:当前执行的方法
-    
-        参数3.3:当前执行的方法运行时传递过来的参数
+```java
+Proxy.newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)生成一个代理对象
+
+    参数1:ClassLoader loader 代理对象的类加载器 一般使用被代理对象的类加载器
+
+    参数2:Class<?>[] interfaces 代理对象的要实现的接口 一般使用的被代理对象实现的接口
+
+    参数3:InvocationHandler h (接口)执行处理类
+
+InvocationHandler中的invoke(Object proxy, Method method, Object[] args)方法：调用代理类的任何方法，此方法都会执行
+
+    参数3.1:代理对象(慎用)
+
+    参数3.2:当前执行的方法
+
+    参数3.3:当前执行的方法运行时传递过来的参数
+```
 
 第一步：编写动态处理器
 
-    public class DynamicProxyHandler implements InvocationHandler {
-           private Object object;
-           public DynamicProxyHandler(final Object object) {
-                  this.object = object;
-           }
-           @Override
-           public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                  System.out.println("买房前准备");
-                  Object result = method.invoke(object, args);
-                  System.out.println("买房后装修");
-                  return result;
-           }
+```java
+public class DynamicProxyHandler implements InvocationHandler {
+    private Object object;
+    public DynamicProxyHandler(final Object object) {
+        this.object = object;
     }
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("买房前准备");
+        Object result = method.invoke(object, args);
+        System.out.println("买房后装修");
+        return result;
+    }
+}
+```
 
 第二步：编写测试类
 
-    public class DynamicProxyTest {
-        public static void main(String[] args) {
-            BuyHouse buyHouse = new BuyHouseImpl();
-            BuyHouse proxyBuyHouse = (BuyHouse) Proxy.newProxyInstance(BuyHouse.class.getClassLoader(), new
-                    Class[]{BuyHouse.class}, new DynamicProxyHandler(buyHouse));
-            proxyBuyHouse.buyHosue();
-        }
+```java
+public class DynamicProxyTest {
+    public static void main(String[] args) {
+        BuyHouse buyHouse = new BuyHouseImpl();
+        BuyHouse proxyBuyHouse = (BuyHouse) Proxy.newProxyInstance(BuyHouse.class.getClassLoader(), new
+                Class[]{BuyHouse.class}, new DynamicProxyHandler(buyHouse));
+        proxyBuyHouse.buyHosue();
     }
+}
+```
 
 动态代理总结：虽然相对于静态代理，动态代理大大减少了我们的开发任务，同时减少了对业务接口的依赖，降低了耦合度。但是还是有一点点小小的遗憾之处，那就是它始终无法摆脱仅支持interface代理的桎梏（我们要使用被代理的对象的接口），因为它的设计注定了这个遗憾。
 
@@ -970,17 +1031,19 @@ CGLIB的实现步骤：
 
 第一步：建立拦截器
 
-    public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-     
-            System.out.println("买房前准备");
-     
-            Object result = methodProxy.invoke(object, args);
-     
-            System.out.println("买房后装修");
-     
-            return result;
-     
-        }
+```java
+public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+
+    System.out.println("买房前准备");
+
+    Object result = methodProxy.invoke(object, args);
+
+    System.out.println("买房后装修");
+
+    return result;
+
+}
+```
 
 参数：Object为由CGLib动态生成的代理类实例，Method为上文中实体类所调用的被代理的方法引用，Object[]为参数值列表，MethodProxy为生成的代理类对方法的代理引用。
 
@@ -990,22 +1053,24 @@ CGLIB的实现步骤：
 
 第二步： 生成动态代理类
 
-    public class CglibProxy implements MethodInterceptor {
-        private Object target;
-        public Object getInstance(final Object target) {
-            this.target = target;
-            Enhancer enhancer = new Enhancer();
-            enhancer.setSuperclass(this.target.getClass());
-            enhancer.setCallback(this);
-            return enhancer.create();
-        }
-        public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-            System.out.println("买房前准备");
-            Object result = methodProxy.invoke(object, args);
-            System.out.println("买房后装修");
-            return result;
-        }
+```java
+public class CglibProxy implements MethodInterceptor {
+    private Object target;
+    public Object getInstance(final Object target) {
+        this.target = target;
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(this.target.getClass());
+        enhancer.setCallback(this);
+        return enhancer.create();
     }
+    public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        System.out.println("买房前准备");
+        Object result = methodProxy.invoke(object, args);
+        System.out.println("买房后装修");
+        return result;
+    }
+}
+```
 
 这里Enhancer类是CGLib中的一个字节码增强器，它可以方便的对你想要处理的类进行扩展，以后会经常看到它。
 
@@ -1013,14 +1078,16 @@ CGLIB的实现步骤：
 
 第三步：测试
 
-    public class CglibProxyTest {
-        public static void main(String[] args){
-            BuyHouse buyHouse = new BuyHouseImpl();
-            CglibProxy cglibProxy = new CglibProxy();
-            BuyHouseImpl buyHouseCglibProxy = (BuyHouseImpl) cglibProxy.getInstance(buyHouse);
-            buyHouseCglibProxy.buyHosue();
-        }
+```java
+public class CglibProxyTest {
+    public static void main(String[] args){
+        BuyHouse buyHouse = new BuyHouseImpl();
+        CglibProxy cglibProxy = new CglibProxy();
+        BuyHouseImpl buyHouseCglibProxy = (BuyHouseImpl) cglibProxy.getInstance(buyHouse);
+        buyHouseCglibProxy.buyHosue();
     }
+}
+```
 
 CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理对象的性能更高，但是CGLIB创建代理对象时所花费的时间却比JDK多得多。所以对于单例的对象，因为无需频繁创建对象，用CGLIB合适，反之使用JDK方式要更为合适一些。同时由于CGLib由于是采用动态创建子类的方法，对于final修饰的方法无法进行代理。
 
@@ -1046,80 +1113,85 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 首先是子系统类：
 
-    public class CPU {
-     
-    	public void start() {
-    		System.out.println("cpu is start...");
-    	}
-     
-    	public void shutDown() {
-    		System.out.println("CPU is shutDown...");
-    	}
+```java
+public class CPU {
+
+    public void start() {
+        System.out.println("cpu is start...");
     }
-     
-    public class Disk {
-    	public void start() {
-    		System.out.println("Disk is start...");
-    	}
-     
-    	public void shutDown() {
-    		System.out.println("Disk is shutDown...");
-    	}
+
+    public void shutDown() {
+        System.out.println("CPU is shutDown...");
     }
-     
-    public class Memory {
-    	public void start() {
-    		System.out.println("Memory is start...");
-    	}
-     
-    	public void shutDown() {
-    		System.out.println("Memory is shutDown...");
-    	}
+}
+
+public class Disk {
+    public void start() {
+        System.out.println("Disk is start...");
     }
+
+    public void shutDown() {
+        System.out.println("Disk is shutDown...");
+    }
+}
+
+public class Memory {
+    public void start() {
+        System.out.println("Memory is start...");
+    }
+
+    public void shutDown() {
+        System.out.println("Memory is shutDown...");
+    }
+}
+```
 
 然后是，门面类Facade
 
-    public class Computer {
-     
-    	private CPU cpu;
-    	private Memory memory;
-    	private Disk disk;
-     
-    	public Computer() {
-    		cpu = new CPU();
-    		memory = new Memory();
-    		disk = new Disk();
-    	}
-     
-    	public void start() {
-    		System.out.println("Computer start begin");
-    		cpu.start();
-    		disk.start();
-    		memory.start();
-    		System.out.println("Computer start end");
-    	}
-     
-    	public void shutDown() {
-    		System.out.println("Computer shutDown begin");
-    		cpu.shutDown();
-    		disk.shutDown();
-    		memory.shutDown();
-    		System.out.println("Computer shutDown end...");
-    	}
+```java
+public class Computer {
+
+    private CPU cpu;
+    private Memory memory;
+    private Disk disk;
+
+    public Computer() {
+        cpu = new CPU();
+        memory = new Memory();
+        disk = new Disk();
     }
+
+    public void start() {
+        System.out.println("Computer start begin");
+        cpu.start();
+        disk.start();
+        memory.start();
+        System.out.println("Computer start end");
+    }
+
+    public void shutDown() {
+        System.out.println("Computer shutDown begin");
+        cpu.shutDown();
+        disk.shutDown();
+        memory.shutDown();
+        System.out.println("Computer shutDown end...");
+    }
+}
+```
 
 最后为，客户角色
 
-    public class Client {
-     
-    	public static void main(String[] args) {
-    		Computer computer = new Computer();
-    		computer.start();
-    		System.out.println("=================");
-    		computer.shutDown();
-    	}
-     
+```java
+public class Client {
+
+    public static void main(String[] args) {
+        Computer computer = new Computer();
+        computer.start();
+        System.out.println("=================");
+        computer.shutDown();
     }
+}
+```
 
 ### 9.2 优点
 
@@ -1165,52 +1237,56 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 实现：
 
-    public interface Software {
-    	public void run();
-     
+```java
+public interface Software {
+	public void run();
+ 
+}
+public class AppStore implements Software {
+	 
+    @Override
+    public void run() {
+        System.out.println("run app store");
     }
-    public class AppStore implements Software {
-    	 
-        @Override
-        public void run() {
-            System.out.println("run app store");
-        }
+}
+public class Camera implements Software {
+	 
+    @Override
+    public void run() {
+        System.out.println("run camera");
     }
-    public class Camera implements Software {
-    	 
-        @Override
-        public void run() {
-            System.out.println("run camera");
-        }
-    }
+}
+```
 
 抽象：
 
-    public abstract class Phone {
-     
-    	protected Software software;
-     
-    	public void setSoftware(Software software) {
-    		this.software = software;
-    	}
-     
-    	public abstract void run();
-     
+```java
+public abstract class Phone {
+ 
+	protected Software software;
+ 
+	public void setSoftware(Software software) {
+		this.software = software;
+	}
+ 
+	public abstract void run();
+ 
+}
+public class Oppo extends Phone {
+	 
+    @Override
+    public void run() {
+        software.run();
     }
-    public class Oppo extends Phone {
-    	 
-        @Override
-        public void run() {
-            software.run();
-        }
+}
+public class Vivo extends Phone {
+	 
+    @Override
+    public void run() {
+        software.run();
     }
-    public class Vivo extends Phone {
-    	 
-        @Override
-        public void run() {
-            software.run();
-        }
-    }
+}
+```
 
 对比最初的设计，将抽象部分（手机）与它的实现部分（手机软件类）分离，将实现部分抽象成单独的类，使它们都可以独立地变化。整个类图看起来像一座桥，所以称为桥接模式
 
@@ -1282,73 +1358,75 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 1 组件
 
-    public interface Component {
-        public void add(Component c);
-        public void remove(Component c);
-        public Component getChild(int i);
-        public void operation();
-     
+```java
+public interface Component {
+    public void add(Component c);
+    public void remove(Component c);
+    public Component getChild(int i);
+    public void operation();
+}
+```
+
+2 叶
+
+```java
+public class Leaf implements Component{
+
+    private String name;
+    public Leaf(String name) {
+        this.name = name;
     }
 
-2 叶子
+    @Override
+    public void add(Component c) {}
 
-    public class Leaf implements Component{
-        
-    	private String name;
+    @Override
+    public void remove(Component c) {}
 
-
-​    	
-​    	public Leaf(String name) {
-​    		this.name = name;
-​    	}
-​     
-​    	@Override
-​    	public void add(Component c) {}
-​     
-    	@Override
-    	public void remove(Component c) {}
-     
-    	@Override
-    	public Component getChild(int i) {
-    		// TODO Auto-generated method stub
-    		return null;
-    	}
-     
-    	@Override
-    	public void operation() {
-    		// TODO Auto-generated method stub
-    		 System.out.println("树叶"+name+"：被访问！"); 
-    	}
-     
+    @Override
+    public Component getChild(int i) {
+        // TODO Auto-generated method stub
+        return null;
     }
+
+    @Override
+    public void operation() {
+        // TODO Auto-generated method stub
+        System.out.println("树叶"+name+"：被访问！"); 
+    }
+}  
+```
+
+
 
 3 树枝
 
-    public class Composite implements Component {
-     
-    	private ArrayList<Component> children = new ArrayList<Component>();
-     
-    	public void add(Component c) {
-    		children.add(c);
-    	}
-     
-    	public void remove(Component c) {
-    		children.remove(c);
-    	}
-     
-    	public Component getChild(int i) {
-    		return children.get(i);
-    	}
-     
-    	public void operation() {
-    		for (Object obj : children) {
-    			((Component) obj).operation();
-    		}
-    	}
-    }
+```java
+public class Composite implements Component {
+ 
+	private ArrayList<Component> children = new ArrayList<Component>();
+ 
+	public void add(Component c) {
+		children.add(c);
+	}
+ 
+	public void remove(Component c) {
+		children.remove(c);
+	}
+ 
+	public Component getChild(int i) {
+		return children.get(i);
+	}
+ 
+	public void operation() {
+		for (Object obj : children) {
+			((Component) obj).operation();
+		}
+	}
+}
+```
 
  
-
 
 
 ## 12 享元模式
@@ -1383,60 +1461,68 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 （1）创建享元对象接口
 
-    public interface IFlyweight {
-        void print();
-    }
+```java
+public interface IFlyweight {
+    void print();
+}
+```
 
 （2）创建具体享元对象
 
-    public class Flyweight implements IFlyweight {
-        private String id;
-        public Flyweight(String id){
-            this.id = id;
-        }
-        @Override
-        public void print() {
-            System.out.println("Flyweight.id = " + getId() + " ...");
-        }
-        public String getId() {
-            return id;
-        }
+```java
+public class Flyweight implements IFlyweight {
+    private String id;
+    public Flyweight(String id){
+        this.id = id;
     }
+    @Override
+    public void print() {
+        System.out.println("Flyweight.id = " + getId() + " ...");
+    }
+    public String getId() {
+        return id;
+    }
+}
+```
 
 （3）创建工厂，这里要特别注意，为了避免享元对象被重复创建，我们使用HashMap中的key值保证其唯一。
 
-    public class FlyweightFactory {
-        private Map<String, IFlyweight> flyweightMap = new HashMap();
-        public IFlyweight getFlyweight(String str){
-            IFlyweight flyweight = flyweightMap.get(str);
-            if(flyweight == null){
-                flyweight = new Flyweight(str);
-                flyweightMap.put(str, flyweight);
-            }
-            return  flyweight;
+```java
+public class FlyweightFactory {
+    private Map<String, IFlyweight> flyweightMap = new HashMap();
+    public IFlyweight getFlyweight(String str){
+        IFlyweight flyweight = flyweightMap.get(str);
+        if(flyweight == null){
+            flyweight = new Flyweight(str);
+            flyweightMap.put(str, flyweight);
         }
-        public int getFlyweightMapSize(){
-            return flyweightMap.size();
-        }
+        return  flyweight;
     }
+    public int getFlyweightMapSize(){
+        return flyweightMap.size();
+    }
+}
+```
 
 （4）测试，我们创建三个字符串，但是只会产生两个享元对象
 
-    public class MainTest {
-    	public static void main(String[] args) {
-            FlyweightFactory flyweightFactory = new FlyweightFactory();
-            IFlyweight flyweight1 = flyweightFactory.getFlyweight("A");
-            IFlyweight flyweight2 = flyweightFactory.getFlyweight("B");
-            IFlyweight flyweight3 = flyweightFactory.getFlyweight("A");
-            flyweight1.print();
-            flyweight2.print();
-            flyweight3.print();
-            System.out.println(flyweightFactory.getFlyweightMapSize());
-        }
-     
+```java
+public class MainTest {
+	public static void main(String[] args) {
+        FlyweightFactory flyweightFactory = new FlyweightFactory();
+        IFlyweight flyweight1 = flyweightFactory.getFlyweight("A");
+        IFlyweight flyweight2 = flyweightFactory.getFlyweight("B");
+        IFlyweight flyweight3 = flyweightFactory.getFlyweight("A");
+        flyweight1.print();
+        flyweight2.print();
+        flyweight3.print();
+        System.out.println(flyweightFactory.getFlyweightMapSize());
     }
+}
+```
 
  
+
 
 
 
@@ -1486,64 +1572,72 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 1、定义抽象策略角色
 
-    public interface Strategy {
-     
-    	public int calc(int num1,int num2);
-    }
+```java
+public interface Strategy {
+ 
+	public int calc(int num1,int num2);
+}
+```
 
 2、定义具体策略角色
 
-    public class AddStrategy implements Strategy {
-     
-    	@Override
-    	public int calc(int num1, int num2) {
-    		// TODO Auto-generated method stub
-    		return num1 + num2;
-    	}
-     
-    }
-    public class SubstractStrategy implements Strategy {
-     
-    	@Override
-    	public int calc(int num1, int num2) {
-    		// TODO Auto-generated method stub
-    		return num1 - num2;
-    	}
-     
-    }
+```java
+public class AddStrategy implements Strategy {
+ 
+	@Override
+	public int calc(int num1, int num2) {
+		// TODO Auto-generated method stub
+		return num1 + num2;
+	}
+ 
+}
+public class SubstractStrategy implements Strategy {
+ 
+	@Override
+	public int calc(int num1, int num2) {
+		// TODO Auto-generated method stub
+		return num1 - num2;
+	}
+ 
+}
+```
 
 3、环境角色
 
-    public class Environment {
-    	private Strategy strategy;
-     
-    	public Environment(Strategy strategy) {
-    		this.strategy = strategy;
-    	}
-     
-    	public int calculate(int a, int b) {
-    		return strategy.calc(a, b);
-    	}
-     
-    }
+```java
+public class Environment {
+	private Strategy strategy;
+ 
+	public Environment(Strategy strategy) {
+		this.strategy = strategy;
+	}
+ 
+	public int calculate(int a, int b) {
+		return strategy.calc(a, b);
+	}
+ 
+}
+```
 
 4、测试
 
-    public class MainTest {
-    	public static void main(String[] args) {
-    		
-    		Environment environment=new Environment(new AddStrategy());
-    		int result=environment.calculate(20, 5);
-    		System.out.println(result);
-    		
-    		Environment environment1=new Environment(new SubstractStrategy());
-    		int result1=environment1.calculate(20, 5);
-    		System.out.println(result1);
-    	}
-     
-    }
+```java
+public class MainTest {
+	public static void main(String[] args) {
+		
+		Environment environment=new Environment(new AddStrategy());
+		int result=environment.calculate(20, 5);
+		System.out.println(result);
+		
+		Environment environment1=new Environment(new SubstractStrategy());
+		int result1=environment1.calculate(20, 5);
+		System.out.println(result1);
+	}
+}
+```
 
  
+
 
 
 
@@ -1565,82 +1659,88 @@ CGLIB代理总结： CGLIB创建的动态代理对象比JDK创建的动态代理
 
 a. 先来写一个抽象的做菜父类： 
 
-    public abstract class Dish {    
-        /**
-         * 具体的整个过程
-         */
-        protected void dodish(){
-            this.preparation();
-            this.doing();
-            this.carriedDishes();
-        }
-        /**
-         * 备料
-         */
-        public abstract void preparation();
-        /**
-         * 做菜
-         */
-        public abstract void doing();
-        /**
-         * 上菜
-         */
-        public abstract void carriedDishes ();
+```java
+public abstract class Dish {    
+    /**
+     * 具体的整个过程
+     */
+    protected void dodish(){
+        this.preparation();
+        this.doing();
+        this.carriedDishes();
     }
+    /**
+     * 备料
+     */
+    public abstract void preparation();
+    /**
+     * 做菜
+     */
+    public abstract void doing();
+    /**
+     * 上菜
+     */
+    public abstract void carriedDishes ();
+}
+```
 
 b. 下来做两个番茄炒蛋（EggsWithTomato）和红烧肉（Bouilli）实现父类中的抽象方法
 
-    public class EggsWithTomato extends Dish {
-     
-    	@Override
-    	public void preparation() {
-    		System.out.println("洗并切西红柿，打鸡蛋。");
-    	}
-     
-    	@Override
-    	public void doing() {
-    		System.out.println("鸡蛋倒入锅里，然后倒入西红柿一起炒。");
-    	}
-     
-    	@Override
-    	public void carriedDishes() {
-    		System.out.println("将炒好的西红寺鸡蛋装入碟子里，端给客人吃。");
-    	}
-     
+```java
+public class EggsWithTomato extends Dish {
+ 
+	@Override
+	public void preparation() {
+		System.out.println("洗并切西红柿，打鸡蛋。");
+	}
+ 
+	@Override
+	public void doing() {
+		System.out.println("鸡蛋倒入锅里，然后倒入西红柿一起炒。");
+	}
+ 
+	@Override
+	public void carriedDishes() {
+		System.out.println("将炒好的西红寺鸡蛋装入碟子里，端给客人吃。");
+	}
+ 
+}
+public class Bouilli extends Dish{
+ 
+    @Override
+    public void preparation() {
+        System.out.println("切猪肉和土豆。");
     }
-    public class Bouilli extends Dish{
-     
-        @Override
-        public void preparation() {
-            System.out.println("切猪肉和土豆。");
-        }
-     
-        @Override
-        public void doing() {
-            System.out.println("将切好的猪肉倒入锅中炒一会然后倒入土豆连炒带炖。");
-        }
-     
-        @Override
-        public void carriedDishes() {
-            System.out.println("将做好的红烧肉盛进碗里端给客人吃。");
-        }
-     
+ 
+    @Override
+    public void doing() {
+        System.out.println("将切好的猪肉倒入锅中炒一会然后倒入土豆连炒带炖。");
     }
+ 
+    @Override
+    public void carriedDishes() {
+        System.out.println("将做好的红烧肉盛进碗里端给客人吃。");
+    }
+ 
+}
+```
 
 c. 在测试类中我们来做菜：
 
-    public class MainTest {
-    	public static void main(String[] args) {
-    		Dish eggsWithTomato = new EggsWithTomato();
-    		eggsWithTomato.dodish();
-     
-    		System.out.println("-----------------------------");
-     
-    		Dish bouilli = new Bouilli();
-    		bouilli.dodish();
-    	}
-     
-    }
+```java
+public class MainTest {
+	public static void main(String[] args) {
+		Dish eggsWithTomato = new EggsWithTomato();
+		eggsWithTomato.dodish();
+ 
+		System.out.println("-----------------------------");
+ 
+		Dish bouilli = new Bouilli();
+		bouilli.dodish();
+	}
+ 
+}
+```
 
 ### 14.2  模板模式的优点和缺点
 
@@ -1689,113 +1789,122 @@ c. 在测试类中我们来做菜：
 
 1、定义一个抽象被观察者接口
 
-    public interface Subject {
-    	
-    	  public void registerObserver(Observer o);
-    	  public void removeObserver(Observer o);
-    	  public void notifyObserver();
-     
-    }
+```java
+public interface Subject {
+	
+	  public void registerObserver(Observer o);
+	  public void removeObserver(Observer o);
+	  public void notifyObserver();
+}
+```
 
 2、定义一个抽象观察者接口
 
-    public interface Observer {
-    	
-    	public void update(String message);
-     
-    }
+```java
+public interface Observer {
+	
+	public void update(String message);
+}
+```
 
 3、定义被观察者，实现了Observerable接口，对Observerable接口的三个方法进行了具体实现，同时有一个List集合，用以保存注册的观察者，等需要通知观察者时，遍历该集合即可。
 
-    public class WechatServer implements Subject {
-     
-    	private List<Observer> list;
-    	private String message;
-     
-    	public WechatServer() {
-    		list = new ArrayList<Observer>();
-    	}
-     
-    	@Override
-    	public void registerObserver(Observer o) {
-    		// TODO Auto-generated method stub
-    		list.add(o);
-    	}
-     
-    	@Override
-    	public void removeObserver(Observer o) {
-    		// TODO Auto-generated method stub
-    		if (!list.isEmpty()) {
-    			list.remove(o);
-    		}
-    	}
-     
-    	@Override
-    	public void notifyObserver() {
-    		// TODO Auto-generated method stub
-    		for (Observer o : list) {
-    			o.update(message);
-    		}
-    	}
-     
-    	public void setInfomation(String s) {
-    		this.message = s;
-    		System.out.println("微信服务更新消息： " + s);
-    		// 消息更新，通知所有观察者
-    		notifyObserver();
-    	}
-     
-    }
+```java
+public class WechatServer implements Subject {
+ 
+	private List<Observer> list;
+	private String message;
+ 
+	public WechatServer() {
+		list = new ArrayList<Observer>();
+	}
+ 
+	@Override
+	public void registerObserver(Observer o) {
+		// TODO Auto-generated method stub
+		list.add(o);
+	}
+ 
+	@Override
+	public void removeObserver(Observer o) {
+		// TODO Auto-generated method stub
+		if (!list.isEmpty()) {
+			list.remove(o);
+		}
+	}
+ 
+	@Override
+	public void notifyObserver() {
+		// TODO Auto-generated method stub
+		for (Observer o : list) {
+			o.update(message);
+		}
+	}
+ 
+	public void setInfomation(String s) {
+		this.message = s;
+		System.out.println("微信服务更新消息： " + s);
+		// 消息更新，通知所有观察者
+		notifyObserver();
+	}
+ 
+}
+```
 
 4、定义具体观察者，微信公众号的具体观察者为用户User
 
-    public class User implements Observer {
-     
-    	private String name;
-    	private String message;
-     
-    	public User(String name) {
-    		this.name = name;
-    	}
-     
-    	@Override
-    	public void update(String message) {
-    		this.message = message;
-    		read();
-    	}
-     
-    	public void read() {
-    		System.out.println(name + " 收到推送消息： " + message);
-    	}
-     
-    }
+```java
+public class User implements Observer {
+ 
+	private String name;
+	private String message;
+ 
+	public User(String name) {
+		this.name = name;
+	}
+ 
+	@Override
+	public void update(String message) {
+		this.message = message;
+		read();
+	}
+ 
+	public void read() {
+		System.out.println(name + " 收到推送消息： " + message);
+	}
+ 
+}
+```
 
 5、编写一个测试类
 
-    public class MainTest {
-    	
-    	 public static void main(String[] args) {
-    		 
-    	        WechatServer server = new WechatServer();
-    	        
-    	        Observer userZhang = new User("ZhangSan");
-    	        Observer userLi = new User("LiSi");
-    	        Observer userWang = new User("WangWu");
-    	        
-    	        server.registerObserver(userZhang);
-    	        server.registerObserver(userLi);
-    	        server.registerObserver(userWang);
-    	        server.setInfomation("PHP是世界上最好用的语言！");
-    	        
-    	        System.out.println("----------------------------------------------");
-    	        server.removeObserver(userZhang);
-    	        server.setInfomation("JAVA是世界上最好用的语言！");
-    	        
-    	    }
-     
-    }
+```java
+public class MainTest {
+	
+	 public static void main(String[] args) {
+		 
+	        WechatServer server = new WechatServer();
+	        
+	        Observer userZhang = new User("ZhangSan");
+	        Observer userLi = new User("LiSi");
+	        Observer userWang = new User("WangWu");
+	        
+	        server.registerObserver(userZhang);
+	        server.registerObserver(userLi);
+	        server.registerObserver(userWang);
+	        server.setInfomation("PHP是世界上最好用的语言！");
+	        
+	        System.out.println("----------------------------------------------");
+	        server.removeObserver(userZhang);
+	        server.setInfomation("JAVA是世界上最好用的语言！");
+	        
+	    }
+ 
+}
+```
 
  
+
 
 
 
@@ -1833,175 +1942,175 @@ c. 在测试类中我们来做菜：
 
 1 迭代器接口
 
-    public interface Iterator {
-    	
-    	public boolean hasNext();
-    	public Object next();
-    	
-    }
+```java
+public interface Iterator {
+	
+	public boolean hasNext();
+	public Object next();
+	
+}
+```
 
 2 咖啡店菜单和咖啡店菜单遍历器
 
-    public class CakeHouseMenu {
-    	private ArrayList<MenuItem> menuItems;
+```java
+public class CakeHouseMenu {
+    
+    private ArrayList<MenuItem> menuItems;
+    
+    public CakeHouseMenu() {
+        menuItems = new ArrayList<MenuItem>();
 
-
-​    	
-​    	public CakeHouseMenu() {
-​    		menuItems = new ArrayList<MenuItem>();
-​    		
-​    		addItem("KFC Cake Breakfast","boiled eggs&toast&cabbage",true,3.99f);
-​    		addItem("MDL Cake Breakfast","fried eggs&toast",false,3.59f);
-​    		addItem("Stawberry Cake","fresh stawberry",true,3.29f);
-​    		addItem("Regular Cake Breakfast","toast&sausage",true,2.59f);
-​    	}
-​     
-    	private void addItem(String name, String description, boolean vegetable,
-    			float price) {
-    		MenuItem menuItem = new MenuItem(name, description, vegetable, price);
-    		menuItems.add(menuItem);
-    	}
-
-
-​     
-​    	
-​    	public Iterator getIterator()
-​    	{
-​    		return new CakeHouseIterator() ;
-​    	}
-​    	
-​    	class CakeHouseIterator implements  Iterator
-​    	 {		
-​    		private int position=0;
-​    		public CakeHouseIterator()
-​    		{
-​    			  position=0;
-​    		}
-​    		
-    		 	@Override
-    			public boolean hasNext() {
-    			// TODO Auto-generated method stub
-    			if(position<menuItems.size())
-    			{
-    				return true;
-    			}
-    			
-    			return false;
-    		}
-     
-    		@Override
-    		public Object next() {
-    			// TODO Auto-generated method stub
-    			MenuItem menuItem =menuItems.get(position);
-    			position++;
-    			return menuItem;
-    		}};
-    	//鍏朵粬鍔熻兘浠ｇ爜
-    	
+        addItem("KFC Cake Breakfast","boiled eggs&toast&cabbage",true,3.99f);
+        addItem("MDL Cake Breakfast","fried eggs&toast",false,3.59f);
+        addItem("Stawberry Cake","fresh stawberry",true,3.29f);
+        addItem("Regular Cake Breakfast","toast&sausage",true,2.59f);
     }
+    
+    private void addItem(String name, String description, boolean vegetable,
+                         float price) {
+        MenuItem menuItem = new MenuItem(name, description, vegetable, price);
+        menuItems.add(menuItem);
+    }
+    
+    public Iterator getIterator(){
+        return new CakeHouseIterator() ;
+    }
+
+    class CakeHouseIterator implements Iterator{		
+        private int position=0;    		
+        public CakeHouseIterator(){
+            position=0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            // TODO Auto-generated method stub
+            if(position<menuItems.size())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Object next() {
+            // TODO Auto-generated method stub
+            MenuItem menuItem =menuItems.get(position);
+            position++;
+            return menuItem;
+        }
+    }
+}
+```
+
+
+
 
 3 中餐厅菜单和中餐厅菜单遍历器
 
-    public class DinerMenu {
-    	private final static int Max_Items = 5;
-    	private int numberOfItems = 0;
-    	private MenuItem[] menuItems;
-     
-    	public DinerMenu() {
-    		menuItems = new MenuItem[Max_Items];
-    		addItem("vegetable Blt", "bacon&lettuce&tomato&cabbage", true, 3.58f);
-    		addItem("Blt", "bacon&lettuce&tomato", false, 3.00f);
-    		addItem("bean soup", "bean&potato salad", true, 3.28f);
-    		addItem("hotdog", "onions&cheese&bread", false, 3.05f);
-     
-    	}
-     
-    	private void addItem(String name, String description, boolean vegetable,
-    			float price) {
-    		MenuItem menuItem = new MenuItem(name, description, vegetable, price);
-    		if (numberOfItems >= Max_Items) {
-    			System.err.println("sorry,menu is full!can not add another item");
-    		} else {
-    			menuItems[numberOfItems] = menuItem;
-    			numberOfItems++;
-    		}
-     
-    	}
-     
-    	public Iterator getIterator() {
-    		return new DinerIterator();
-    	}
-     
-    	class DinerIterator implements Iterator {
-    		private int position;
-     
-    		public DinerIterator() {
-    			position = 0;
-    		}
-     
-    		@Override
-    		public boolean hasNext() {
-    			// TODO Auto-generated method stub
-    			if (position < numberOfItems) {
-    				return true;
-    			}
-    			
-    			return false;
-    		}
-     
-    		@Override
-    		public Object next() {
-    			// TODO Auto-generated method stub
-    			MenuItem menuItem = menuItems[position];
-    			position++;
-    			return menuItem;
-    		}
-    	};
-    }
+```java
+public class DinerMenu {
+	private final static int Max_Items = 5;
+	private int numberOfItems = 0;
+	private MenuItem[] menuItems;
+ 
+	public DinerMenu() {
+		menuItems = new MenuItem[Max_Items];
+		addItem("vegetable Blt", "bacon&lettuce&tomato&cabbage", true, 3.58f);
+		addItem("Blt", "bacon&lettuce&tomato", false, 3.00f);
+		addItem("bean soup", "bean&potato salad", true, 3.28f);
+		addItem("hotdog", "onions&cheese&bread", false, 3.05f);
+ 
+	}
+ 
+	private void addItem(String name, String description, boolean vegetable,
+			float price) {
+		MenuItem menuItem = new MenuItem(name, description, vegetable, price);
+		if (numberOfItems >= Max_Items) {
+			System.err.println("sorry,menu is full!can not add another item");
+		} else {
+			menuItems[numberOfItems] = menuItem;
+			numberOfItems++;
+		}
+ 
+	}
+ 
+	public Iterator getIterator() {
+		return new DinerIterator();
+	}
+ 
+	class DinerIterator implements Iterator {
+		private int position;
+ 
+		public DinerIterator() {
+			position = 0;
+		}
+ 
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			if (position < numberOfItems) {
+				return true;
+			}
+			
+			return false;
+		}
+ 
+		@Override
+		public Object next() {
+			// TODO Auto-generated method stub
+			MenuItem menuItem = menuItems[position];
+			position++;
+			return menuItem;
+		}
+	};
+}
+```
 
 4 女服务员
 
-    public class Waitress {
-    	private ArrayList<Iterator> iterators = new ArrayList<Iterator>();
-     
-    	public Waitress() {
-     
-    	}
-     
-    	public void addIterator(Iterator iterator) {
-    		iterators.add(iterator);
-     
-    	}
-     
-    	public void printMenu() {
-    		Iterator iterator;
-    		MenuItem menuItem;
-    		for (int i = 0, len = iterators.size(); i < len; i++) {
-    			iterator = iterators.get(i);
-     
-    			while (iterator.hasNext()) {
-    				menuItem = (MenuItem) iterator.next();
-    				System.out
-    						.println(menuItem.getName() + "***" + menuItem.getPrice() + "***" + menuItem.getDescription());
-     
-    			}
-     
-    		}
-     
-    	}
-     
-    	public void printBreakfastMenu() {
-     
-    	}
-     
-    	public void printLunchMenu() {
-     
-    	}
-     
-    	public void printVegetableMenu() {
-     
-    	}
+```java
+public class Waitress {
+    private ArrayList<Iterator> iterators = new ArrayList<Iterator>();
+
+    public Waitress() {
+
     }
+
+    public void addIterator(Iterator iterator) {
+        iterators.add(iterator);
+
+    }
+
+    public void printMenu() {
+        Iterator iterator;
+        MenuItem menuItem;
+        for (int i = 0, len = iterators.size(); i < len; i++) {
+            iterator = iterators.get(i);
+
+            while (iterator.hasNext()) {
+                menuItem = (MenuItem) iterator.next();
+                System.out.println(menuItem.getName() + "***" 
+                    + menuItem.getPrice() + "***" + menuItem.getDescription());
+
+            }
+        }
+    }
+
+    public void printBreakfastMenu() {
+
+    }
+
+    public void printLunchMenu() {
+
+    }
+
+    public void printVegetableMenu() {
+
+    }
+}
+```
 
 
 
@@ -2029,126 +2138,134 @@ c. 在测试类中我们来做菜：
 
 1 决策者抽象类，包含对请求处理的函数，同时还包含指定下一个决策者的函数
 
-    public abstract class Approver {
-    	 Approver successor;
-    	 String Name;
-    	public Approver(String Name)
-    	{
-    		this.Name=Name;
-    	}
-    	public abstract void ProcessRequest( PurchaseRequest request);
-    	public void SetSuccessor(Approver successor) {
-    		// TODO Auto-generated method stub
-    		this.successor=successor;
-    	}
-    }
+```java
+public abstract class Approver {
+	 Approver successor;
+	 String Name;
+	public Approver(String Name)
+	{
+		this.Name=Name;
+	}
+	public abstract void ProcessRequest( PurchaseRequest request);
+	public void SetSuccessor(Approver successor) {
+		// TODO Auto-generated method stub
+		this.successor=successor;
+	}
+}
+```
 
 2 客户端以及请求
 
-    public class PurchaseRequest {
-    	private int Type = 0;
-    	private int Number = 0;
-    	private float Price = 0;
-    	private int ID = 0;
-     
-    	public PurchaseRequest(int Type, int Number, float Price) {
-    		this.Type = Type;
-    		this.Number = Number;
-    		this.Price = Price;
-    	}
-     
-    	public int GetType() {
-    		return Type;
-    	}
-     
-    	public float GetSum() {
-    		return Number * Price;
-    	}
-     
-    	public int GetID() {
-    		return (int) (Math.random() * 1000);
-    	}
+```java
+public class PurchaseRequest {
+    private int Type = 0;
+    private int Number = 0;
+    private float Price = 0;
+    private int ID = 0;
+
+    public PurchaseRequest(int Type, int Number, float Price) {
+        this.Type = Type;
+        this.Number = Number;
+        this.Price = Price;
     }
-    public class Client {
-     
-    	public Client() {
-     
-    	}
-     
-    	public PurchaseRequest sendRequst(int Type, int Number, float Price) {
-    		return new PurchaseRequest(Type, Number, Price);
-    	}
-     
+
+    public int GetType() {
+        return Type;
     }
+
+    public float GetSum() {
+        return Number * Price;
+    }
+
+    public int GetID() {
+        return (int) (Math.random() * 1000);
+    }
+}
+
+public class Client {
+
+    public Client() {
+
+    }
+
+    public PurchaseRequest sendRequst(int Type, int Number, float Price) {
+        return new PurchaseRequest(Type, Number, Price);
+    }
+
+}
+```
 
 3 组长、部长。。。继承决策者抽象类
 
-    public class GroupApprover extends Approver {
-     
-    	public GroupApprover(String Name) {
-    		super(Name + " GroupLeader");
-    		// TODO Auto-generated constructor stub
-     
-    	}
-     
-    	@Override
-    	public void ProcessRequest(PurchaseRequest request) {
-    		// TODO Auto-generated method stub
-     
-    		if (request.GetSum() < 5000) {
-    			System.out.println("**This request " + request.GetID() + " will be handled by " + this.Name + " **");
-    		} else {
-    			successor.ProcessRequest(request);
-    		}
-    	}
-     
-    }
-    public class DepartmentApprover extends Approver {
-     
-    	public DepartmentApprover(String Name) {
-    		super(Name + " DepartmentLeader");
-     
-    	}
-     
-    	@Override
-    	public void ProcessRequest(PurchaseRequest request) {
-    		// TODO Auto-generated method stub
-     
-    		if ((5000 <= request.GetSum()) && (request.GetSum() < 10000)) {
-    			System.out.println("**This request " + request.GetID()
-    					+ " will be handled by " + this.Name + " **");
-    		} else {
-    			successor.ProcessRequest(request);
-    		}
-     
-    	}
-     
-    }
+```java
+public class GroupApprover extends Approver {
+ 
+	public GroupApprover(String Name) {
+		super(Name + " GroupLeader");
+		// TODO Auto-generated constructor stub
+ 
+	}
+ 
+	@Override
+	public void ProcessRequest(PurchaseRequest request) {
+		// TODO Auto-generated method stub
+ 
+		if (request.GetSum() < 5000) {
+			System.out.println("**This request " + request.GetID() + " will be handled by " + this.Name + " **");
+		} else {
+			successor.ProcessRequest(request);
+		}
+	}
+ 
+}
+public class DepartmentApprover extends Approver {
+ 
+	public DepartmentApprover(String Name) {
+		super(Name + " DepartmentLeader");
+ 
+	}
+ 
+	@Override
+	public void ProcessRequest(PurchaseRequest request) {
+		// TODO Auto-generated method stub
+ 
+		if ((5000 <= request.GetSum()) && (request.GetSum() < 10000)) {
+			System.out.println("**This request " + request.GetID()
+					+ " will be handled by " + this.Name + " **");
+		} else {
+			successor.ProcessRequest(request);
+		}
+ 
+	}
+ 
+}
+```
 
 4测试
 
-    public class MainTest {
-     
-    	public static void main(String[] args) {
-     
-    		Client mClient = new Client();
-    		Approver GroupLeader = new GroupApprover("Tom");
-    		Approver DepartmentLeader = new DepartmentApprover("Jerry");
-    		Approver VicePresident = new VicePresidentApprover("Kate");
-    		Approver President = new PresidentApprover("Bush");
-     
-    		GroupLeader.SetSuccessor(VicePresident);
-    		DepartmentLeader.SetSuccessor(President);
-    		VicePresident.SetSuccessor(DepartmentLeader);
-    		President.SetSuccessor(GroupLeader);
-     
-    		GroupLeader.ProcessRequest(mClient.sendRequst(1, 10000, 40));
-     
-    	}
-     
-    }
-
+```java
+public class MainTest {
  
+	public static void main(String[] args) {
+ 
+		Client mClient = new Client();
+		Approver GroupLeader = new GroupApprover("Tom");
+		Approver DepartmentLeader = new DepartmentApprover("Jerry");
+		Approver VicePresident = new VicePresidentApprover("Kate");
+		Approver President = new PresidentApprover("Bush");
+ 
+		GroupLeader.SetSuccessor(VicePresident);
+		DepartmentLeader.SetSuccessor(President);
+		VicePresident.SetSuccessor(DepartmentLeader);
+		President.SetSuccessor(GroupLeader);
+ 
+		GroupLeader.ProcessRequest(mClient.sendRequst(1, 10000, 40));
+ 
+	}
+ 
+}
+```
+
 
 
 
@@ -2175,76 +2292,85 @@ c. 在测试类中我们来做菜：
 
 1 命令抽象类
 
-    public interface Command {
-    	
-    	public void excute();
-    	public void undo();
-     
-    }
+```java
+public interface Command {
+	
+	public void excute();
+	public void undo();
+ 
+}
+```
 
 2 具体命令对象
 
-    public class TurnOffLight implements Command {
-     
-    	private Light light;
-     
-    	public TurnOffLight(Light light) {
-    		this.light = light;
-    	}
-     
-    	@Override
-    	public void excute() {
-    		// TODO Auto-generated method stub
-    		light.Off();
-    	}
-     
-    	@Override
-    	public void undo() {
-    		// TODO Auto-generated method stub
-    		light.On();
-    	}
-     
-    }
+```java
+public class TurnOffLight implements Command {
+ 
+	private Light light;
+ 
+	public TurnOffLight(Light light) {
+		this.light = light;
+	}
+ 
+	@Override
+	public void excute() {
+		// TODO Auto-generated method stub
+		light.Off();
+	}
+ 
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		light.On();
+	}
+ 
+}
+```
 
 3 实现者
 
-    public class Light {
-     
-    	String loc = "";
-     
-    	public Light(String loc) {
-    		this.loc = loc;
-    	}
-     
-    	public void On() {
-     
-    		System.out.println(loc + " On");
-    	}
-     
-    	public void Off() {
-     
-    		System.out.println(loc + " Off");
-    	}
-     
-    }
+```java
+public class Light {
+ 
+	String loc = "";
+ 
+	public Light(String loc) {
+		this.loc = loc;
+	}
+ 
+	public void On() {
+ 
+		System.out.println(loc + " On");
+	}
+ 
+	public void Off() {
+ 
+		System.out.println(loc + " Off");
+	}
+ 
+}
+```
 
 4 请求者
 
-    public class Contral{
-     
-    	public void CommandExcute(Command command) {
-    		// TODO Auto-generated method stub
-    		command.excute();
-    	}
-     
-    	public void CommandUndo(Command command) {
-    		// TODO Auto-generated method stub
-    		command.undo();
-    	}
-     
-    }
+```java
+public class Contral{
+ 
+	public void CommandExcute(Command command) {
+		// TODO Auto-generated method stub
+		command.excute();
+	}
+ 
+	public void CommandUndo(Command command) {
+		// TODO Auto-generated method stub
+		command.undo();
+	}
+ 
+}
+```
 
  
+
 
 
 
@@ -2288,11 +2414,13 @@ c. 在测试类中我们来做菜：
 
 1 state接口
 
-    public interface State {
-    	public void stop();
-    	public void move();
-     
-    }
+```java
+public interface State {
+	public void stop();
+	public void move();
+ 
+}
+```
 
 2 状态实例
 
@@ -2324,51 +2452,52 @@ c. 在测试类中我们来做菜：
 
 3 context(player)拥有状态的对象
 
-    public class Player {
-     
-    	State placeA;
-    	State placeB;
-    	State onMove;
-    	private State state;
-    	private String direction;
-     
-    	public Player() {
-    		direction = "AB";
-    		placeA = new PlaceA(this);
-    		placeB = new PlaceB(this);
-    		onMove = new OnMove(this);
-    		this.state = placeA;
-    	}
-     
-    	public void move() {
-    		System.out.println("指令:开始移动");
-    		state.move();
-    	}
-     
-    	public void stop() {
-    		System.out.println("指令:停止移动");
-    		state.stop();
-    	}
-     
-    	public State getState() {
-    		return state;
-    	}
-     
-    	public void setState(State state) {
-    		this.state = state;
-    	}
-     
-    	public void setDirection(String direction) {
-    		this.direction = direction;
-    	}
-     
-    	public String getDirection() {
-    		return direction;
-    	}
-     
-    }
-
+```java
+public class Player {
  
+	State placeA;
+	State placeB;
+	State onMove;
+	private State state;
+	private String direction;
+ 
+	public Player() {
+		direction = "AB";
+		placeA = new PlaceA(this);
+		placeB = new PlaceB(this);
+		onMove = new OnMove(this);
+		this.state = placeA;
+	}
+ 
+	public void move() {
+		System.out.println("指令:开始移动");
+		state.move();
+	}
+ 
+	public void stop() {
+		System.out.println("指令:停止移动");
+		state.stop();
+	}
+ 
+	public State getState() {
+		return state;
+	}
+ 
+	public void setState(State state) {
+		this.state = state;
+	}
+ 
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+ 
+	public String getDirection() {
+		return direction;
+	}
+ 
+} 
+```
+
 
 
 
@@ -2394,80 +2523,79 @@ c. 在测试类中我们来做菜：
     
     管理者（Caretaker）角色：对备忘录进行管理，提供保存与获取备忘录的功能，但其不能对备忘录的内容进行访问与修改。
 
- 
-
-
-
-
 举例（发起者通过备忘录存储信息和获取信息），类图如下：
-
- 
 
 1 备忘录接口
 
-    public interface MementoIF {
-     
-    }
+```java
+public interface MementoIF {
+ 
+}
+```
 
 2 备忘录
 
-    public class Memento implements MementoIF{
-    	
-    	private String state;
-     
-    	public Memento(String state) {
-    		this.state = state;
-    	}
-    	
-    	public String getState(){
-    		return state;
-    	}
-
-
-​     
-​    }
+```java
+public class Memento implements MementoIF{
+	
+	private String state;
+ 
+	public Memento(String state) {
+		this.state = state;
+	}
+	
+	public String getState(){
+		return state;
+	}
+}
+```
 
 3 发起者
 
-    public class Originator {
-     
-    	private String state;
-     
-    	public String getState() {
-    		return state;
-    	}
-     
-    	public void setState(String state) {
-    		this.state = state;
-    	}
-     
-    	public Memento saveToMemento() {
-    		return new Memento(state);
-    	}
-     
-    	public String getStateFromMemento(MementoIF memento) {
-    		return ((Memento) memento).getState();
-    	}
-     
-    }
+```java
+public class Originator {
+ 
+	private String state;
+ 
+	public String getState() {
+		return state;
+	}
+ 
+	public void setState(String state) {
+		this.state = state;
+	}
+ 
+	public Memento saveToMemento() {
+		return new Memento(state);
+	}
+ 
+	public String getStateFromMemento(MementoIF memento) {
+		return ((Memento) memento).getState();
+	}
+ 
+}
+```
 
 4 管理者
 
-    public class CareTaker {
-    	
-    	private List<MementoIF> mementoList = new ArrayList<MementoIF>();
-     
-    	public void add(MementoIF memento) {
-    		mementoList.add(memento);
-    	}
-     
-    	public MementoIF get(int index) {
-    		return mementoList.get(index);
-    	}
-     
-    }
+```java
+public class CareTaker {
+	
+	private List<MementoIF> mementoList = new ArrayList<MementoIF>();
+ 
+	public void add(MementoIF memento) {
+		mementoList.add(memento);
+	}
+ 
+	public MementoIF get(int index) {
+		return mementoList.get(index);
+	}
+ 
+}
+```
 
  
+
 
 
 
@@ -2509,78 +2637,89 @@ c. 在测试类中我们来做菜：
 
 1 抽象访问者
 
-    public interface Visitor {
-     
-    	abstract public void Visit(Element element);
-    }
+```java
+public interface Visitor {
+ 
+	abstract public void Visit(Element element);
+}
+```
 
 2 具体访问者
 
-    public class CompensationVisitor implements Visitor {
-     
-    	@Override
-    	public void Visit(Element element) {
-    		// TODO Auto-generated method stub
-    		Employee employee = ((Employee) element);
-     
-    		System.out.println(
-    				employee.getName() + "'s Compensation is " + (employee.getDegree() * employee.getVacationDays() * 10));
-    	}
-     
-    }
+```java
+public class CompensationVisitor implements Visitor {
+ 
+	@Override
+	public void Visit(Element element) {
+		// TODO Auto-generated method stub
+		Employee employee = ((Employee) element);
+ 
+		System.out.println(employee.getName() + "'s Compensation is " 
+            + (employee.getDegree() * employee.getVacationDays() * 10));
+	}
+ 
+}
+```
 
 3 抽象元素
 
-    public interface Element {
-    	abstract public void Accept(Visitor visitor);
-     
-    }
+```java
+public interface Element {
+	abstract public void Accept(Visitor visitor);
+ 
+}
+```
 
 4 具体元素
 
-    public class CompensationVisitor implements Visitor {
-     
-    	@Override
-    	public void Visit(Element element) {
-    		// TODO Auto-generated method stub
-    		Employee employee = ((Employee) element);
-     
-    		System.out.println(
-    				employee.getName() + "'s Compensation is " + (employee.getDegree() * employee.getVacationDays() * 10));
-    	}
-     
-    }
+```java
+public class CompensationVisitor implements Visitor {
+ 
+	@Override
+	public void Visit(Element element) {
+		// TODO Auto-generated method stub
+		Employee employee = ((Employee) element);
+ 
+		System.out.println(
+				employee.getName() + "'s Compensation is " + (employee.getDegree() * employee.getVacationDays() * 10));
+	}
+ 
+}
+```
 
 5 对象结构
 
-    public class ObjectStructure {
-    	private HashMap<String, Employee> employees;
-     
-    	public ObjectStructure() {
-    		employees = new HashMap();
-    	}
-     
-    	public void Attach(Employee employee) {
-    		employees.put(employee.getName(), employee);
-    	}
-     
-    	public void Detach(Employee employee) {
-    		employees.remove(employee);
-    	}
-     
-    	public Employee getEmployee(String name) {
-    		return employees.get(name);
-    	}
-     
-    	public void Accept(Visitor visitor) {
-    		for (Employee e : employees.values()) {
-    			e.Accept(visitor);
-    		}
-    	}
-     
-    }
+```java
+public class ObjectStructure {
+	private HashMap<String, Employee> employees;
+ 
+	public ObjectStructure() {
+		employees = new HashMap();
+	}
+ 
+	public void Attach(Employee employee) {
+		employees.put(employee.getName(), employee);
+	}
+ 
+	public void Detach(Employee employee) {
+		employees.remove(employee);
+	}
+ 
+	public Employee getEmployee(String name) {
+		return employees.get(name);
+	}
+ 
+	public void Accept(Visitor visitor) {
+		for (Employee e : employees.values()) {
+			e.Accept(visitor);
+		}
+	}
+ 
+}
+```
 
  
+
 
 
 
@@ -2610,95 +2749,103 @@ c. 在测试类中我们来做菜：
 
 1 抽象中介者
 
-    public interface Mediator {
-     
-    	void register(Colleague colleague); // 客户注册
-     
-    	void relay(String from, String to,String ad); // 转发
-     
-    }
+```java
+public interface Mediator {
+ 
+	void register(Colleague colleague); // 客户注册
+ 
+	void relay(String from, String to,String ad); // 转发
+ 
+}
+```
 
 2 具体中介者
 
-    public class ConcreteMediator implements Mediator {
-     
-    	private List<Colleague> colleagues = new ArrayList<Colleague>();
-     
-    	@Override
-    	public void register(Colleague colleague) {
-    		// TODO Auto-generated method stub
-    		if (!colleagues.contains(colleague)) {
-    			colleagues.add(colleague);
-    			colleague.setMedium(this);
-    		}
-    	}
-     
-    	@Override
-    	public void relay(String from, String to, String ad) {
-    		// TODO Auto-generated method stub
-    		for (Colleague cl : colleagues) {
-     
-    			String name = cl.getName();
-    			if (name.equals(to)) {
-    				cl.receive(from, ad);
-    			}
-     
-    		}
-     
-    	}
-     
-    }
+```java
+public class ConcreteMediator implements Mediator {
+ 
+	private List<Colleague> colleagues = new ArrayList<Colleague>();
+ 
+	@Override
+	public void register(Colleague colleague) {
+		// TODO Auto-generated method stub
+		if (!colleagues.contains(colleague)) {
+			colleagues.add(colleague);
+			colleague.setMedium(this);
+		}
+	}
+ 
+	@Override
+	public void relay(String from, String to, String ad) {
+		// TODO Auto-generated method stub
+		for (Colleague cl : colleagues) {
+ 
+			String name = cl.getName();
+			if (name.equals(to)) {
+				cl.receive(from, ad);
+			}
+ 
+		}
+ 
+	}
+ 
+}
+```
 
 3 抽象同事类
 
-    public abstract class Colleague {
-     
-    	protected Mediator mediator;
-    	protected String name;
-     
-    	public Colleague(String name) {
-    		this.name = name;
-    	}
-     
-    	public void setMedium(Mediator mediator) {
-     
-    		this.mediator = mediator;
-     
-    	}
-     
-    	public String getName() {
-    		return name;
-    	}
-     
-    	public abstract void Send(String to, String ad);
-     
-    	public abstract void receive(String from, String ad);
-     
-    }
+```java
+public abstract class Colleague {
+ 
+	protected Mediator mediator;
+	protected String name;
+ 
+	public Colleague(String name) {
+		this.name = name;
+	}
+ 
+	public void setMedium(Mediator mediator) {
+ 
+		this.mediator = mediator;
+ 
+	}
+ 
+	public String getName() {
+		return name;
+	}
+ 
+	public abstract void Send(String to, String ad);
+ 
+	public abstract void receive(String from, String ad);
+ 
+}
+```
 
 4 具体同事类
 
-    public class Buyer extends Colleague {
-     
-    	public Buyer(String name) {
-     
-    		super(name);
-     
-    	}
-     
-    	@Override
-    	public void Send(String to, String ad) {
-    		// TODO Auto-generated method stub
-    		mediator.relay(name, to, ad);
-    	}
-     
-    	@Override
-    	public void receive(String from, String ad) {
-    		// TODO Auto-generated method stub
-    		System.out.println(name + "接收到来自" + from + "的消息:" + ad);
-    	}
-     
-    }
+```java
+public class Buyer extends Colleague {
+ 
+	public Buyer(String name) {
+ 
+		super(name);
+ 
+	}
+ 
+	@Override
+	public void Send(String to, String ad) {
+		// TODO Auto-generated method stub
+		mediator.relay(name, to, ad);
+	}
+ 
+	@Override
+	public void receive(String from, String ad) {
+		// TODO Auto-generated method stub
+		System.out.println(name + "接收到来自" + from + "的消息:" + ad);
+	}
+ 
+}
+```
 
 
 ## 23 解释器模式

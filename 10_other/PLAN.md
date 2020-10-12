@@ -1,6 +1,40 @@
+# 自律的人有多可怕
+
+
+
+## 技术目标
+
+JVM 底层
+Spring Framework 
+Spring Boot
+Spring Cloud 
+Spring Data
+
+
+
+# 年度计划
+
+
+
+8月份： Java 基础
+
+9月份：Sprin Framework Spring Boot  Spring Cloud Spring CloudAlibaba SpringCloudNetflix
+
+10月份：并发编程，通信, Java 进阶  Java 高阶 
+
+11月份：JVM  MySQL优化 Tomcat优化
+
+12月份：数据库 MySQL Mongo Redis ElasticSearch
+
+
+
+
+
 # 周计划
 
+## 2020-08-24 至 2020-08-30
 
+- [ ] Java 基础
 
 
 

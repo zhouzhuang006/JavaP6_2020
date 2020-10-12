@@ -4,6 +4,20 @@
 
 
 
+vim /usr/local/nginx/conf/nginx.conf
+
+
+
+/usr/local/nginx/sbin/nginx -t
+
+
+
+/usr/local/nginx/sbin/nginx -s reload
+
+
+
+
+
 ## 随学随用
 
 ### 定时重启执行gitbook服务

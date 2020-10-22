@@ -1,8 +1,8 @@
-# 初遇代码生成
+# generator-code代码生成
 
 
 
-​    很多人可能没有听过g0code， 其实我也没听过， 因为这是我即将创建的一款牛逼的生成代码开源软件。 解释一下 g = generate, 0 是 零， 对是0， 不是o, 0 代表着新生， 代表着全新的生命, 是一个项目的起点。 code 就不解释了， 大家都是码农。 我一直想做的是一个生成代码的工具，每天的CURD不仅让程序员苦不堪言，更不能解放我们的双手创造更有价值的东西。作为一名资深码农， 当然要解决这些问题。当前市面上有许多代码生成的插件， 确实是很好， 我也从中受到启发，既然代码生成如此重要，又有成熟的框架，为什么不能精益求精更上一层楼呢！或许它将成为我现实自我价值的方向！
+​     easycode 就不解释了， 大家都是码农。 我一直想做的是一个生成代码的工具，每天的CURD不仅让程序员苦不堪言，更不能解放我们的双手创造更有价值的东西。作为一名资深码农， 当然要解决这些问题。当前市面上有许多代码生成的插件， 确实是很好， 我也从中受到启发，既然代码生成如此重要，又有成熟的框架，为什么不能精益求精更上一层楼呢！或许它将成为我现实自我价值的方向！
 
 > 目前主流的代码生成的原理非常简单，就是查询数据库的信息，然后通过模板引擎渲染出来
 
@@ -19,8 +19,6 @@ http://mybatis.org/generator/
 ### 3.SpringBoot_v2
 
 https://gitee.com/bdj/SpringBoot_v2
-
-
 
 
 
@@ -52,6 +50,10 @@ FreeMarker VS Velocity(freemarker模板引擎和velocity模板引擎比较)
 [apache的开源项目-模板引擎(Velocity)_学习了两天就上手啦_源码下载](http://www.cnblogs.com/hongten/archive/2013/03/09/hongten_apache_velocity.html)
 
 [利用Velocity自动生成自定义代码_java版_源码下载](http://www.cnblogs.com/hongten/archive/2013/03/10/hongten_velocity_automatic_code_generation.html)
+
+[Velocity基本常用语法](https://www.cnblogs.com/xiohao/p/5788932.html)
+
+
 
 
 

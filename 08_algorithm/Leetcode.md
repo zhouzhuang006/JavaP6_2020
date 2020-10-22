@@ -4,9 +4,7 @@
 
 
 
-# 每日打卡一道算法
-
-
+# 2020-06
 
 ## 2020-06-01 拥有最多糖果的孩子
 
@@ -1062,7 +1060,7 @@ class Solution {
 
 
 
-# 2020-06-19 验证回文串
+## 2020-06-19 验证回文串
 
 https://leetcode-cn.com/problems/valid-palindrome/
 
@@ -1119,7 +1117,7 @@ class Solution {
 
 
 
-# 2020-06-21 二叉树中的最大路径和
+## 2020-06-21 二叉树中的最大路径和
 
 https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
 
@@ -1220,7 +1218,7 @@ class Solution {
 
 
 
-# 2020-06-22 模式匹配
+## 2020-06-22 模式匹配
 
 https://leetcode-cn.com/problems/pattern-matching-lcci/
 
@@ -1385,7 +1383,7 @@ class Solution {
 
 
 
-# 2020-06-23 二进制求和
+## 2020-06-23 二进制求和
 
 https://leetcode-cn.com/problems/add-binary
 
@@ -1523,7 +1521,7 @@ class Solution:
 
 
 
-# 2020-06-24 最接近的三数之和
+## 2020-06-24 最接近的三数之和
 
 https://leetcode-cn.com/problems/3sum-closest/
 
@@ -1645,7 +1643,7 @@ class Solution {
 
 
 
-# 2020-06-28 长度最小的子数组
+## 2020-06-28 长度最小的子数组
 
 https://leetcode-cn.com/problems/minimum-size-subarray-sum/
 
@@ -1771,7 +1769,7 @@ class Solution {
 
 
 
-# 2020-06-29 数组中的第K个最大元素
+## 2020-06-29 数组中的第K个最大元素
 
 https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
 
@@ -1814,7 +1812,7 @@ class Solution {
 
 
 
-# 2020-06-30 用两个栈实现队列
+## 2020-06-30 用两个栈实现队列
 
 https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/
 
@@ -1911,7 +1909,9 @@ class CQueue {
 
 
 
-# 2020-07-01 最长重复子数组
+# 2020-07
+
+## 2020-07-01 最长重复子数组
 
 https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/
 
@@ -1971,7 +1971,7 @@ class Solution {
 
 
 
-# 2020-07-02 有序矩阵中第K小的元素
+## 2020-07-02 有序矩阵中第K小的元素
 
 https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/
 
@@ -2183,6 +2183,88 @@ class Solution {
 上述三种解法，第一种没有利用矩阵的性质，所以时间复杂度最差；第二种解法只利用了一部分性质（每一列是一个有序数列，而忽视了行之间的关系）；第三种解法则利用了全部性质，所以时间复杂度最佳。
 
 这也启示我们要认真把握题目中的条件与性质，更有利于我们解题。
+
+
+
+# 2020-10
+
+## 2020-10-15 两数相加
+
+https://leetcode-cn.com/problems/add-two-numbers
+
+
+
+**题目**
+
+给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+
+如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+
+您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+示例：
+
+输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+输出：7 -> 0 -> 8
+原因：342 + 465 = 807
+
+
+
+**方法一：模拟**
+
+思路与算法
+
+```
+由于输入的两个链表都是逆序存储数字的位数的，因此两个链表中同一位置的数字可以直接相加。
+
+我们同时遍历两个链表，逐位计算它们的和，并与当前位置的进位值相加。具体而言，如果当前两个链表处相应位置的数字为 n1,n2n1,n2n1,n2，进位值为 carry\textit{carry}carry，则它们的和为 n1+n2+carryn1+n2+\textit{carry}n1+n2+carry；其中，答案链表处相应位置的数字为 (n1+n2+carry)%10(n1+n2+\textit{carry}) \% 10(n1+n2+carry)%10，而新的进位值为 ⌊n1+n2+carry10⌋\lfloor\frac{n1+n2+\textit{carry}}{10}\rfloor⌊10n1+n2+carry​⌋。
+
+如果两个链表的长度不同，则可以认为长度短的链表的后面有若干个 000 。
+
+此外，如果链表遍历结束后，有 carry>0\textit{carry} > 0carry>0，还需要在答案链表的后面附加一个节点，节点的值为 carry\textit{carry}carry。
+
+
+```
+
+
+
+```java
+public class Solution {
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = null, tail = null;
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int n1 = l1 != null ? l1.val : 0;
+            int n2 = l2 != null ? l2.val : 0;
+            int sum = n1 + n2 + carry;
+            if (head == null) {
+                head = tail = new ListNode(sum % 10);
+            } else {
+                tail.next = new ListNode(sum % 10);
+                tail = tail.next;
+            }
+            carry = sum / 10;
+            if (l1 != null) {
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                l2 = l2.next;
+            }
+        }
+        if (carry > 0) {
+            tail.next = new ListNode(carry);
+        }
+        return head;
+    }
+}
+```
+
+
+
+
+
+
 
 
 

@@ -173,6 +173,132 @@ AOP：提供了面向切面编程的实现，让你可以定义方法拦截器�
 
 
 
+> **Spring源码学习的好处：**
+>
+> 培养代码架构思维，深入理解Spring框架，写出优雅的代码，装逼
+>
+> **Spring源码学习的原则：**
+>
+> 定焦原则：定目标，抓主线
+>
+> 宏观原则：站在上帝视角，关注源码结构和流程（淡化某行代码的编写细节）
+>
+> **Spring源码学习的技巧：**
+>
+> 断点：debug模式  观察调用栈
+>
+> 反调：Find Usages
+>
+> 经验：Spring框架中doXXX是具体干活的方法
+>
+> **Spring源码学习的构建：**
+>
+> 下载源码（GitHub）5.1.2 
+>
+> https://github.com/spring-projects/spring-framework/
+>
+> 安装gradle 版本5.6.3   idea 2019.2  JDK 11.0.5 
+>
+> 
+>
+> 导入 需要耗费一定的时间
+>
+> 编译工程 （顺序  core -> oxm -> content -> beans -> aspects -> aop）工程 -> tasks -> other -> compileTestJava
+
+
+
+### 第一节 Spring IOC 容器初始化主流程
+
+#### 1.1 Spring IOC容器的继承体系
+
+IoC容器是Spring的核心模块，是抽象了对象管理、依赖关系管理的框架解决方案。Spring提供了很多的容器，其中BeanFactory是顶层容器（根容器），不能被实例化，它定义了所有IoC容器必须遵从的一套原则，具体的容器实现可以增加额外的功能，比如我们常用到的ApplicationContext， 其下更具体的实现如ClassPathXmlApplication 则是包含了解析xml等一系列的内容，AnnotationConfigApplicationContext 则是包含了注解解析等一系列的内容。Spring IoC容器继承体系非常聪明，需要使用哪个层次用哪个层次即可，不必使用功能大而全的。
+
+
+
+BeanFactory顶层接口方法栈如下：
+
+![image-20201024153501863](SpringFramework.assets/image-20201024153501863.png)
+
+BeanFactory 容器继承体系
+
+选择 ClassPathXmlApplicationContext 查询继承关系， 快捷键Ctrl + Alt + u
+
+![image-20201024160432670](SpringFramework.assets/image-20201024160432670.png)
+
+
+
+> 参考：spring的beanFactory继承体系
+>
+> https://www.cnblogs.com/sunrainlyb/p/11668490.html
+>
+> 参考：Spring IOC-BeanFactory的继承体系结构
+>
+> https://blog.csdn.net/chenzitaojay/article/details/46716071
+
+通过其接口设计，我们可以看到我们一贯使用的ApplicationContext除了继承BeanFactory的子接口，还继承了ResourceLoader、MessageSource等接口，因此其提供的功能也就更丰富了。
+
+下面我们以ClasspathXmlApplicationContext为例，深入源码说明IoC容器的初始化流程。
+
+
+
+#### 1.2 Bean生命周期关键时机点
+
+**思路：** 创建一个类DemoBean, 让其实现几个特殊的接口，并分别在接口实现的构造器、接口方法中断点，观察线程调用栈，分析出Bean对象创建和管理关键点的触发时机。
+
+DemoBean类
+
+```java
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+public class DemoBean implements InitializingBean, ApplicationContextAware {
+
+	private ItBean itBean;
+
+	public void setItBean(ItBean itBean) {
+		this.itBean = itBean;
+	}
+
+	/**
+	 * 构造函数
+	 */
+	public LagouBean(){
+		System.out.println("LagouBean 构造器...");
+	}
+
+
+	/**
+	 * InitializingBean 接口实现
+	 */
+	public void afterPropertiesSet() throws Exception {
+		System.out.println("LagouBean afterPropertiesSet...");
+	}
+
+	public void print() {
+		System.out.println("print方法业务逻辑执行");
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		System.out.println("setApplicationContext....");
+	}
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## 第六部分 Spring AOP应用

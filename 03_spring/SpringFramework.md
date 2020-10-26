@@ -94,8 +94,6 @@ AOP思想的实现一般都是基于 **代理模式** ，在JAVA中一般采用J
 
 
 
-
-
 第2节 Spring发展历程
 
 1997年 IBM 提出了EJB的思想； 1998年，SUN 制定开发标准规范EJB1.0； 1999年，EJB 1.1发
@@ -287,9 +285,223 @@ public class DemoBean implements InitializingBean, ApplicationContextAware {
 }
 ```
 
+BeanPostProcessor 接口实现类
+
+```java
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author 应癫
+ * @create 2019/12/3 16:59
+ */
+public class MyBeanPostProcessor implements BeanPostProcessor {
+
+	public MyBeanPostProcessor() {
+		System.out.println("BeanPostProcessor 实现类构造函数...");
+	}
+
+	@Override
+	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		if("lagouBean".equals(beanName)) {
+			System.out.println("BeanPostProcessor 实现类 postProcessBeforeInitialization 方法被调用中......");
+		}
+		return bean;
+	}
+
+	@Override
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		if("lagouBean".equals(beanName)) {
+			System.out.println("BeanPostProcessor 实现类 postProcessAfterInitialization 方法被调用中......");
+		}
+		return bean;
+	}
+}
+```
+
+BeanFactoryPostProcessor 接口实现类
+
+```java
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author 应癫
+ * @create 2019/12/3 16:56
+ */
+public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+
+	public MyBeanFactoryPostProcessor() {
+		System.out.println("BeanFactoryPostProcessor的实现类构造函数...");
+	}
+
+	@Override
+	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		System.out.println("BeanFactoryPostProcessor的实现方法调用中......");
+	}
+}
+```
+
+ApplicationContext.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+">
+
+	<!--循环依赖问题-->
+	<bean id="lagouBean" class="com.lagou.edu.LagouBean">
+		<property name="ItBean" ref="itBean"/>
+	</bean>
+	<bean id="itBean" class="com.lagou.edu.ItBean">
+		<property name="LagouBean" ref="lagouBean"/>
+	</bean>
+
+
+	<!--<bean id="myBeanFactoryPostProcessor" class="com.lagou.edu.MyBeanFactoryPostProcessor"/>
+	<bean id="myBeanPostProcessor" class="com.lagou.edu.MyBeanPostProcessor"/>-->
+
+
+	<!--<bean id="lagouBean" class="com.lagou.edu.LagouBean">
+	</bean>-->
+
+
+	<!--aop配置-->
+	<!--横切逻辑-->
+	<!--<bean id="logUtils" class="com.lagou.edu.LogUtils">
+	</bean>
+
+	<aop:config>
+		<aop:aspect ref="logUtils">
+			<aop:before method="beforeMethod" pointcut="execution(public void com.lagou.edu.LagouBean.print())"/>
+		</aop:aspect>
+	</aop:config>-->
+
+
+</beans>
+```
+
+IoC 容器源码分析用例
+
+```java
+import com.lagou.edu.LagouBean;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @Author 应癫
+ */
+public class IocTest {
+
+	/**
+	 *  Ioc 容器源码分析基础案例
+	 */
+	@Test
+	public void testIoC() {
+		// ApplicationContext是容器的高级接口，BeanFacotry（顶级容器/根容器，规范了/定义了容器的基础行为）
+		// Spring应用上下文，官方称之为 IoC容器（错误的认识：容器就是map而已；准确来说，map是ioc容器的一个成员，
+		// 叫做单例池, singletonObjects,容器是一组组件和过程的集合，包括BeanFactory、单例池、BeanPostProcessor等以及之间的协作流程）
+
+		/**
+		 * Ioc容器创建管理Bean对象的，Spring Bean是有生命周期的
+		 * 构造器执行、初始化方法执行、Bean后置处理器的before/after方法、：AbstractApplicationContext#refresh#finishBeanFactoryInitialization
+		 * Bean工厂后置处理器初始化、方法执行：AbstractApplicationContext#refresh#invokeBeanFactoryPostProcessors
+		 * Bean后置处理器初始化：AbstractApplicationContext#refresh#registerBeanPostProcessors
+		 */
+
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		LagouBean lagouBean = applicationContext.getBean(LagouBean.class);
+		System.out.println(lagouBean);
+	}
 
 
 
+	/**
+	 *  Ioc 容器源码分析基础案例
+	 */
+	@Test
+	public void testAOP() {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		LagouBean lagouBean = applicationContext.getBean(LagouBean.class);
+		lagouBean.print();
+	}
+}
+
+```
+
+(1) 分析Bean的创建是在容器初始化时还是在getBean时
+
+![image-20201026203145696](SpringFramework.assets/image-20201026203145696.png)
+
+
+
+根据断点调试，我们发现，在未设置延迟加载的前提下，Bean的创建是在容器初始化过程中完成的。
+
+（2） 分析构造函数调用情况
+
+
+
+![image-20201026203620503](SpringFramework.assets/image-20201026203620503.png)
+
+
+
+![image-20201026203602105](SpringFramework.assets/image-20201026203602105.png)
+
+
+
+（3）分析InitializingBean 之 afterPropertiesSet 初始化方法调用情况
+
+![image-20201026204021977](SpringFramework.assets/image-20201026204021977.png)
+
+
+
+![image-20201026203949457](SpringFramework.assets/image-20201026203949457.png)
+
+通过如上观察，我们发现InitializingBean 中 afterPropertiesSet方法的调用时机也是在AbstractApplicationContext类refresh方法的finishBeanFactoryInitialization(beanFactory);
+
+(4) 分析BeanFactoryPOstProcessor 初始化和调用情况
+
+分别在构造函数、postProcessBeanFactory 方法处打断点，观察调用栈，发现BeanFactoryPostProcessor 初始化在AbstractApplicationContext类refresh方法的invokeBeanFactoryPostProcessors(beanFactory);
+
+postProcessBeanFactory 调用在AbstractApplicationContext类refresh方法的invokeBeanFactoryPostProcessors(beanFactory);
+
+
+
+(5) 分析BeanPostProcessor 初始化和调用情况
+
+分别在构造函数、postProcessBeanFactory 方法处打断点，观察调用栈，发现BeanPostProcessor 初始化在AbstractApplicationContext 类refresh 方法的registerBeanPostProcessors(beanFactory);
+
+postProcessBeforeInitialization 调用在AbstractApplicationContext 类refresh 方法的finishBeanFactoryInitialization（beanFactory）;
+
+postProcessAfterInitialization（beanFactory）;
+
+(6) 总结
+
+根据上面的调试分析， 我们发现Bean对象创建的几个关键时机点代码层级的调用都在AbstractApplicationContext 类的refresh方法中， 可见这个方法对于Spring IoC容器初始化来说相当关键， 汇总如下：
+
+| 关键点                            | 触发代码                                                     |
+| --------------------------------- | ------------------------------------------------------------ |
+| 构造器                            | refresh#finishBeanFactoryInitialization(beanFactory)(beanFactory) |
+| BeanFactoryPostProcessor 初始化   | refresh#invokeBeanFactoryPostProcessors(beanFactory)         |
+| BeanFactoryPostProcessor 方法调用 | refresh#invokeBeanFactoryPostProcessors(beanFactory)         |
+| BeanPostProcessor 初始化          | registerBeanPostProcessors(beanFactory)                      |
+| BeanPostProcessor方法调用         | refresh#finishBeanFactoryInitialization(beanFactory)         |
+
+
+
+ 
 
 
 

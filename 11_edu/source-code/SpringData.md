@@ -1,4 +1,4 @@
-# 通用持久层规范及Spring Data源码剖析
+# Spring Data 源码剖析
 
 Spring Data Jpa 是应用于Dao层的一个框架，简化数据库开发的，作用和Mybatis框架一样，但是在使用方式和底层机制是有所不同的。最明显的一个特点，Spring Data Jpa 开发Dao的时候，很多场景我们连sql语句都不需要开发。由Spring出品。
 

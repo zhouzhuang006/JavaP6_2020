@@ -1,2 +1,2 @@
-# 约定优于配置设计范式及Spring Boot源码剖析
+# Spring Boot 源码剖析
 

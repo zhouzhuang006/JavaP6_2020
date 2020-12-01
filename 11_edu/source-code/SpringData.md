@@ -480,12 +480,15 @@ public class ResumeDaoTest {
     @Test
     public void testFindById() {
         // 早期的版本 dao.findOne(id);
-        /*select resume0_.id as id1_0_0_,resume0_.address as address2_0_0_, resume0_.name asname3_0_0_,resume0_.phone as phone4_0_0_ from tb_resume resume0_where resume0_.id=?*/
+        /*
+            select resume0_.id as id1_0_0_,resume0_.address as address2_0_0_, 
+            resume0_.name as name3_0_0_,resume0_.phone as phone4_0_0_ 
+            from tb_resume resume0_where resume0_.id=?
+        */
 
         Optional<Resume> optional = resumeDao.findById(1L);
         Resume resume = optional.get();
         System.out.println(resume);
-
     }
 
     @Test

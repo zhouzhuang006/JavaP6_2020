@@ -28,15 +28,33 @@
 
 ## 分布式架构设计&微服务深入剖析
 
+ [分布式原理.pdf](lg-edu\分布式原理.pdf) 
 
+[Zookeeper讲义.pdf](lg-edu\Zookeeper讲义.pdf) 
 
+ [Dubbo讲义.pdf](lg-edu\Dubbo讲义.pdf) 
 
+ [Spring_Cloud_微服务课程笔记.pdf](lg-edu\Spring_Cloud_微服务课程笔记.pdf) 
 
 
 
 ## 大型分布式存储系统架构进阶
 
+ [MySQL海量数据存储与优化（上）.pdf](lg-edu\MySQL海量数据存储与优化（上）.pdf) 
 
+ [MySQL海量数据存储与优化（下）.pdf.pdf](lg-edu\MySQL海量数据存储与优化（下）.pdf.pdf) 
+
+ [MongoDB.pdf](lg-edu\MongoDB.pdf) 
+
+ [Neo4j讲义.pdf](lg-edu\Neo4j讲义.pdf) 
+
+ [FastDFS.pdf](lg-edu\FastDFS.pdf) 
+
+ [Hadoop课程笔记.pdf](lg-edu\Hadoop课程笔记.pdf) 
+
+ [HBase讲义.pdf](lg-edu\HBase讲义.pdf) 
+
+ [云对象存储服务OSS.pdf](lg-edu\云对象存储服务OSS.pdf) 
 
 
 

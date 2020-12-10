@@ -118,6 +118,8 @@
 
  [docker 讲义.pdf](lg-edu\docker 讲义.pdf) 
 
+
+
  [k8s (1).pdf](lg-edu\k8s (1).pdf) 
 
  [k8s (2).pdf](lg-edu\k8s (2).pdf) 
@@ -138,6 +140,8 @@
 
  [k8s (10).pdf](lg-edu\k8s (10).pdf) 
 
+
+
  [01jenkins实战篇.pdf](lg-edu\01jenkins实战篇.pdf) 
 
  [02.jenkins配置篇.pdf](lg-edu\02.jenkins配置篇.pdf) 
@@ -146,3 +150,36 @@
 
  [04.jenkinsCICD理论篇.pdf](lg-edu\04.jenkinsCICD理论篇.pdf) 
 
+ 
+
+[sonarqube.pdf](lg-edu\sonarqube.pdf) 
+
+ [01.初识skywalking.pdf](lg-edu\01.初识skywalking.pdf) 
+
+ [02.实战skywalking.pdf](lg-edu\02.实战skywalking.pdf) 
+
+ [03.skywalking源码解析.pdf](lg-edu\03.skywalking源码解析.pdf) 
+
+ [pinpoint.pdf](lg-edu\pinpoint.pdf) 
+
+
+
+# 第十阶段 底层调优与算法深入
+
+ [数据结构与算法.pdf](lg-edu\数据结构与算法.pdf) 
+
+ [JVM优化.pdf](lg-edu\JVM优化.pdf) 
+
+ [并发编程.pdf](lg-edu\并发编程.pdf) 
+
+
+
+## 第十一阶段 大型互联网项目实战和业务解决方案
+
+ [项目实战.pdf](lg-edu\项目实战.pdf) 
+
+
+
+## 第十二阶段 进大厂必备-面试求职深度辅导
+
+ [就业指导讲义.pdf](lg-edu\就业指导讲义.pdf) 

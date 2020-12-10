@@ -100,5 +100,49 @@
 
 ## 第七阶段 分布式搜索引擎进阶
 
+ [Lucene.pdf](lg-edu\Lucene.pdf) 
 
+ [Solr.pdf](lg-edu\Solr.pdf) 
+
+ [Elasticsearch7x.pdf](lg-edu\Elasticsearch7x.pdf) 
+
+
+
+## 第八阶段 分布式实时流式计算引擎Flink
+
+ [Flink讲义.md](..\11_edu\flink\Flink讲义.md) 
+
+
+
+## 第九阶段 容器技术&CI/CD、DevOps
+
+ [docker 讲义.pdf](lg-edu\docker 讲义.pdf) 
+
+ [k8s (1).pdf](lg-edu\k8s (1).pdf) 
+
+ [k8s (2).pdf](lg-edu\k8s (2).pdf) 
+
+ [k8s (3).pdf](lg-edu\k8s (3).pdf) 
+
+ [k8s (4).pdf](lg-edu\k8s (4).pdf) 
+
+ [k8s (5).pdf](lg-edu\k8s (5).pdf) 
+
+ [k8s (6).pdf](lg-edu\k8s (6).pdf) 
+
+ [k8s (7).pdf](lg-edu\k8s (7).pdf) 
+
+ [k8s (8).pdf](lg-edu\k8s (8).pdf) 
+
+ [k8s (9).pdf](lg-edu\k8s (9).pdf) 
+
+ [k8s (10).pdf](lg-edu\k8s (10).pdf) 
+
+ [01jenkins实战篇.pdf](lg-edu\01jenkins实战篇.pdf) 
+
+ [02.jenkins配置篇.pdf](lg-edu\02.jenkins配置篇.pdf) 
+
+ [03.jenkins运维篇.pdf](lg-edu\03.jenkins运维篇.pdf) 
+
+ [04.jenkinsCICD理论篇.pdf](lg-edu\04.jenkinsCICD理论篇.pdf) 
 

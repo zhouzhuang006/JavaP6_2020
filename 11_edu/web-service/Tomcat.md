@@ -2,7 +2,7 @@
 
 
 
-# **主要课程内容**
+# 主要课程内容
 
 - 第⼀部分：Tomcat 系统架构与原理剖析
 - 第⼆部分：Tomcat 服务器核⼼配置详解
@@ -37,7 +37,7 @@ http请求的处理过程
 
 ## 第 2 节 Tomcat 系统总体架构
 
-### **2.1** Tomcat 请求处理大致过程
+### 2.1 Tomcat 请求处理大致过程
 
 #### Tomcat是⼀个Http服务器（能够接收并且处理http请求，所以tomcat是⼀个http服务器）
 
@@ -64,7 +64,7 @@ Tomcat的两个重要身份：
 
 
 
-### **2.2** Tomcat Servlet容器处理流程
+### 2.2 Tomcat Servlet容器处理流程
 
 当⽤户请求某个URL资源时
 
@@ -89,7 +89,7 @@ Tomcat的两个重要身份：
 
 
 
-### **2.3** Tomcat 系统总体架构
+### 2.3 Tomcat 系统总体架构
 
 通过上⾯的讲解，我们发现tomcat有两个⾮常重要的功能需要完成                   
 
@@ -114,7 +114,7 @@ Tomcat 设计了两个核⼼组件连接器（Connector）和容器（Container�
 
 ## 第 3 节 Tomcat 连接器组件 Coyote
 
-### **3.1** Coyote 简介
+### 3.1 Coyote 简介
 
 Coyote 是Tomcat 中连接器的组件名称 , 是对外的接口。客户端通过Coyote与服务器建立连接、发送请求并接受响应 。
 
@@ -147,7 +147,7 @@ Tomcat Coyote ⽀持的 IO模型与协议Tomcat⽀持多种应⽤层协议和I/O
 
 在 8.0 之前 ，Tomcat 默认采⽤的I/O⽅式为 BIO，之后改为 NIO。 ⽆论 NIO、NIO2 还是 APR， 在性能⽅⾯均优于以往的BIO。 如果采⽤APR， 甚⾄可以达到 Apache HTTP Server 的影响性能。
 
-### **3.2** Coyote 的内部组件及流程
+### 3.2 Coyote 的内部组件及流程
 
 
 
@@ -172,7 +172,7 @@ Coyote 组件及作⽤
 
 ## 第 4 节 Tomcat Servlet 容器 Catalina
 
-### **4.1** Tomcat 模块分层结构图及Catalina位置
+### 4.1 Tomcat 模块分层结构图及Catalina位置
 
 Tomcat是⼀个由⼀系列可配置（conf/server.xml）的组件构成的Web容器，⽽Catalina是Tomcat的servlet容器。
 
@@ -184,7 +184,7 @@ Tomcat是⼀个由⼀系列可配置（conf/server.xml）的组件构成的Web�
 
  
 
-### **4.2** Servlet 容器 Catalina 的结构
+### 4.2 Servlet 容器 Catalina 的结构
 
 Tomcat（我们往往有⼀个认识，Tomcat就是⼀个Catalina的实例，因为Catalina是Tomcat的核心）
 
@@ -225,7 +225,7 @@ Tomcat/Catalina实例
 
 
 
-### **4.3** Container 组件的具体结构
+### 4.3 Container 组件的具体结构
 
 Container组件下有⼏种具体的组件，分别是Engine、Host、Context和Wrapper。这4种组件（容器）  是父子关系。Tomcat通过⼀种分层的架构，使得Servlet容器具有很好的灵活性。
 
@@ -1049,14 +1049,14 @@ public class StaticResourceUtil {
 
 ## 第 1 节 源码构建
 
-### **1.1** 下载源码
+### 1.1 下载源码
 
 
 ![img](Tomcat.assets/wps84.png)
 
 
 
-### **1.2** 源码导⼊IDE之前准备⼯作
+### 1.2 源码导⼊IDE之前准备⼯作
 
 
 
@@ -1142,7 +1142,7 @@ public class StaticResourceUtil {
 - 在 apache-tomcat-8.5.50-src ⽬录中创建 source ⽂件夹
 - 将 conf、webapps ⽬录移动到刚刚创建的 source ⽂件夹中
 
-### **1.3** 导⼊源码⼯程到IDE并进行配置
+### 1.3 导⼊源码⼯程到IDE并进行配置
 
 - 将源码⼯程导⼊到 IDEA 中
 
@@ -1291,11 +1291,11 @@ class，会优先加载 classpath ⽬录中的⽂件
 
 
 
-### **2.1** 什么是双亲委派机制
+### 2.1 什么是双亲委派机制
 
 当某个类加载器需要加载某个.class⽂件时，它⾸先把这个任务委托给他的上级类加载器，递归这个操  作，如果上级的类加载器没有加载，⾃⼰才会去加载这个类。
 
-### **2.2** 双亲委派机制的作⽤
+### 2.2 双亲委派机制的作⽤
 
 - 防⽌重复加载同⼀个.class。通过委托去向上⾯问⼀问，加载过了，就不⽤再加载⼀遍。保证数据 安全。
 
@@ -1350,7 +1350,7 @@ tomcat 8.5 默认改变了严格的双亲委派机制
 
 Https是⽤来加强数据传输安全的
 
-### **1.1** HTTPS 简介
+### 1.1 HTTPS 简介
 
 
 ![img](Tomcat.assets/wps126.png)
@@ -1378,7 +1378,7 @@ HTTPS⼯作原理
 
  
 
-### **1.2** Tomcat 对 HTTPS 的支持
+### 1.2 Tomcat 对 HTTPS 的支持
 
 1） 使⽤ JDK 中的 keytool ⼯具⽣成免费的秘钥库⽂件(证书)。
 
@@ -1424,7 +1424,7 @@ Tomcat优化从两个⽅⾯进⾏1）JVM虚拟机优化（优化内存模型）
 
 提供给⼤家优化思路，没有说有明确的参数值⼤家直接去使⽤，必须根据⾃⼰的真实⽣产环境来进⾏调   整，调优是⼀个过程
 
-### **2.1** 虚拟机运⾏优化（参数调整）
+### 2.1 虚拟机运⾏优化（参数调整）
 
 Java 虚拟机的运⾏优化主要是内存分配和垃圾回收策略的优化：
 
@@ -1527,7 +1527,7 @@ JAVA_OPTS="-XX:+UseConcMarkSweepGC"
 ```
 
 
-### **2.2** Tomcat 配置调优
+### 2.2 Tomcat 配置调优
 
 - Tomcat⾃身相关的调优调整tomcat线程池
 
@@ -1548,13 +1548,13 @@ JAVA_OPTS="-XX:+UseConcMarkSweepGC"
 | acceptCount    | 最⼤排队等待数,当服务器接收的请求数量到达maxConnections ，此时Tomcat会将后⾯的请求，存放在任务队列中进⾏排序， acceptCount指的就是任务队列中排队等待的请求数 。 ⼀台Tomcat的最⼤的请求处理数量， 是maxConnections+acceptCount |
 
 
-- 禁⽤ A JP 连接器
+- 禁用 AJP 连接器
 
 ![img](Tomcat.assets/wps151.png)
 
 - 调整 IO 模式
 
-![img](Tomcat.assets/wps153.png)Tomcat8之前的版本默认使⽤BIO（阻塞式IO），对于每⼀个请求都要创建⼀个线程来处理，不适合⾼并发；Tomcat8以后的版本默认使⽤NIO模式（⾮阻塞式IO）
+![img](Tomcat.assets/wps153.png)Tomcat8之前的版本默认使⽤BIO（阻塞式IO），对于每⼀个请求都要创建⼀个线程来处理，不适合高并发；Tomcat8以后的版本默认使⽤NIO模式（非阻塞式IO）
 
 ![img](Tomcat.assets/wps154.jpg)
 

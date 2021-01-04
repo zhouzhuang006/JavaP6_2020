@@ -7,9 +7,9 @@
 - 第⼀部分：Tomcat 系统架构与原理剖析
 - 第⼆部分：Tomcat 服务器核⼼配置详解
 - 第三部分：⼿写实现迷你版 Tomcat
-- 第四部分：Tomcat 源码构建及核⼼流程源码剖析
+- 第四部分：Tomcat 源码构建及核心流程源码剖析
 - 第五部分：Tomcat 类加载机制剖析
-- 第六部分：Tomcat 对 Https 的⽀持及 Tomcat 性能优化策略
+- 第六部分：Tomcat 对 Https 的支持及 Tomcat 性能优化策略
 
 说明：本课程基于 8.5.50 版本的 Tomcat 讲解
 
@@ -27,9 +27,13 @@ http请求的处理过程
 
 <img src="Tomcat.assets/image-20201229163906042.png" alt="image-20201229163906042" style="zoom:80%;" />
 
-​                    <img src="Tomcat.assets/image-20201229163933612.png" alt="image-20201229163933612" style="zoom:80%;" /> 
+​                    
+
+<img src="Tomcat.assets/image-20210103084532917.png" alt="image-20210103084532917" style="zoom:80%;" />
 
  
+
+ TCP建立的是 socket连接处理， 
 
 注意：浏览器访问服务器使⽤的是Http协议，Http是应⽤层协议，⽤于定义数据通信的格式，具体的数  据传输使⽤的是TCP/IP协议
 

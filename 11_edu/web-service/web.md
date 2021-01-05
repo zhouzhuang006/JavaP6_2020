@@ -288,8 +288,6 @@ public class ConsistentHashWithVirtual {
         // 定义针对每个真实服务器虚拟出来⼏个节点
         int virtaulCount = 3;
 
-
-
         for(String tomcatServer: tomcatServers) {
             // 求出每⼀个ip的hash值，对应到hash环上，存储hash值与ip的对应关系
             int serverHash = Math.abs(tomcatServer.hashCode());
@@ -420,8 +418,6 @@ X思路：
     chkconfig ntpd on
 ```
 
-![img](web.assets/wps46.png)
-
 
 集群中其他节点就可以从A服务器同步时间了
 
@@ -445,8 +441,9 @@ ntpdate 172.17.0.17
 
 ```java
 public class MyTest {
-public static void main(String[] args) { System.out.println(java.util.UUID.randomUUID().toString());
-}
+    public static void main(String[] args) { 
+        System.out.println(java.util.UUID.randomUUID().toString());
+    }
 }
 ```
 
@@ -461,15 +458,15 @@ public static void main(String[] args) { System.out.println(java.util.UUID.rando
 -- Table structure for DISTRIBUTE_ID
 -- ----------------------------
 DROP TABLE IF EXISTS `DISTRIBUTE_ID`; CREATE TABLE `DISTRIBUTE_ID` (
-`id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
-`createtime` datetime DEFAULT NULL, PRIMARY KEY (`id`)
+    `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `createtime` datetime DEFAULT NULL, PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 
 当分布式集群环境中哪个应用需要获取一个全局唯一的分布式ID的时候，就可以使用代码连接这个   数据库实例，执行如下sql语句即可。
 
-```
+```sql
 insert into DISTRIBUTE_ID(createtime) values(NOW()); 
 select LAST_INSERT_ID()；
 ```
@@ -531,9 +528,9 @@ Java代码中使用Jedis客户端调用Reids的incr命令获得一个全局的id
 
 ```xml
 <dependency>
-<groupId>redis.clients</groupId>
-<artifactId>jedis</artifactId>
-<version>2.9.0</version>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>2.9.0</version>
 </dependency>
 ```
 
@@ -541,13 +538,15 @@ Java代码（此处我们就是连接单节点，也不使用连接池）
 
 ```java
 Jedis jedis = new Jedis("127.0.0.1",6379); try {
-long id = jedis.incr("id");
-System.out.println("从redis中获取的分布式id为：" + id);
+    long id = jedis.incr("id");
+    System.out.println("从redis中获取的分布式id为：" + id);
 } finally {
-if (null != jedis) { jedis.close();
-}
+    if (null != jedis) { 
+        jedis.close();
+    }
 }
 ```
+
 
 
 # 第四部分 分布式调度问题
@@ -619,20 +618,15 @@ Elastic-job（当当⽹开源的分布式调度框架）
 
 ```xml
 <!--任务调度框架quartz-->
-<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz --
->
+<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
 <dependency>
-<groupId>org.quartz-scheduler</groupId>
-<artifactId>quartz</artifactId>
-<version>2.3.2</version>
+    <groupId>org.quartz-scheduler</groupId>
+    <artifactId>quartz</artifactId>
+    <version>2.3.2</version>
 </dependency>
 ```
 
 - 定时任务作业主调度程序
-
- 
-
-![img](web.assets/wps93.png)package quartz;
 
 
 ```java
@@ -641,70 +635,66 @@ package quartz;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory; public class QuartzMain {
-// 创建作业任务调度器（类似于公交调度站）
-public static Scheduler createScheduler() throws SchedulerException {
-SchedulerFactory schedulerFactory = new StdSchedulerFactory(); Scheduler scheduler = schedulerFactory.getScheduler();
-return scheduler;
-}
+    // 创建作业任务调度器（类似于公交调度站）
+    public static Scheduler createScheduler() throws SchedulerException {
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory(); 
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        return scheduler;
+    }
 
 
 
-// 创建⼀个作业任务（类似于⼀辆公交⻋）
-public static	JobDetail createJob()	{
-JobBuilder jobBuilder = JobBuilder.newJob(DemoJob.class); jobBuilder.withIdentity("jobName","myJob");
-JobDetail jobDetail = jobBuilder.build(); return jobDetail;
-}
+    // 创建⼀个作业任务（类似于⼀辆公交⻋）
+    public static	JobDetail createJob()	{
+        JobBuilder jobBuilder = JobBuilder.newJob(DemoJob.class); 		
+        jobBuilder.withIdentity("jobName","myJob");
+        JobDetail jobDetail = jobBuilder.build(); return jobDetail;
+    }
 
+    /**
+    *创建作业任务时间触发器（类似于公交⻋出⻋时间表）
+    *cron表达式由七个位置组成，空格分隔
+    *1、Seconds（秒）	0~59
+    *2、Minutes（分）	0~59
+    *3、Hours（⼩时）	0~23
+    *4、Day of Month（天）1~31,注意有的⽉份不⾜31天
+    *5、Month（⽉）   0~11,或者
+    JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+    *6、Day of Week(周)	1~7,1=SUN或者	SUN,MON,TUE,WEB,THU,FRI,SAT
+    * 7、Year（年）1970~2099	可选项
+    *示例：
+    *0 0 11 * * ? 每天的11点触发执⾏⼀次
+    *0 30 10 1 * ? 每⽉1号上午10点半触发执⾏⼀次
+    */
+    public static	Trigger createTrigger() {
+        // 创建时间触发器，按⽇历调度
+        CronTrigger trigger = TriggerBuilder.newTrigger()
+            .withIdentity("triggerName","myTrigger")
+            .startNow()
+            .withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * * * ?")).build();
+            // 创建触发器，按简单间隔调度
+            /*SimpleTrigger trigger1 = TriggerBuilder.newTrigger()
+            .withIdentity("triggerName","myTrigger")
+            .startNow()
+            .withSchedule(SimpleScheduleBuilder
+            .simpleSchedule()
+            .withIntervalInSeconds(3)
+            .repeatForever())
+            .build();*/ 
+        return trigger;
+	}
 
+    // 定时任务作业主调度程序
+    public static void main(String[] args) throws SchedulerException {
+        // 创建⼀个作业任务调度器（类似于公交调度站）
+        Scheduler scheduler = QuartzMain.createScheduler();
+        // 创建⼀个作业任务（类似于⼀辆公交⻋）
+        JobDetail job = QuartzMain.createJob();
+        // 创建⼀个作业任务时间触发器（类似于公交⻋出⻋时间表）
+        Trigger trigger = QuartzMain.createTrigger();
+        // 使⽤调度器按照时间触发器执⾏这个作业任务scheduler.scheduleJob(job,trigger); scheduler.start();
 
-/**
-*创建作业任务时间触发器（类似于公交⻋出⻋时间表）
-*cron表达式由七个位置组成，空格分隔
-*1、Seconds（秒）	0~59
-*2、Minutes（分）	0~59
-*3、Hours（⼩时）	0~23
-*4、Day of Month（天）1~31,注意有的⽉份不⾜31天
-*5、Month（⽉）   0~11,或者
-JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
-*6、Day of Week(周)	1~7,1=SUN或者	SUN,MON,TUE,WEB,THU,FRI,SAT
-* 7、Year（年）1970~2099	可选项
-*示例：
-*0 0 11 * * ? 每天的11点触发执⾏⼀次
-*0 30 10 1 * ? 每⽉1号上午10点半触发执⾏⼀次
-*/
-public static	Trigger createTrigger() {
-// 创建时间触发器，按⽇历调度
-CronTrigger trigger = TriggerBuilder.newTrigger()
-.withIdentity("triggerName","myTrigger")
-.startNow()
-.withSchedule(CronScheduleBuilder.cronSchedule("0/2 *
-* * * ?"))
-.build();
-// 创建触发器，按简单间隔调度
-/*SimpleTrigger trigger1 = TriggerBuilder.newTrigger()
-.withIdentity("triggerName","myTrigger")
-.startNow()
-.withSchedule(SimpleScheduleBuilder
-.simpleSchedule()
-.withIntervalInSeconds(3)
-.repeatForever())
-.build();*/ return trigger;
-}
-
-
-
-
-// 定时任务作业主调度程序
-public static void main(String[] args) throws SchedulerException {
-// 创建⼀个作业任务调度器（类似于公交调度站）
-Scheduler scheduler = QuartzMain.createScheduler();
-// 创建⼀个作业任务（类似于⼀辆公交⻋）
-JobDetail job = QuartzMain.createJob();
-// 创建⼀个作业任务时间触发器（类似于公交⻋出⻋时间表）
-Trigger trigger = QuartzMain.createTrigger();
-// 使⽤调度器按照时间触发器执⾏这个作业任务scheduler.scheduleJob(job,trigger); scheduler.start();
-
-}
+    }
 }
 
 ```
@@ -715,12 +705,12 @@ Trigger trigger = QuartzMain.createTrigger();
 ```java
 package quartz;
 import org.quartz.Job;
-import org.quartz.JobExecutionContext; import org.quartz.JobExecutionException;
+import org.quartz.JobExecutionContext; 
+import org.quartz.JobExecutionException;
 public class DemoJob implements Job {
-public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-System.out.println("我是⼀个定时任务逻辑");
-}
-}
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        System.out.println("我是⼀个定时任务逻辑");
+    }
 }
 ```
 
@@ -806,13 +796,13 @@ Elastic-Job依赖于Zookeeper进行分布式协调，所以需要安装Zookeeper
 -- ----------------------------
 DROP TABLE IF EXISTS `resume`;
 CREATE TABLE `resume` (
-`id` bigint(20) NOT NULL AUTO_INCREMENT,
-`name` varchar(255) DEFAULT NULL,
-`sex` varchar(255) DEFAULT NULL,
-`phone` varchar(255) DEFAULT NULL,
-`address` varchar(255) DEFAULT NULL,
-`education` varchar(255) DEFAULT NULL,
-`state` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) DEFAULT NULL,
+    `sex` varchar(255) DEFAULT NULL,
+    `phone` varchar(255) DEFAULT NULL,
+    `address` varchar(255) DEFAULT NULL,
+    `education` varchar(255) DEFAULT NULL,
+    `state` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 SET FOREIGN_KEY_CHECKS = 1;
 ```
@@ -834,35 +824,35 @@ import java.util.Map;
 
 public class BackupJob implements SimpleJob {
 
-// 定时任务每执⾏⼀次都会执⾏如下的逻辑
-@Override
-public void execute(ShardingContext shardingContext) {
-/*
+    // 定时任务每执⾏⼀次都会执⾏如下的逻辑
+    @Override
+    public void execute(ShardingContext shardingContext) {
+        /*
 从resume数据表查找1条未归档的数据，将其归档到resume_bak 表，并更新状态为已归档（不删除原数据）
 */
 
-// 查询出⼀条数据
-String selectSql = "select * from resume where state='未归档' limit 1";
-List<Map<String, Object>> list =
-JdbcUtil.executeQuery(selectSql);
-if(list == null || list.size() == 0) {
-return;
-}
-Map<String, Object> stringObjectMap = list.get(0); long id = (long) stringObjectMap.get("id");
-String name = (String) stringObjectMap.get("name"); String education = (String)
-stringObjectMap.get("education");
+        // 查询出⼀条数据
+        String selectSql = "select * from resume where state='未归档' limit 1";
+        List<Map<String, Object>> list =
+            JdbcUtil.executeQuery(selectSql);
+        if(list == null || list.size() == 0) {
+            return;
+        }
+        Map<String, Object> stringObjectMap = list.get(0); long id = (long) stringObjectMap.get("id");
+        String name = (String) stringObjectMap.get("name"); String education = (String)
+            stringObjectMap.get("education");
 
-// 打印出这条记录
-System.out.println("======>>>id：" + id + " name：" + name + " education：" + education);
+        // 打印出这条记录
+        System.out.println("======>>>id：" + id + " name：" + name + " education：" + education);
 
-// 更改状态
-String updateSql = "update resume set state='已归档'
-where id=?";
-JdbcUtil.executeUpdate(updateSql,id);
-// 归档这条记录
-String insertSql = "insert into resume_bak	select * from resume where id=?";
-JdbcUtil.executeUpdate(insertSql,id);
-}
+        // 更改状态
+        String updateSql = "update resume set state='已归档'
+            where id=?";
+            JdbcUtil.executeUpdate(updateSql,id);
+        // 归档这条记录
+        String insertSql = "insert into resume_bak	select * from resume where id=?";
+        JdbcUtil.executeUpdate(insertSql,id);
+    }
 }
 
 ```
@@ -884,13 +874,13 @@ public class ElasticJobMain {
         coordinatorRegistryCenter.init();
 
         // 配置任务
-        JobCoreConfiguration jobCoreConfiguration = JobCoreConfiguration.newBuilder("archive-job","*/2 * * * *
-                                                                                    ?",1).build();
-                                                                                    SimpleJobConfiguration simpleJobConfiguration = new SimpleJobConfiguration(jobCoreConfiguration,BackupJob.class.getNam e());
-                                                                                    // 启动任务
-                                                                                    new JobScheduler(coordinatorRegistryCenter, LiteJobConfiguration.newBuilder(simpleJobConfiguration).build()).i nit();
-                                                                                    }
-                                                                                    }
+        JobCoreConfiguration jobCoreConfiguration = JobCoreConfiguration
+            .newBuilder("archive-job","*/2 * * * ?",1).build();
+        SimpleJobConfiguration simpleJobConfiguration = new SimpleJobConfiguration(jobCoreConfiguration,BackupJob.class.getNam e());
+        // 启动任务
+        new JobScheduler(coordinatorRegistryCenter, LiteJobConfiguration.newBuilder(simpleJobConfiguration).build()).i nit();
+    }
+}
 ```
 
 - JdbcUtil工具类

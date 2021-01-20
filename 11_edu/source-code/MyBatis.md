@@ -6,7 +6,7 @@
 
 # 第一部分自定义持久层框架
 
-## 1.1分析jdb c操作问题
+## 1.1分析jdbc操作问题
 
 ```java
 public static void main(String[] args) {

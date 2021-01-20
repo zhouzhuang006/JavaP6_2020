@@ -17,7 +17,7 @@ ZooKeeper最为主要的使用场景，是作为分布式系统的分布式协�
 优点显而易见，人多干活快，并且互为备份。但是缺点也很明显。我们可以想象一下，以一个小研发团队开发软件为例，假设我们有一个5人的项目组，要开始一个系统的开发，项目组将面临如下问题：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps3.png) 
+![img](ZookeeperSource.assets/wps3.png) 
 
 
 图中列举的就是项目组将要面临到的问题，这些问题在我们日常工作中也是天天发生，并没感觉有多么复杂，但是这是因为我们人类的大脑是个超级计算机，能够灵活应对这些问题，而且现实中信息的交换不依赖网络，不会因网络延迟或者中断，出现信息不对等，而且现实中对以上问题的处理其实并不严谨，从而也引发了很多问题。想一想，项目中是不是出现过沟通不畅造成任务分配有歧义？是否由于人员离职造成任务进行不下去，甚至要联系离职人员协助？是不是出现过任务分配不合理？类似这样的各种问题，肯定会发生于你的项目组中。在现实世界，我们可以人为去协调，即使出错了，人工去补错，加加班搞定就好。但在计算机的世界，这样做是行不通的，一切都要保证严谨，以上问题要做到尽可能不要发生。因此，分布式系统必须采用合理的方式解决掉以上的问题
@@ -39,7 +39,7 @@ ZooKeeper最为主要的使用场景，是作为分布式系统的分布式协�
 这就好比开发leader按照约定的时间和路径，把任务分配表放到了svn上，组员每天去svn上拉取最新的任务分配表，然后干活。其中svn就是共享存储。更好一点的做法是，当svn文件版本更新时，触发邮件通知，每个组员再去拉取最新的任务分配表。这样做更好，因为每次更新，组员都能第一时间得到消息，从而让自己手中的任务分配表永远是最新的。此种方式依赖于中央存储。整个过程如下图所示：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps6.png)
+![img](ZookeeperSource.assets/wps6.png)
 
 
 
@@ -53,7 +53,7 @@ ZooKeeper对分布式系统的协调，使用的是第⼆种方式，共享存�
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps7.png) 
+![img](ZookeeperSource.assets/wps7.png) 
 
 
 注：Slave节点要想获取ZooKeeper的更新通知，需事先在关心的数据节点上设置观察点。
@@ -171,7 +171,7 @@ dataDir=/root/zookeeper-3.4.14/data
 输出以下内容表示启动成功
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps14.png)
+![img](ZookeeperSource.assets/wps14.png)
 
 
 
@@ -184,7 +184,7 @@ dataDir=/root/zookeeper-3.4.14/data
 输出以下提示信息
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps16.png)
+![img](ZookeeperSource.assets/wps16.png)
 
 
 
@@ -201,7 +201,7 @@ dataDir=/root/zookeeper-3.4.14/data
 如果启动状态，提示：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps18.png)
+![img](ZookeeperSource.assets/wps18.png)
 
 
 
@@ -209,7 +209,7 @@ dataDir=/root/zookeeper-3.4.14/data
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps19.png)
+![img](ZookeeperSource.assets/wps19.png)
 
 
 
@@ -340,7 +340,7 @@ server.3=10.211.55.4:2883:3883
 在ZooKeeper中，数据信息被保存在一个个数据节点上，这些节点被称为znode。ZNode 是Zookeeper 中最小数据单位，在 ZNode 下面又可以再挂 ZNode，这样一层层下去就形成了一个层次化命名空间 ZNode 树，我们称为 ZNode Tree，它采用了类似文件系统的层级树状结构进行管理。见下图示例：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps32.png)
+![img](ZookeeperSource.assets/wps32.png)
 
 
 
@@ -383,7 +383,7 @@ Zookeeper 节点类型可以分为三大类：
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps33.png) 
+![img](ZookeeperSource.assets/wps33.png) 
 
  
 
@@ -419,7 +419,7 @@ Zookeeper使用Watcher机制实现分布式数据的发布/订阅功能
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps35.jpg) 
+![img](ZookeeperSource.assets/wps35.jpg) 
 
  
 
@@ -498,7 +498,7 @@ Super模式，顾名思义就是超级用户的意思，也是一种特殊的Dig
 连接成功之后，系统会输出Zookeeper的相关环境及配置信息等信息。输入help之后，屏幕会输出可用的Zookeeper命令，如下图所示
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps37.png)
+![img](ZookeeperSource.assets/wps37.png)
 
 
 
@@ -517,7 +517,7 @@ create [-s][-e] path data acl
 使用 create -s /zk-test 123 命令创建zk-test顺序节点
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps39.png)
+![img](ZookeeperSource.assets/wps39.png)
 
 
 
@@ -529,20 +529,20 @@ create [-s][-e] path data acl
 
 使用 create -e /zk-temp 123 命令创建zk-temp临时节
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps40.png) 
+![img](ZookeeperSource.assets/wps40.png) 
 
 
 
 临时节点在客户端会话结束后，就会自动删除，下面使用quit命令退出客户端
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps41.png)
+![img](ZookeeperSource.assets/wps41.png)
 
 
 
 再次使用客户端连接服务端，并使用ls / 命令查看根目录下的节点
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps42.png)
+![img](ZookeeperSource.assets/wps42.png)
 
 
 
@@ -554,7 +554,7 @@ create [-s][-e] path data acl
 
 使用 create /zk-permanent 123 命令创建zk-permanent永久节点
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps43.png)
+![img](ZookeeperSource.assets/wps43.png)
 
 
 
@@ -585,13 +585,13 @@ get path
 
 若获取根节点下面的所有子节点，使用ls / 命令即可
 
-<img src="C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps46.png" alt="img" style="zoom:80%;" />
+<img src="ZookeeperSource.assets/wps46.png" alt="img" style="zoom:80%;" />
 
 
 
 若想获取/zk-permanent的数据内容和属性，可使用如下命令：get /zk-permanent
 
-<img src="C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps47.png" alt="img" style="zoom: 80%;" /> 
+<img src="ZookeeperSource.assets/wps47.png" alt="img" style="zoom: 80%;" /> 
 
  
 
@@ -614,7 +614,7 @@ set path data [version]
 其中，data就是要更新的新内容，version表示数据版本，在zookeeper中，节点的数据是有版本概念的，这个参数用于指定本次更新操作是基于Znode的哪一个数据版本进行的，如将/zk-permanent节点的数据更新为456，可以使用如下命令：set /zk-permanent 456
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps49.png)
+![img](ZookeeperSource.assets/wps49.png)
 
 
 
@@ -635,7 +635,7 @@ delete path [version]
 其中version也是表示数据版本，使用delete /zk-permanent 命令即可删除/zk-permanent节点
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps51.png)
+![img](ZookeeperSource.assets/wps51.png)
 
 
 
@@ -1608,7 +1608,7 @@ ZooKeeper采用的是推拉相结合的方式：客户端向服务端注册自�
 
 在进行配置管理之前，首先我们需要将初始化配置信息存储到Zookeeper上去，一般情况下，我们可以在Zookeeper上选取一个数据节点用于配置信息的存储，例如：/app1/database_conﬁg
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps115.png)
+![img](ZookeeperSource.assets/wps115.png)
 
 
 配置管理的zookeeper节点示意图
@@ -1665,7 +1665,7 @@ UUID 最大的问题就在于生成的字符串过长。显然，和数据库中
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps117.jpg) 
+![img](ZookeeperSource.assets/wps117.jpg) 
 
 
 全局唯一ID生成的ZooKeeper节点示意图
@@ -1753,7 +1753,7 @@ UUID 最大的问题就在于生成的字符串过长。显然，和数据库中
 
 使用ZooKeeper来进行日志系统收集器的注册，典型做法是在ZooKeeper上创建一个节点作为收集器的根节点，例如/logs/collector（下文我们以“收集器节点”代表该数据节点），每个收集器机器在启动的时候，都会在收集器节点下创建自己的节点，例如/logs/collector/[Hostname]
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps123.jpg)
+![img](ZookeeperSource.assets/wps123.jpg)
 
 
 ② 任务分发
@@ -1800,7 +1800,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 
 在分布式环境中，经常会碰到这样的应用场景：集群中的所有系统单元需要对前端业务提供数据，比如一个商品 ID，或者是一个网站轮播广告的广告 ID（通常出现在一些广告投放系统中）等，而这些商品ID或是广告ID往往需要从一系列的海量数据处理中计算得到一这通常是一个非常耗费 I/O 和 CPU资源的过程。鉴于该计算过程的复杂性，如果让集群中的所有机器都执行这个计算逻辑的话，那么将耗费非常多的资源。一种比较好的方法就是只让集群中的部分，甚至只让其中的一台机器去处理数据计算，一旦计算出数据结果，就可以共享给整个集群中的其他所有客户端机器，这样可以大大减少重复劳动，提升性能。 这里我们以一个简单的广告投放系统后台场景为例来讲解这个模型。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps124.png)
+![img](ZookeeperSource.assets/wps124.png)
 
 
 
@@ -1813,7 +1813,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 借助数据库的这种方案确实可行，依靠关系型数据库的主键特性能够很好地保证在集群中选举出唯一的一个Master。但是我们需要考虑的另一个问题是，如果当前选举出的Master挂了，那么该如何处理？ 谁来告诉我Master挂了呢？显然，关系型数据库没法通知我们这个事件。那么，如果使用ZooKeeper是否可以做到这一点呢？ 那在之前，我们介绍了ZooKeeper创建节点的API接口，其中一个重要特性便是：利用ZooKeeper的强一致性，能够很好保证在分布式高并发情况下节点的创建一定能够保证全局唯一性，即ZooKeeper将会保证客户端无法重复创建一个已经存在的数据节点。也就是说，如果同时有多个客户端请求创建同一个节点，那么最终一定只有一个客户端请求能够创建成功。利用这个特性，就能很容易地在分布式环境中进行Master选举了。
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps125.jpg)
+![img](ZookeeperSource.assets/wps125.jpg)
 
 
 在这个系统中，首先会在 ZooKeeper 上创建一个日期节点，例如“2020-11-11
@@ -1845,7 +1845,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 在通常的Java开发编程中，有两种常见的方式可以用来定义锁，分别是synchronized机制和JDK5提供的ReentrantLock。然而，在ZooKeeper中，没有类似于这样的API可以直接使用，而是通过 ZooKeeper 上的数据节点来表示一个锁，例如/exclusive_lock/lock节点就可以被定义为一个锁，如图：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps126.jpg)
+![img](ZookeeperSource.assets/wps126.jpg)
 
 
 
@@ -1858,7 +1858,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 在“定义锁”部分，我们已经提到，/exclusive_lock/lock是一个临时节点，因此在以下两种情况下，都有可能释放锁。当前获取锁的客户端机器发生宕机，那么ZooKeeper上的这个临时节点就会被移除。 · 正常执行完业务逻辑后，客户端就会主动将自己创建的临时节点删除。无论在什么情况下移除了lock节点，ZooKeeper都会通知所有在/exclusive_lock节点上注册了子节点变更Watcher监听的客户端。这些客户端在接收到通知后，再次重新发起分布式锁获取，即重复“获取锁”过程。整个排他锁的获取和释放流程，如下图：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps127.png)
+![img](ZookeeperSource.assets/wps127.png)
 
 
 
@@ -1878,7 +1878,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 
 “/shared_lock/[Hostname]-请求类型-序号”的临时顺序节点，例如/shared_lock/host1-R- 0000000001，那么，这个节点就代表了一个共享锁，如图所示：
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps128.jpg)
+![img](ZookeeperSource.assets/wps128.jpg)
 
 
 #### ② 获取锁
@@ -1906,7 +1906,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 
 上面讲解的这个共享锁实现，大体上能够满足一般的分布式集群竞争锁的需求，并且性能都还可以。 这里说的一般场景是指集群规模不是特别大，一般是在10台机器以内。但是如果机器规模扩大之后，会有什么问题呢？我们着重来看上面“判断读写顺序”过程的步骤3，结合下面的图，看看实际运行中的情况
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps130.jpg)
+![img](ZookeeperSource.assets/wps130.jpg)
 
 
 针对如上图所示的情况进行分析
@@ -1943,7 +1943,7 @@ Master选举是一个在分布式系统中非常常见的应用场景。分布�
 此方案改动主要在于：每个锁竞争者，只需要关注/shared_lock节点下序号比自己小的那个节点是否存在即可。
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps131.png)
+![img](ZookeeperSource.assets/wps131.png)
 
 
 注意相信很多同学都会觉得改进后的分布式锁实现相对来说比较麻烦。确实如此，如同在多线程并发编程实践中，我们会去尽量缩小锁的范围一一对于分布式锁实现的改进其实也是同样的思路。那么对于开发人员来说，是否必须按照改进后的思路来设计实现自己的分布式锁呢？答案是否定的。在具体的实际开发过程中，我们提倡根据具体的业务场景和集群规模来选择适合自己的分布式锁实现：在集群规模不
@@ -1962,7 +1962,7 @@ FIFO（First Input First Output，先入先出）， FIFO 队列是一种非常�
 
 使用ZooKeeper实现FIFO队列，和之前提到的共享锁的实现非常类似。FIFO队列就类似于一个全写的共享锁模型，大体的设计思路其实非常简单：所有客户端都会到/queue_ﬁfo 这个节点下面创建一个临时顺序节点，例如如/queue_ﬁfo/host1-00000001。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps132.png)
+![img](ZookeeperSource.assets/wps132.png)
 
 
 创建完节点后，根据如下4个步骤来确定执行顺序。
@@ -1975,7 +1975,7 @@ FIFO（First Input First Output，先入先出）， FIFO 队列是一种非常�
 
 4. 接收到Watcher通知后，重复步骤1。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps133.png)
+![img](ZookeeperSource.assets/wps133.png)
 
 
 
@@ -1987,7 +1987,7 @@ Barrier原意是指障碍物、屏障，而在分布式系统中，特指系统�
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps134.png) 
+![img](ZookeeperSource.assets/wps134.png) 
 
  
 
@@ -2003,7 +2003,7 @@ Barrier原意是指障碍物、屏障，而在分布式系统中，特指系统�
 
 5. 接受到Wacher通知后，重复步骤2
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps135.png)
+![img](ZookeeperSource.assets/wps135.png)
 
 
 # 5. Zookeeper深入进阶
@@ -2031,7 +2031,7 @@ ZAB协议的核心是定义了对于那些会改变Zookeeper服务器数据状�
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps138.jpg) 
+![img](ZookeeperSource.assets/wps138.jpg) 
 
 
 #### ZAB协议介绍
@@ -2052,7 +2052,7 @@ ZAB协议包括两种基本的模式：**崩溃恢复和消息广播**
 
 ZAB协议的消息广播过程使用原子广播协议，类似于一个⼆阶段提交过程，针对客户端的事务请求， Leader服务器会为其生成对应的事务Proposal，并将其发送给集群中其余所有的机器，然后再分别收集各自的选票，最后进行事务提交。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps139.jpg)
+![img](ZookeeperSource.assets/wps139.jpg)
 
 
 在ZAB的⼆阶段提交过程中，移除了中断逻辑，所有的Follower服务器要么正常反馈Leader提出的事务Proposal，要么就抛弃Leader服务器，同时，ZAB协议将⼆阶段提交中的中断逻辑移除意味着我们可以在过半的Follower服务器已经反馈Ack之后就开始提交事务Proposal了，而不需要等待集群中所有的Follower服务器都反馈响应，但是，在这种简化的⼆阶段提交模型下，无法处理因Leader服务器崩溃退出而带来的数据不一致问题，因此ZAB采用了崩溃恢复模式来解决此问题，另外，整个消息广播协议是基于具有FIFO特性的TCP协议来进行网络通信的，因此能够很容易保证消息广播过程中消息接受与发送的顺序性。
@@ -2076,7 +2076,7 @@ ZAB协议的这个基于原子广播协议的消息广播过程，在正常情�
 假设一个事务在 Leader 服务器上被提交了，并且已经得到过半 Folower 服务器的Ack反馈，但是在它将Commit消息发送给所有Follower机器之前，Leader服务器挂了，如图所示
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps140.png)
+![img](ZookeeperSource.assets/wps140.png)
 
 
 图中的消息C2就是一个典型的例子：在集群正常运行过程中的某一个时刻，Server1 是 Leader 服务器，其先后广播了消息 P1、P2、C1、P3 和 C2，其中，当Leader服务器将消息C2（C2是Commit Of Proposal2的缩写，即提交事务Proposal2）发出后就立即崩溃退出了。针对这种情况，ZAB协议就需要确保事务Proposal2最终能够在所有的服务器上都被提交成功，否则将出现不一致。
@@ -2085,7 +2085,7 @@ ZAB协议的这个基于原子广播协议的消息广播过程，在正常情�
 
 如果在崩溃恢复过程中出现一个需要被丢弃的提案，那么在崩溃恢复结束后需要跳过该事务Proposal，   如图所示。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps141.png)
+![img](ZookeeperSource.assets/wps141.png)
 
 
 在图所示的集群中，假设初始的 Leader 服务器 Server1 在提出了一个事务Proposal3 之后就崩溃退出了，从而导致集群中的其他服务器都没有收到这个事务Proposal3。于是，当 Server1 恢复过来再次加入到集群中的时候，ZAB 协议需要确保丢弃Proposal3这个事务。
@@ -2150,7 +2150,7 @@ Leader服务器是Zookeeper集群工作的核心，其主要工作有以下两�
 
 使用责任链来处理每个客户端的请求是Zookeeper的特色，Leader服务器的请求处理链如下：
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps142.png)
+![img](ZookeeperSource.assets/wps142.png)
 
 
 可以看到，从prepRequestProcessor到FinalRequestProcessor前后一共7个请求处理器组成了leader   服务器的请求处理链
@@ -2184,7 +2184,7 @@ Follower服务器是Zookeeper集群状态中的跟随者，其主要工作有以
 
 和leader一样，Follower也采用了责任链模式组装的请求处理链来处理每一个客户端请求，由于不需要对事务请求的投票处理，因此Follower的请求处理链会相对简单，其处理链如下
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps143.jpg)
+![img](ZookeeperSource.assets/wps143.jpg)
 
 
 和 Leader 服务器的请求处理链最大的不同点在于，Follower 服务器的第一个处理器换成了FollowerRequestProcessor处理器，同时由于不需要处理事务请求的投票，因此也没有了ProposalRequestProcessor处理器。
@@ -2206,7 +2206,7 @@ Observer是ZooKeeper自3.3.0版本开始引入的一个全新的服务器角色�
 
 另外，Observer的请求处理链路和Follower服务器也非常相近,其处理链如下
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps144.jpg)
+![img](ZookeeperSource.assets/wps144.jpg)
 
 
 另外需要注意的一点是，虽然在图中可以看到，Observer 服务器在初始化阶段会将SyncRequestProcessor处理器也组装上去，但是在实际运行过程中，Leader服务器不会将事务请求的投票发送给Observer服务器。
@@ -2219,7 +2219,7 @@ Observer是ZooKeeper自3.3.0版本开始引入的一个全新的服务器角色�
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps145.jpg) 
+![img](ZookeeperSource.assets/wps145.jpg) 
 
  
 
@@ -2240,7 +2240,7 @@ Zookeeper服务器的启动，大致可以分为以下五个步骤
 单机版服务器的启动其流程图如下
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps147.jpg) 
+![img](ZookeeperSource.assets/wps147.jpg) 
 
 
 上图的过程可以分为预启动和初始化过程。
@@ -2290,7 +2290,7 @@ clientPort等参数。
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps150.jpg) 
+![img](ZookeeperSource.assets/wps150.jpg) 
 
  
 
@@ -2366,7 +2366,7 @@ ZooKeeper的Leader选举过程，简单地讲，就是一个集群中所有的�
 
  
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps155.png) 
+![img](ZookeeperSource.assets/wps155.png) 
 
 1. 创建Leader服务器和Follower服务器。完成Leader选举后，每个服务器会根据自己服务器的角色创建相应的服务器实例，并进入各自角色的主流程。
 
@@ -2489,7 +2489,7 @@ zk源码下载地址：https://github.com/apache/zookeeper/tree/release-3.5.4
 
 运行主类 org.apache.zookeeper.server.QuorumPeerMain ，将zoo.cfg的完整路径配置在Program arguments。
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps159.png)
+![img](ZookeeperSource.assets/wps159.png)
 
 
 在VM options配置，即指定到conf目录下的log4j.properties：
@@ -2501,7 +2501,7 @@ zk源码下载地址：https://github.com/apache/zookeeper/tree/release-3.5.4
 
 运行输出日志如下
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps161.png)
+![img](ZookeeperSource.assets/wps161.png)
 
 可以得知单机版启动成功，单机版服务端地址为127.0.0.1:2182。
 
@@ -2514,7 +2514,7 @@ zk源码下载地址：https://github.com/apache/zookeeper/tree/release-3.5.4
 客户端的启动类为org.apache.zookeeper.ZooKeeperMain ，进行如下配置：
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps165.png)
+![img](ZookeeperSource.assets/wps165.png)
 
 
 即客户端连接127.0.0.1:2182，获取节点/lg 的信息。
@@ -2528,7 +2528,7 @@ zk源码下载地址：https://github.com/apache/zookeeper/tree/release-3.5.4
 
 单机模式的ZK服务端逻辑写在ZooKeeperServerMain类中，由里面的main函数启动，整个过程如下：
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps167.png) 
+![img](ZookeeperSource.assets/wps167.png) 
 
 
 单机模式的委托启动类为：ZooKeeperServerMain
@@ -2763,7 +2763,7 @@ protected void setupRequestProcessors() {
 
 对于Leader选举，其总体框架图如下图所示
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps174.png)
+![img](ZookeeperSource.assets/wps174.png)
 
 
 
@@ -2809,7 +2809,7 @@ public class FastLeaderElection implements Election {}
 - recvqueue：选票接收队列，用于保存接收到的外部投票。
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps183.png) 
+![img](ZookeeperSource.assets/wps183.png) 
 
 
 #### lookForLeader函数
@@ -2818,7 +2818,7 @@ public class FastLeaderElection implements Election {}
 
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps184.png) 
+![img](ZookeeperSource.assets/wps184.png) 
 
 ```java
 public Vote lookForLeader() throws InterruptedException {
@@ -2996,7 +2996,7 @@ if (termPredicate(recvset,new Vote(proposedLeader, proposedZxid,
 #### 执行流程图
 
 
-![img](C:\Users\周壮\AppData\Local\Temp\ksohtml1452\wps191.jpg) 
+![img](ZookeeperSource.assets/wps191.jpg) 
 
 
 源码分析

@@ -216,11 +216,7 @@ dataDir=/root/zookeeper-3.4.14/data
 
 ### 伪集群模式
 
-Zookeeper不但可以在单机上运行单机模式Zookeeper，而且可以在单机模拟集群模式 Zookeeper的运
-
-行，也就是将不同实例运行在同一台机器，用端口进行区分，伪集群模式为我们体验Zookeeper和做一些尝试性的实验提供了很大的便利。比如，我们在测试的时候，可以先使用少量数据在伪集群模式下进
-
-行测试。当测试可行的时候，再将数据移植到集群模式进行真实的数据实验。这样不但保证了它的可行性，同时大大提高了实验的效率。这种搭建方式，比较简便，成本比较低，适合测试和学习
+Zookeeper不但可以在单机上运行单机模式Zookeeper，而且可以在单机模拟集群模式 Zookeeper的运行，也就是将不同实例运行在同一台机器，用端口进行区分，伪集群模式为我们体验Zookeeper和做一些尝试性的实验提供了很大的便利。比如，我们在测试的时候，可以先使用少量数据在伪集群模式下进行测试。当测试可行的时候，再将数据移植到集群模式进行真实的数据实验。这样不但保证了它的可行性，同时大大提高了实验的效率。这种搭建方式，比较简便，成本比较低，适合测试和学习
 
 注意事项：
 
@@ -291,22 +287,26 @@ mv zoo_sample.cfg zoo.cfg
 配置每一个Zookeeper 的dataDir（zoo.cfg） clientPort 分别为2181 2182 2183
 
 ```sh
-clientPort=2181 dataDir=/zkcluster/zookeeper01/data dataLogDir=/zkcluster/zookeeper01/data/logs
+clientPort=2181 
+dataDir=/zkcluster/zookeeper01/data 
+dataLogDir=/zkcluster/zookeeLogper01/data/logs
 ```
 
 
 
 ```sh
-clientPort=2182 dataDir=/zkcluster/zookeeper02/data dataLogDir=/zkcluster/zookeeper02/data/logs
+clientPort=2182 
+dataDir=/zkcluster/zookeeper02/data 
+dataLogDir=/zkcluster/zookeeper02/data/logs
 ```
 
 
 
 ```sh
-clientPort=2183 dataDir=/zkcluster/zookeeper03/data dataLogDir=/zkcluster/zookeeper03/data/logs
+clientPort=2183 
+dataDir=/zkcluster/zookeeper03/data 
+dataLogDir=/zkcluster/zookeeper03/data/logs
 ```
-
-
 
 **配置集群**
 
@@ -347,8 +347,6 @@ server.3=10.211.55.4:2883:3883
 
 在 Zookeeper 中，每一个数据节点都是一个 ZNode，上图根目录下有两个节点，分别是：app1 和app2，其中 app1 下面又有三个子节点,所有ZNode按层次化进行组织，形成这么一颗树，ZNode的节点路径标识方式和Unix文件系统路径非常相似，都是由一系列使用斜杠（/）进行分割的路径表示，开发人员可以向这个节点写入数据，也可以在这个节点下面创建子节点。
 
- 
-
 #### ZNode 的类型
 
 刚刚已经了解到，Zookeeper的znode   tree是由一系列数据节点组成的，那接下来，我们就对数据节点做详细讲解
@@ -360,8 +358,6 @@ Zookeeper 节点类型可以分为三大类：
 临时性节点（Ephemeral） 
 
 顺序性节点（Sequential）
-
-
 
 在开发中在创建节点的时候通过组合可以生成以下四种节点类型：持久节点、持久顺序节点、临时节点、临时顺序节点。不同类型的节点则会有不同的生命周期
 
@@ -381,7 +377,7 @@ Zookeeper 节点类型可以分为三大类：
 
 而在ZooKeeper中，事务是指能够改变ZooKeeper服务器状态的操作，我们也称之为事务操作或更新操作，一般包括数据节点创建与删除、数据节点内容更新等操作。对于每一个事务请求，ZooKeeper都会为其分配一个全局唯一的事务ID，用 ZXID 来表示，通常是一个 64 位的数字。每一个 ZXID 对应一次更新操作，从这些ZXID中可以间接地识别出ZooKeeper处理这些更新操作请求的全局顺序
 
- 
+
 
 #### ZNode 的状态信息
 
@@ -409,7 +405,7 @@ ephemeralOwner 表示创建该临时节点时的会话 sessionID，如果是持�
 numChildren 表示直系子节点数。
 ```
 
- 
+
 
 #### Watcher--数据变更通知
 

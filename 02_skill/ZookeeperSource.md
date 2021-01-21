@@ -337,7 +337,7 @@ server.3=10.211.55.4:2883:3883
 
 #### ZooKeeper数据模型Znode
 
-在ZooKeeper中，数据信息被保存在一个个数据节点上，这些节点被称为znode。ZNode 是Zookeeper 中最小数据单位，在 ZNode 下面又可以再挂 ZNode，这样一层层下去就形成了一个层次化命名空间 ZNode 树，我们称为 ZNode Tree，它采用了类似文件系统的层级树状结构进行管理。见下图示例：
+在ZooKeeper中，数据信息被保存在一个个数据节点上，这些节点被称为 ZNode 。ZNode 是Zookeeper 中最小数据单位，在 ZNode 下面又可以再挂 ZNode，这样一层层下去就形成了一个层次化命名空间 ZNode 树，我们称为 ZNode Tree，它采用了类似文件系统的层级树状结构进行管理。见下图示例：
 
 
 ![img](ZookeeperSource.assets/wps32.png)
@@ -720,60 +720,78 @@ public class CreateSession implements Watcher {
 ### 创建节点
 
 ```java
+import org.apache.zookeeper.*;
+
+import java.util.concurrent.CountDownLatch;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 14:24
+ * @Description:
+ */
 public class CreateNote implements Watcher {
 
-    //countDownLatch这个类使一个线程等待,主要不让main方法结束
+    // countDownLatch这个类使一个线程等待,主要不让main方法结束
     private static CountDownLatch countDownLatch = new CountDownLatch(1);
 
     private static ZooKeeper zooKeeper;
 
     public static void main(String[] args) throws Exception {
 
-        zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new CreateNote()); countDownLatch.await();
+        zooKeeper = new ZooKeeper("10.211.55.4:2181", 50000, new CreateNote());
+        countDownLatch.await();
 
     }
-    public void process(WatchedEvent watchedEvent) {
 
-        //当连接创建了，服务端发送给客户端SyncConnected事件
-        if(watchedEvent.getState() == Event.KeeperState.SyncConnected){
-            countDownLatch.countDown();
-        }
+    @Override
+    public void process(WatchedEvent watchedEvent) {
 
         //调用创建节点方法
         try {
             createNodeSync();
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        //当连接创建了，服务端发送给客户端SyncConnected事件
+        if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
+            countDownLatch.countDown();
         }
     }
 
+    /**
+     * path	：节点创建的路径
+     * data[]	：节点创建要保存的数据，是个byte类型的
+     * acl	：节点创建的权限信息(4种类型)
+     * ANYONE_ID_UNSAFE	: 表示任何人
+     * AUTH_IDS	：此ID仅可用于设置ACL。它将被客户机验证的ID替换。
+     * OPEN_ACL_UNSAFE	：这是一个完全开放的ACL(常用)-->world:anyone
+     * CREATOR_ALL_ACL	：此ACL授予创建者身份验证ID的所有权限
+     * createMode	：创建节点的类型(4种类型)
+     * PERSISTENT：持久节点
+     * PERSISTENT_SEQUENTIAL：持久顺序节点
+     * EPHEMERAL：临时节点
+     * EPHEMERAL_SEQUENTIAL：临时顺序节点
+     * String node = zookeeper.create(path,data,acl,createMode);
+     */
     private void createNodeSync() throws Exception {
-        /**
-        * path	：节点创建的路径
-        * data[]	：节点创建要保存的数据，是个byte类型的
-        * acl	：节点创建的权限信息(4种类型)
-        * ANYONE_ID_UNSAFE	: 表示任何人
-        * AUTH_IDS	：此ID仅可用于设置ACL。它将被客户机验证的ID替换。
-        * OPEN_ACL_UNSAFE	：这是一个完全开放的ACL(常用)-->world:anyone
-        * CREATOR_ALL_ACL	：此ACL授予创建者身份验证ID的所有权限
-        * createMode	：创建节点的类型(4种类型)
-        * PERSISTENT：持久节点
-        * PERSISTENT_SEQUENTIAL：持久顺序节点
-        * EPHEMERAL：临时节点
-        * EPHEMERAL_SEQUENTIAL：临时顺序节点
-        String node = zookeeper.create(path,data,acl,createMode);
-		*/
 
-        String node_PERSISTENT = zooKeeper.create("/lg_persistent", "持久节点内容 ".getBytes("utf-8"), 
-                                                  ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        System.out.println("创建的节点:");
+        String node_PERSISTENT = zooKeeper.create("/lg_persistent", 
+                "持久节点内容 ".getBytes("utf-8"),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
 
-        String node_PERSISTENT_SEQUENTIAL = zooKeeper.create("/lg_persistent_sequential", "持久节点内容".getBytes("utf-8"), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
+        String node_PERSISTENT_SEQUENTIAL = zooKeeper.create("/lg_persistent_sequential", 
+                "持久节点内容".getBytes("utf-8"),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
 
-        String node_EPERSISTENT = zooKeeper.create("/lg_ephemeral", "临时节点内容 ".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        String node_EPERSISTENT = zooKeeper.create("/lg_ephemeral", 
+                "临时节点内容 ".getBytes(),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
 
-        System.out.println("创建的持久节点是:"+node_PERSISTENT);
-        System.out.println("创建的持久顺序节点是:"+node_PERSISTENT_SEQUENTIAL);
-        System.out.println("创建的临时节点是:"+node_EPERSISTENT);
+        System.out.println("创建的持久节点是:" + node_PERSISTENT);
+        System.out.println("创建的持久顺序节点是:" + node_PERSISTENT_SEQUENTIAL);
+        System.out.println("创建的临时节点是:" + node_EPERSISTENT);
 
     }
 }
@@ -782,76 +800,83 @@ public class CreateNote implements Watcher {
 ### 获取节点数据
 
 ```java
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
+
+import java.util.List;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 14:45
+ * @Description:
+ */
 public class GetNoteData implements Watcher {
 
-    //countDownLatch这个类使一个线程等待,主要不让main方法结束
-
-    private static CountDownLatch countDownLatch = new CountDownLatch(1); private static ZooKeeper zooKeeper;
+    private static ZooKeeper zooKeeper;
 
     public static void main(String[] args) throws Exception {
 
-        zooKeeper = new ZooKeeper("10.211.55.4:2181", 10000, new GetNoteDate());
+        zooKeeper = new ZooKeeper("10.211.55.4:2181", 10000, new GetNoteData());
 
         Thread.sleep(Integer.MAX_VALUE);
     }
 
+    @Override
     public void process(WatchedEvent watchedEvent) {
-
-        //子节点列表发生变化时，服务器会发出NodeChildrenChanged通知，但不会把变化情况告诉给客户端
+        // 子节点列表发生变化时，服务器会发出NodeChildrenChanged通知，但不会把变化情况告诉给客户端
         // 需要客户端自行获取，且通知是一次性的，需反复注册监听
-
-        if(watchedEvent.getType() ==Event.EventType.NodeChildrenChanged){
+        if (watchedEvent.getType() == Event.EventType.NodeChildrenChanged) {
 
             //再次获取节点数据
             try {
-
                 List<String> children = zooKeeper.getChildren(watchedEvent.getPath(), true);
                 System.out.println(children);
-            } catch (KeeperException e) { 
+            } catch (KeeperException e) {
                 e.printStackTrace();
 
-            } catch (InterruptedException e) { 
-                e.printStackTrace();
-            }
-        }
-
-        //当连接创建了，服务端发送给客户端SyncConnected事件
-        if(watchedEvent.getState() == Event.KeeperState.SyncConnected){
-            try {
-                //调用获取单个节点数据方法
-                getNoteDate(); 
-                getChildrens();
-            } catch (KeeperException e) { 
-                e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        // 当连接创建了，服务端发送给客户端SyncConnected事件
+        if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
+            try {
+                // 调用获取单个节点数据方法
+                getNoteData();
+                getChildrens();
+            } catch (KeeperException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    /**
+     * path	: 获取数据的路径
+     * watch	: 是否开启监听
+     * stat	: 节点状态信息
+     * null: 表示获取最新版本的数据
+     * zk.getData(path, watch, stat);
+     */
     private static void getNoteData() throws Exception {
-        /**
-         * path	: 获取数据的路径
-         * watch	: 是否开启监听
-         * stat	: 节点状态信息
-         * null: 表示获取最新版本的数据
-         * zk.getData(path, watch, stat);
-         */
 
-        byte[] data = zooKeeper.getData("/lg_persistent/lg-children", true,null);
-        System.out.println(new String(data,"utf-8"));
+        byte[] data = zooKeeper.getData("/lg_persistent/lg-children", true, null);
+        System.out.println(new String(data, "utf-8"));
 
     }
 
+    /**
+     * path:路径
+     * watch:是否要启动监听，当子节点列表发生变化，会触发监听
+     * zooKeeper.getChildren(path, watch);
+     */
     private static void getChildrens() throws KeeperException, InterruptedException {
 
-        /*
-        path:路径
-        watch:是否要启动监听，当子节点列表发生变化，会触发监听
-        zooKeeper.getChildren(path, watch);
-        */
-
-        List<String> children = zooKeeper.getChildren("/lg_persistent", true); 
+        List<String> children = zooKeeper.getChildren("/lg_persistent", true);
         System.out.println(children);
 
     }
@@ -863,35 +888,50 @@ public class GetNoteData implements Watcher {
 ### 修改节点数据
 
 ```java
-public class updateNote implements Watcher {
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.data.Stat;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 14:54
+ * @Description:
+ */
+public class UpdateNote implements Watcher {
+
     private static ZooKeeper zooKeeper;
+
     public static void main(String[] args) throws Exception {
-        zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new updateNote()); 
+        zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new UpdateNote());
         Thread.sleep(Integer.MAX_VALUE);
     }
 
+    @Override
     public void process(WatchedEvent watchedEvent) {
         //当连接创建了，服务端发送给客户端SyncConnected事件
         try {
             updateNodeSync();
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * path:路径
+     * data:要修改的内容 byte[]
+     * version:为-1，表示对最新版本的数据进行修改
+     * zooKeeper.setData(path, data,version);
+     */
     private void updateNodeSync() throws Exception {
-        /*
-        path:路径
-        data:要修改的内容 byte[]
-        version:为-1，表示对最新版本的数据进行修改
-        zooKeeper.setData(path, data,version);
-        */
-        byte[] data = zooKeeper.getData("/lg_persistent", false, null); 
-        System.out.println("修改前的值:"+new String(data));
+
+        byte[] data = zooKeeper.getData("/lg_persistent", false, null);
+        System.out.println("修改前的值:" + new String(data));
         //修改	stat:状态信息对象 -1:最新版本
         Stat stat = zooKeeper.setData("/lg_persistent", "客户端修改内容 ".getBytes(), -1);
-        byte[] data2 = zooKeeper.getData("/lg_persistent", false, null); 
-        System.out.println("修改后的值:"+new String(data2));
-        
+        byte[] data2 = zooKeeper.getData("/lg_persistent", false, null);
+        System.out.println("修改后的值:" + new String(data2));
+
     }
 }
 ```
@@ -902,32 +942,47 @@ public class updateNote implements Watcher {
 
 
 ```java
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.data.Stat;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:00
+ * @Description:
+ */
 public class DeleteNote implements Watcher {
+
     private static ZooKeeper zooKeeper;
+
     public static void main(String[] args) throws Exception {
-        zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new DeleteNote()); Thread.sleep(Integer.MAX_VALUE);
+        zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new DeleteNote());
+        Thread.sleep(Integer.MAX_VALUE);
     }
 
+    @Override
     public void process(WatchedEvent watchedEvent) {
         //当连接创建了，服务端发送给客户端SyncConnected事件
         try {
             deleteNodeSync();
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * zooKeeper.exists(path,watch) :判断节点是否存在
+     * zookeeper.delete(path,version) : 删除节点
+     */
     private void deleteNodeSync() throws KeeperException, InterruptedException {
-        /*
-        zooKeeper.exists(path,watch) :判断节点是否存在
-        zookeeper.delete(path,version) : 删除节点
-        */
-        Stat exists = zooKeeper.exists("/lg_persistent/lg-children", false); 
-        System.out.println(exists == null ? "该节点不存在 ":"该节点存在"); 
-        zooKeeper.delete("/lg_persistent/lg-children",-1);
-        Stat exists2 = zooKeeper.exists("/lg_persistent/lg-children", false); 
-        System.out.println(exists2 == null ? "该节点不存在":"该节点存在");
-        
+
+        Stat exists = zooKeeper.exists("/lg_persistent/lg-children", false);
+        System.out.println(exists == null ? "该节点不存在 " : "该节点存在");
+        zooKeeper.delete("/lg_persistent/lg-children", -1);
+        Stat exists2 = zooKeeper.exists("/lg_persistent/lg-children", false);
+        System.out.println(exists2 == null ? "该节点不存在" : "该节点存在");
     }
 }
 ```
@@ -962,18 +1017,23 @@ ZkClient是Github上一个开源的zookeeper客户端，在Zookeeper原生API接
 使用ZkClient可以轻松的创建会话，连接到服务端。
 
 ```java
-package com.hust.grid.leesf.zkclient.examples;
+package com.example.zookeeper.zkclient;
 
-import java.io.IOException;
 import org.I0Itec.zkclient.ZkClient;
 
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:06
+ * @Description:
+ */
 public class CreateSession {
-    /*
-    创建一个zkClient实例来进行连接
-	注意：zkClient通过对zookeeperAPI内部包装，将这个异步的会话创建过程同步化了
-    */
+
+    /**
+     * 创建一个zkClient实例来进行连接
+     * 注意：zkClient通过对zookeeperAPI内部包装，将这个异步的会话创建过程同步化了
+     */
     public static void main(String[] args) {
-        ZkClient zkClient = new ZkClient("127.0.0.1:2181"); 
+        ZkClient zkClient = new ZkClient("127.0.0.1:2181");
         System.out.println("ZooKeeper session established.");
     }
 }
@@ -993,16 +1053,21 @@ ZkClient提供了递归创建节点的接口，即其帮助开发者先完成父
 
 
 ```java
-package com.hust.grid.leesf.zkclient.examples;
+package com.example.zookeeper.zkclient;
+
 import org.I0Itec.zkclient.ZkClient;
 
-public class Create_Node_Sample {
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:08
+ * @Description:
+ */
+public class CreateNodeSample {
     public static void main(String[] args) {
         ZkClient zkClient = new ZkClient("127.0.0.1:2181");
         System.out.println("ZooKeeper session established.");
-
-        //createParents的值设置为true，可以递归创建节点
-        zkClient.createPersistent("/lg-zkClient/lg-c1",true); 
+        // createParents的值设置为true，可以递归创建节点
+        zkClient.createPersistent("/lg-zkClient/lg-c1", true);
         System.out.println("success create znode.");
     }
 }
@@ -1018,16 +1083,20 @@ ZkClient提供了递归删除节点的接口，即其帮助开发者先删除所
 
 
 ```java
-package com.hust.grid.leesf.zkclient.examples;
+package com.example.zookeeper.zkclient;
 
 import org.I0Itec.zkclient.ZkClient;
 
-public class Del_Data_Sample {
-
-    public static void main(String[] args) throws Exception { 
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:10
+ * @Description:
+ */
+public class DeleteDataSample {
+    public static void main(String[] args) throws Exception {
         String path = "/lg-zkClient/lg-c1";
-        ZkClient zkClient = new ZkClient("127.0.0.1:2181", 5000); 
-        zkClient.deleteRecursive(path); 
+        ZkClient zkClient = new ZkClient("127.0.0.1:2181", 5000);
+        zkClient.deleteRecursive(path);
         System.out.println("success delete znode.");
     }
 }
@@ -1041,12 +1110,20 @@ public class Del_Data_Sample {
 
 
 ```java
-package com.hust.grid.leesf.zkclient.examples;
-import java.util.List;
+package com.example.zookeeper.zkclient;
+
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class Get_Children_Sample {
+import java.util.List;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:11
+ * @Description:
+ */
+public class GetChildrenSample {
 
     public static void main(String[] args) throws Exception {
 
@@ -1055,21 +1132,26 @@ public class Get_Children_Sample {
         List<String> children = zkClient.getChildren("/lg-zkClient");
         System.out.println(children);
 
+        String path = "/lg-zkClient";
         // 注册监听事件
-        zkClient.subscribeChildChanges(path, new IZkChildListener() { 
+        zkClient.subscribeChildChanges(path, new IZkChildListener() {
+
+            @Override
             public void handleChildChange(String parentPath, List<String>
-                                          currentChilds) throws Exception {
+                    currentChilds) throws Exception {
                 System.out.println(parentPath + " 's child changed, currentChilds:" + currentChilds);
             }
-
-            zkClient.createPersistent("/lg-zkClient");
-            Thread.sleep(1000); 
-            zkClient.createPersistent("/lg-zkClient/c1"); 
-            Thread.sleep(1000);
-            zkClient.delete("/lg-zkClient/c1"); 
-            Thread.sleep(1000); zkClient.delete(path);
-            Thread.sleep(Integer.MAX_VALUE);
         });
+
+        zkClient.createPersistent("/lg-zkClient/c0");
+        Thread.sleep(1000);
+        zkClient.createPersistent("/lg-zkClient/c1");
+        Thread.sleep(1000);
+        zkClient.delete("/lg-zkClient/c0");
+        Thread.sleep(1000);
+        zkClient.delete("/lg-zkClient/c1");
+        Thread.sleep(Integer.MAX_VALUE);
+
     }
 }
 ```
@@ -1077,10 +1159,11 @@ public class Get_Children_Sample {
 运行结果：
 
 ```
-/zk-book 's child changed, currentChilds:[]
-/zk-book 's child changed, currentChilds:[c1]
-/zk-book 's child changed, currentChilds:[]
-/zk-book 's child changed, currentChilds:null
+[]
+/lg-zkClient 's child changed, currentChilds:[c0]
+/lg-zkClient 's child changed, currentChilds:[c0, c1]
+/lg-zkClient 's child changed, currentChilds:[c1]
+/lg-zkClient 's child changed, currentChilds:[]
 ```
 
 结果表明：
@@ -1093,7 +1176,17 @@ public class Get_Children_Sample {
 #### 获取数据（节点是否存在、更新、删除）
 
 ```java
-public class Get_Data_Sample {
+package com.example.zookeeper.zkclient;
+
+import org.I0Itec.zkclient.IZkDataListener;
+import org.I0Itec.zkclient.ZkClient;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:26
+ * @Description:
+ */
+public class GetDataSample {
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -1102,32 +1195,35 @@ public class Get_Data_Sample {
 
         // 判断节点是否存在
         boolean exists = zkClient.exists(path);
-        if (!exists){
+        if (!exists) {
             zkClient.createEphemeral(path, "123");
         }
 
         //注册监听
-        zkClient.subscribeDataChanges(path, new IZkDataListener() { 
-            public void handleDataChange(String path, Object data) throwsException {
-                System.out.println(path+"该节点内容被更新，更新后的内容"+data);
+        zkClient.subscribeDataChanges(path, new IZkDataListener() {
+
+            @Override
+            public void handleDataChange(String path, Object data) throws Exception {
+                System.out.println(path + "该节点内容被更新，更新后的内容" + data);
             }
 
-            public void handleDataDeleted(String s) throws Exception { 
-                System.out.println(s+" 该节点被删除");
+            @Override
+            public void handleDataDeleted(String s) throws Exception {
+                System.out.println(s + " 该节点被删除");
 
             }
         });
 
         //获取节点内容
-        Object o = zkClient.readData(path); 
+        Object o = zkClient.readData(path);
         System.out.println(o);
 
         //更新
-        zkClient.writeData(path,"4567"); 
+        zkClient.writeData(path, "4567");
         Thread.sleep(1000);
 
         //删除
-        zkClient.delete(path); 
+        zkClient.delete(path);
         Thread.sleep(1000);
 
     }
@@ -1173,10 +1269,15 @@ Curator的创建会话方式与原生的API和ZkClient的创建方式区别很�
 
 
 ```java
-public static CuratorFramework newClient(String connectString, RetryPolicy retryPolicy){}
+public static CuratorFramework newClient(String connectString, RetryPolicy retryPolicy) {
+    return newClient(connectString, DEFAULT_SESSION_TIMEOUT_MS, 
+                     DEFAULT_CONNECTION_TIMEOUT_MS, retryPolicy);
+}
 
-public static CuratorFramework newClient(String connectString, int
-                                         sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy){}
+public static CuratorFramework newClient(String connectString, int sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy) {
+    return builder().connectString(connectString).sessionTimeoutMs(sessionTimeoutMs)
+        .connectionTimeoutMs(connectionTimeoutMs).retryPolicy(retryPolicy).build();
+}
 ```
 
 
@@ -1185,12 +1286,14 @@ public static CuratorFramework newClient(String connectString, int
 2. 通过调用CuratorFramework中的start()方法来启动会话
 
 ```java
-RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3); CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181",retryPolicy); client.start();
+RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3); 
+CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181",retryPolicy); 
+client.start();
 ```
 
 ```java
-RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3); CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181",
-                                                                                                                           5000,1000,retryPolicy);
+RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3); 
+CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181",5000,1000,retryPolicy);
 client.start();
 ```
 
@@ -1218,11 +1321,11 @@ client.start();
 - retryPolicy：失败重试策略
 
 ```
-ExponentialBackoﬀRetry：构造器含有三个参数 ExponentialBackoﬀRetry(int baseSleepTimeMs, int maxRetries, int maxSleepMs)
+ExponentialBackoffRetry：构造器含有三个参数 ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries, int maxSleepMs)
 
     baseSleepTimeMs：初始的sleep时间，用于计算之后的每次重试的sleep时间，           
     
-        计算公式 ： 当 前 sleep 时 间 =baseSleepTimeMs*Math.max(1, random.nextInt(1<<(retryCount+1)))
+        计算公式：当前sleep时间 = baseSleepTimeMs*Math.max(1, random.nextInt(1<<(retryCount+1)))
     
     maxRetries：最大重试次数
     
@@ -1233,36 +1336,54 @@ ExponentialBackoﬀRetry：构造器含有三个参数 ExponentialBackoﬀRetry(
 start()：完成会话的创建
 ```
 
+下面通过一个实际例子来演示
 ```java
-package com.hust.grid.leesf.curator.examples;
+package com.example.zookeeper.curator;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory; 
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
-public class Create_Session_Sample {
-    
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:29
+ * @Description:
+ */
+public class CreateSessionSample {
+
     public static void main(String[] args) throws Exception {
-        
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3); CuratorFramework client =
-            CuratorFrameworkFactory.newClient("127.0.0.1:2181", 5000, 3000, retryPolicy);
+
+        RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181",
+                5000, 3000, retryPolicy);
         client.start();
         System.out.println("Zookeeper session1 established. ");
+
         CuratorFramework client1 = CuratorFrameworkFactory.builder()
-            .connectString("127.0.0.1:2181") //server地址
-            .sessionTimeoutMs(5000)	// 会话超时时间
-            .connectionTimeoutMs(3000)	// 连接超时时间
-            .retryPolicy(retryPolicy)	// 重试策略
-            .namespace("base")	// 独立命名空间/base
-            .build();	// 
+                // server地址
+                .connectString("127.0.0.1:2181")
+                // 会话超时时间
+                .sessionTimeoutMs(5000)
+                // 连接超时时间
+                .connectionTimeoutMs(3000)
+                // 重试策略
+                .retryPolicy(retryPolicy)
+                // 独立命名空间/base
+                .namespace("base")
+                .build();
         client1.start();
         System.out.println("Zookeeper session2 established. ");
     }
 }
 ```
 
-运行结果：Zookeeper session1 established. Zookeeper session2 established
+运行结果：
+
+```
+Zookeeper session1 established. 
+Zookeeper session2 established. 
+```
 
 需要注意的是session2会话含有隔离命名空间，即客户端对Zookeeper上数据节点的任何操作都是相对/base目录进行的，这有利于实现不同的Zookeeper的业务之间的隔离
 
@@ -1299,7 +1420,7 @@ Curator和ZkClient不同的是依旧采用Zookeeper原生API的风格，内容�
 （3） 递归创建父节点,并选择节点类型
 
 ```java
-client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPa th(path);
+client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
 ```
 
 
@@ -1309,38 +1430,51 @@ creatingParentsIfNeeded这个接口非常有用，在使用ZooKeeper 的过程�
 下面通过一个实际例子来演示如何在代码中使用这些API。
 
 ```java
-package com.hust.grid.leesf.curator.examples;
+package com.example.zookeeper.curator;
+
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory; 
-import org.apache.curator.retry.ExponentialBackoffRetry; 
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 
-public class Create_Node_Sample{
-    
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:43
+ * @Description:
+ */
+public class CreateNodeSample {
     public static void main(String[] args) throws Exception {
 
         CuratorFramework client = CuratorFrameworkFactory.builder()
-            .connectString("127.0.0.1:2181") //server地址
-            .sessionTimeoutMs(5000)	// 会话超时时间
-            .connectionTimeoutMs(3000)	// 连接超时时间
-            .retryPolicy(new ExponentialBackoffRetry(1000,5))// 重试策略
-            .build();
-        client.start(); 
+                // server地址
+                .connectString("127.0.0.1:2181")
+                // 会话超时时间
+                .sessionTimeoutMs(5000)
+                // 连接超时时间
+                .connectionTimeoutMs(3000)
+                // 重试策略
+                .retryPolicy(new ExponentialBackoffRetry(1000, 5))
+                .build();
+        client.start();
         System.out.println("Zookeeper session established. ");
         //添加节点
         String path = "/lg-curator/c1";
         client.create().creatingParentsIfNeeded()
-            .withMode(CreateMode.PERSISTENT).forPath(path,"init".getBytes());
+                .withMode(CreateMode.PERSISTENT).forPath(path, "init".getBytes());
         Thread.sleep(1000);
-        System.out.println("success create znode"+path);
+        System.out.println("success create znode" + path);
     }
 }
 ```
 
 
 
+运行结果：
 
-运行结果：Zookeeper session established. success create znode/lg-curator/c1
+```
+Zookeeper session established. 
+success create znode/lg-curator/c1
+```
 
 其中，也创建了lg-curator/c1的父节点lg-curator节点。
 
@@ -1390,97 +1524,121 @@ client.delete().guaranteed().forPath(path);
 演示实例：
 
 ```java
-package com.hust.grid.leesf.curator.examples;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory; 
-import org.apache.curator.retry.ExponentialBackoffRetry; 
-import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.data.Stat;
+package com.example.zookeeper.curator;
 
-public class Delete_Node_Sample{
-    
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:48
+ * @Description:
+ */
+public class DeleteNodeSample {
     public static void main(String[] args) throws Exception {
-        
+
         CuratorFramework client = CuratorFrameworkFactory.builder()
-            .connectString("127.0.0.1:2181") //server地址
-            .sessionTimeoutMs(5000)	// 会话超时时间
-            .connectionTimeoutMs(3000)	// 连接超时时间
-            .retryPolicy(new ExponentialBackoffRetry(1000,5)) // 重试策略
-            .build();
+                // server地址
+                .connectString("127.0.0.1:2181")
+                // 会话超时时间
+                .sessionTimeoutMs(5000)
+                // 连接超时时间
+                .connectionTimeoutMs(3000)
+                // 重试策略
+                .retryPolicy(new ExponentialBackoffRetry(1000, 5))
+                .build();
         client.start();
         System.out.println("Zookeeper session established. ");
         //删除节点
         String path = "/lg-curator";
         client.delete().deletingChildrenIfNeeded()
-            .withVersion(-1).forPath(path);
-        System.out.println("success create znode"+path);
+                .withVersion(-1).forPath(path);
+        System.out.println("success delete znode: " + path);
     }
 }
 ```
 
+运行结果：
 
-
-
-运行结果：Zookeeper session established. success create znode/lg-curator
+```
+Zookeeper session established. 
+success delete znode/lg-curator
+```
 
 结果表明成功删除/lg-curator节点
+
+
 
 #### 获取数据
 
 获取节点数据内容API相当简单，同时Curator提供了传入一个Stat变量的方式来存储服务器端返回的最新的节点状态信息
 
-```
+```java
 // 普通查询
 client.getData().forPath(path);
 // 包含状态查询
-Stat stat = new Stat(); client.getData().storingStatIn(stat).forPath(path);
+Stat stat = new Stat(); 
+client.getData().storingStatIn(stat).forPath(path);
 ```
-
-
 
 
 演示：
 
 ```java
-package com.hust.grid.leesf.curator.examples;
+package com.example.zookeeper.curator;
+
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory; 
-import org.apache.curator.retry.ExponentialBackoffRetry; 
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
-public class Get_Node_Sample{
+/**
+ * @author 周壮
+ * @date : 2021/1/21 15:52
+ * @Description:
+ */
+public class GetNodeSample {
 
     public static void main(String[] args) throws Exception {
 
         CuratorFramework client = CuratorFrameworkFactory.builder()
-            .connectString("127.0.0.1:2181") //server地址
-            .sessionTimeoutMs(5000)	// 会话超时时间
-            .connectionTimeoutMs(3000)	// 连接超时时间
-            .retryPolicy(new ExponentialBackoffRetry(1000,5)) // 重试策略
-            .build();
+                // server地址
+                .connectString("127.0.0.1:2181")
+                // 会话超时时间
+                .sessionTimeoutMs(5000)
+                // 连接超时时间
+                .connectionTimeoutMs(3000)
+                // 重试策略
+                .retryPolicy(new ExponentialBackoffRetry(1000, 5))
+                .build();
         client.start();
         System.out.println("Zookeeper session established. ");
         // 添加节点
         String path = "/lg-curator/c1";
         client.create().creatingParentsIfNeeded()
-            .withMode(CreateMode.PERSISTENT).forPath(path,"init".getBytes());
+                .withMode(CreateMode.PERSISTENT).forPath(path, "init".getBytes());
 
-        System.out.println("success create znode"+path);
+        System.out.println("success create znode" + path);
 
         // 获取节点数据
         Stat stat = new Stat();
-        byte[] bytes = client.getData().storingStatIn(stat)
-            .forPath(path); System.out.println(new String(bytes));
-
+        byte[] bytes = client.getData().storingStatIn(stat).forPath(path);
+        System.out.println(new String(bytes));
     }
 }
 ```
 
 
 
+运行结果：
 
-运行结果：Zookeeper session established. success create znode/lg-curator/c1 init
+```
+Zookeeper session established. 
+success create znode/lg-curator/c1
+init
+```
 
 结果表明成功获取了节点的数据
 
@@ -1512,45 +1670,52 @@ org.apache.zookeeper.KeeperException$BadVersionException: KeeperErrorCode = BadV
 案例演示：
 
 ```java
-package com.hust.grid.leesf.curator.examples;
+package com.example.zookeeper.curator;
 
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory; 
-import org.apache.curator.retry.ExponentialBackoffRetry; 
-import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.data.Stat; 
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.data.Stat;
 
-public class Set_Node_Sample {
+/**
+ * @author 周壮
+ * @date : 2021/1/21 17:41
+ * @Description:
+ */
+public class SetNodeSample {
 
     public static void main(String[] args) throws Exception {
 
         CuratorFramework client = CuratorFrameworkFactory.builder()
-            .connectString("127.0.0.1:2181") //server地址
-            .sessionTimeoutMs(5000)	// 会话超时时间
-            .connectionTimeoutMs(3000)	// 连接超时时间
-            .retryPolicy(new ExponentialBackoffRetry(1000,5))	// 重试策略
-            .build();
-
+                // server地址
+                .connectString("127.0.0.1:2181")
+                // 会话超时时间
+                .sessionTimeoutMs(5000)
+                // 连接超时时间
+                .connectionTimeoutMs(3000)
+                // 重试策略
+                .retryPolicy(new ExponentialBackoffRetry(1000, 5))
+                .build();
         client.start();
 
-        System.out.println("Zookeeper session established. "); 
+        System.out.println("Zookeeper session established. ");
 
         String path = "/lg-curator/c1";
 
         //获取节点数据
-
         Stat stat = new Stat();
-        byte[] bytes = client.getData().storingStatIn(stat).forPath(path); System.out.println(new String(bytes));
+        byte[] bytes = client.getData().storingStatIn(stat).forPath(path);
+        System.out.println(new String(bytes));
 
         //更新节点数据
         int version = client.setData()
-            .withVersion(stat.getVersion()).forPath(path).getVersion();
+                .withVersion(stat.getVersion()).forPath(path).getVersion();
 
-        System.out.println("Success set node for : " + path 
-                           + ", new version: "+version);
+        System.out.println("Success set node for : " + path
+                + ", new version: " + version);
 
         client.setData().withVersion(stat.getVersion())
-            .forPath(path).getVersion();
+                .forPath(path).getVersion();
 
     }
 }
@@ -1562,9 +1727,8 @@ public class Set_Node_Sample {
 ```
 Zookeeper session established. 
 init
-Success set node for : /lg-curator/c1, new version: 1 
-Exception in thread "main"
-org.apache.zookeeper.KeeperException$BadVersionException: KeeperErrorCode = BadVersion for /lg-curator/c1
+Success set node for : /lg-curator/c1, new version: 4
+Exception in thread "main" org.apache.zookeeper.KeeperException$BadVersionException: KeeperErrorCode = BadVersion for /lg-curator/c1
 ```
 
 结果表明当携带数据版本不一致时，无法完成更新操作。

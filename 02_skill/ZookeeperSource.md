@@ -687,21 +687,21 @@ public class CreateSession implements Watcher {
     public static void main(String[] args) throws InterruptedException, IOException {
 
         /*
-        客户端可以通过创建一个zk实例来连接zk服务器
-        new Zookeeper(connectString,sesssionTimeOut,Wather) connectString:           
-        连接地址 ：IP： 端 口sesssionTimeOut：会话超时时间：单位毫秒
-        Wather：监听器(当特定事件触发监听时，zk会通过watcher通知到客户端)
-        */
-
+         * 客户端可以通过创建一个zk实例来连接zk服务器
+         * new Zookeeper(connectString,sesssionTimeOut,Wather) connectString:           
+         * 连接地址 ：IP： 端 口sesssionTimeOut：会话超时时间：单位毫秒
+         * Wather：监听器(当特定事件触发监听时，zk会通过watcher通知到客户端)
+         */
         ZooKeeper zooKeeper = new ZooKeeper("10.211.55.4:2181", 5000, new CreateSession());
-
-        System.out.println(zooKeeper.getState()); countDownLatch.await();
+        System.out.println(zooKeeper.getState()); 
+        countDownLatch.await();
         //表示会话真正建立
         System.out.println("=========Client Connected to zookeeper==========");
 
     }
 
-    // 当前类实现了Watcher接口，重写了process方法，该方法负责处理来自Zookeeper服务端的watcher通知，在收到服务端发送过来的SyncConnected事件之后，解除主程序在CountDownLatch上的等待阻塞，至此，会话创建完毕
+    // 当前类实现了Watcher接口，重写了process方法，该方法负责处理来自Zookeeper服务端的watcher通知，
+    // 在收到服务端发送过来的SyncConnected事件之后，解除主程序在CountDownLatch上的等待阻塞，至此，会话创建完毕
 
     public void process(WatchedEvent watchedEvent) {
         //当连接创建了，服务端发送给客户端SyncConnected事件

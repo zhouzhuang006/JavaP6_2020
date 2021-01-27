@@ -6,7 +6,7 @@ Spring Data Jpa 是应用于Dao层的一个框架，简化数据库开发的，�
 
 
 
-## 第一部分 Spring Data JPA 概述
+# 第一部分 Spring Data JPA 概述
 
 - 什么是 Spring Data JPA
 
@@ -63,7 +63,7 @@ Currently, the release train contains the following modules:
 
 
 
-## 第二部分 Spring Data JPA，JPA规范和Hibernate之间的关系
+# 第二部分 Spring Data JPA，JPA规范和Hibernate之间的关系
 
 Spring Data JPA 是 Spring 提供的一个封装了JPA 操作的框架，而 JPA 仅仅是规范，单独使用规范无法具体做什么，那么Spring Data JPA 、 JPA规范以及 Hibernate （JPA 规范的一种实现）之间的关系是什么？
 
@@ -75,7 +75,7 @@ Spring Data JPA 是 Spring 提供的一套对 JPA 操作更加高级的封装，
 
 
 
-## 第三部分 Spring Data JPA 应用
+# 第三部分 Spring Data JPA 应用
 
 - 需求：使用 Spring Data JPA 完成对 tb_resume 表（简历表）的Dao 层操作（增删改查，排序，分⻚等）
 - 数据表设计
@@ -575,7 +575,7 @@ public class ResumeDaoTest {
 
 
 
-## 第四部分Spring Data JPA 执行过程源码分析
+# 第四部分Spring Data JPA 执行过程源码分析
 
 
 

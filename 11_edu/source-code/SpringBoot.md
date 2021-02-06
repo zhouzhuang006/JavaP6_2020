@@ -2112,7 +2112,8 @@ public class Comment {
 ```java
 public interface CommentRepository extends JpaRepository<Comment,Integer> {
 
-    //根据评论id修改评论作者author @Transactional
+    //根据评论id修改评论作者author 
+    @Transactional
     @Modifying
     @Query("update t_comment c set c.author = ?1 where	c.id=?2") 
     public int updateComment(String author,Integer id);

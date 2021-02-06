@@ -466,16 +466,16 @@ Java**中**有8种基本数据类型，分别为：
 JAVA中一共有八种基本数据类型，他们分别是 
 byte、short、int、long、float、double、char、boolean
 
-| 类型    | 型别   | 字节  | 位数 | 默认值  | 取值范围                      | 包装器类型 |
-| ------- | ------ | ----- | ---- | ------- | ----------------------------- | ---------- |
-| byte    | 整型   | 1byte | 1    | 0       | -27 ~ 27-1                    | Byte       |
-| short   | 整型   | 2byte | 2    | 0       | -215 ~ 215-1                  | Short      |
-| int     | 整型   | 4byte | 4    | 0       | -231 ~ 231-1                  | Integer    |
-| long    | 整型   | 8byte | 8    | 0L      | -263 ~ 263-1                  | Long       |
-| float   | 浮点型 | 4byte | 4    | 0f      | 3.402823e+38 ~ 1.401298e-45   | Float      |
-| double  | 浮点型 | 8byte | 8    | 0d      | 1.797693e+308~ 4.9000000e-324 | Double     |
-| char    | 文本型 | 2byte | 2    | 'u0000' | 0~216-1                       | Character  |
-| boolean | 布尔型 | 1byte | 1    | false   | true/false                    | Boolean    |
+| 类型    | 型别   | 字节  | 位数 | 默认值  | 取值范围                             | 包装器类型 |
+| ------- | ------ | ----- | ---- | ------- | ------------------------------------ | ---------- |
+| byte    | 整型   | 1byte | 1    | 0       | -128 ~ 127                           | Byte       |
+| short   | 整型   | 2byte | 2    | 0       | -32768 ~ 32767                       | Short      |
+| int     | 整型   | 4byte | 4    | 0       | -2^31-1 ~ 2^31 （21亿）              | Integer    |
+| long    | 整型   | 8byte | 8    | 0L      | -2^63-1 ~ 2^63 （64位）              | Long       |
+| float   | 浮点型 | 4byte | 4    | 0f      | 3.402823e+38 ~ 1.401298e-45 (32位)   | Float      |
+| double  | 浮点型 | 8byte | 8    | 0d      | 1.797693e+308~ 4.9000000e-324 (64位) | Double     |
+| char    | 文本型 | 2byte | 2    | 'u0000' | 0 ~ 2^16-1                           | Character  |
+| boolean | 布尔型 | 1byte | 1    | false   | true/false                           | Boolean    |
 
 对于boolean，官方文档未明确定义，它依赖于 JVM 厂商的具体实现。逻辑上理解是占用 1位，但是实际中会考虑计算机高效存储因素。
 
@@ -497,7 +497,7 @@ byte、short、int、long、float、double、char、boolean
 
 #### 1.3.3. 8种基本类型的包装类和常量池
 
-**Java 基本类型的包装类的大部分都实现了常量池技术，即 Byte,Short,Integer,Long,Character,Boolean；前面 4 种包装类默认创建了数值[-128，127] 的相应类型的缓存数据，Character创建了数值在[0,127]范围的缓存数据，Boolean 直接返回True Or False。如果超出对应范围仍然会去创建新的对象。** 为啥把缓存设置为[-128，127]区间？（[参见issue/461](https://github.com/Snailclimb/JavaGuide/issues/461)）性能和资源之间的权衡。
+Java 基本类型的包装类的大部分都实现了常量池技术，即 Byte,Short,Integer,Long,Character,Boolean；前面 4 种包装类默认创建了数值[-128，127] 的相应类型的缓存数据，Character创建了数值在[0,127]范围的缓存数据，Boolean 直接返回True Or False。如果超出对应范围仍然会去创建新的对象。 为啥把缓存设置为[-128，127]区间？（[参见issue/461](https://github.com/Snailclimb/JavaGuide/issues/461)）性能和资源之间的权衡。
 
 ```java
 public static Boolean valueOf(boolean b) {
@@ -517,7 +517,7 @@ private static class CharacterCache {
 }
 ```
 
-两种浮点数类型的包装类 Float,Double 并没有实现常量池技术。**
+两种浮点数类型的包装类 Float,Double 并没有实现常量池技术。
 
 ```java
 		Integer i1 = 33;
@@ -1077,7 +1077,8 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 
     AbstractStringBuilder(int capacity) {
         value = new char[capacity];
-    }}
+    }
+}
 ```
 
 **线程安全性**

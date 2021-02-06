@@ -1,10 +1,8 @@
 # SpringBoot 深入学习
 
-![img](SpringBoot.assets/wps1.png)
+
 
 # 第一部分 SpringBoot基础回顾
-
-![img](SpringBoot.assets/wps2.png)
 
 ## 1.1 约定优于配置
 
@@ -2112,7 +2110,8 @@ public class Comment {
 ```java
 public interface CommentRepository extends JpaRepository<Comment,Integer> {
 
-    //根据评论id修改评论作者author @Transactional
+    //根据评论id修改评论作者author 
+    @Transactional
     @Modifying
     @Query("update t_comment c set c.author = ?1 where	c.id=?2") 
     public int updateComment(String author,Integer id);

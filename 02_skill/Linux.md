@@ -4,23 +4,33 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+# 随学随用
+
+
+
+## Ngnix 相关
+
 vim /usr/local/nginx/conf/nginx.conf
 
-
-
 /usr/local/nginx/sbin/nginx -t
-
-
 
 /usr/local/nginx/sbin/nginx -s reload
 
 
 
-
-
-## 随学随用
-
-### 定时重启执行gitbook服务
+## 定时重启执行gitbook服务
 
 背景：由于采用github + Typara + gitbook 搭建的个人博客， 每次更新比较麻烦， 需要提交到github , 拉去最新的数据到服务器， 还需要重启gitbook , 打算做成每天晚上9点拉去最新的提交， 自动重启。
 
